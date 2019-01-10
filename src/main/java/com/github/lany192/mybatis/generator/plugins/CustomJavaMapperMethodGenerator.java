@@ -32,7 +32,7 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
         // 方法对象设置返回类型对象
         method.setReturnType(returnType);
         // 设置方法名称为我们在IntrospectedTable类中初始化的 “selectByObject”
-        method.setName("find");
+        method.setName("selectOne");
 
         // 设置参数类型是对象
         FullyQualifiedJavaType parameterType;
@@ -70,7 +70,7 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
         // 方法对象设置返回类型对象
         method.setReturnType(returnType);
         // 设置方法名称为我们在IntrospectedTable类中初始化的 “selectByObject”
-        method.setName("list");
+        method.setName("selectByEntity");
 
         // 设置参数类型是对象
         FullyQualifiedJavaType parameterType;
@@ -90,7 +90,7 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
 
     private void addInterfacePageList(Interface interfaze) {
         // 先创建import对象
-        Set<FullyQualifiedJavaType> importedTypes = new TreeSet<FullyQualifiedJavaType>();
+        Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
         // 添加Page的包
         importedTypes.add(new FullyQualifiedJavaType("com.github.pagehelper.Page"));
         // 创建方法对象
@@ -108,7 +108,7 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
         // 方法对象设置返回类型对象
         method.setReturnType(returnType);
         // 设置方法名称为我们在IntrospectedTable类中初始化的 “selectByObject”
-        method.setName("pageList");
+        method.setName("selectByPage");
 
         // 设置参数类型是对象
         FullyQualifiedJavaType parameterType;
