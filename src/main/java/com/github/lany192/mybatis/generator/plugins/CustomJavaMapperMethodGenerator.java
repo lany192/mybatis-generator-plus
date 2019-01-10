@@ -35,8 +35,7 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
         method.setName("selectOne");
 
         // 设置参数类型是对象
-        FullyQualifiedJavaType parameterType;
-        parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+        FullyQualifiedJavaType parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         // import参数类型对象
         importedTypes.add(parameterType);
         // 为方法添加参数，变量名称record
@@ -52,7 +51,7 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
 
     private void addInterfaceList(Interface interfaze) {
         // 先创建import对象
-        Set<FullyQualifiedJavaType> importedTypes = new TreeSet<FullyQualifiedJavaType>();
+        Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
         // 添加Lsit的包
         importedTypes.add(FullyQualifiedJavaType.getNewListInstance());
         // 创建方法对象
@@ -61,6 +60,9 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
         method.setVisibility(JavaVisibility.PUBLIC);
         // 设置返回类型是List
         FullyQualifiedJavaType returnType = FullyQualifiedJavaType.getNewListInstance();
+
+
+
         FullyQualifiedJavaType listType;
         // 设置List的类型是实体类的对象
         listType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
@@ -73,8 +75,7 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
         method.setName("selectByEntity");
 
         // 设置参数类型是对象
-        FullyQualifiedJavaType parameterType;
-        parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+        FullyQualifiedJavaType parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         // import参数类型对象
         importedTypes.add(parameterType);
         // 为方法添加参数，变量名称record
@@ -111,8 +112,7 @@ public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGen
         method.setName("selectByPage");
 
         // 设置参数类型是对象
-        FullyQualifiedJavaType parameterType;
-        parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+        FullyQualifiedJavaType parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
         // import参数类型对象
         importedTypes.add(parameterType);
         // 为方法添加参数，变量名称record
