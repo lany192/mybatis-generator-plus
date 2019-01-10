@@ -13,12 +13,12 @@ public class SelectExpandJavaMapperMethodGenerator extends AbstractJavaMapperMet
 
     @Override
     public void addInterfaceElements(Interface interfaze) {
-        addInterfaceFind(interfaze);
-        addInterfaceList(interfaze);
-        addInterfacePageList(interfaze);
+        addSelectOne(interfaze);
+        addSelectByEntity(interfaze);
+        addSelectByPage(interfaze);
     }
 
-    private void addInterfaceFind(Interface interfaze) {
+    private void addSelectOne(Interface interfaze) {
         // 先创建import对象
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
         // 添加Lsit的包
@@ -40,8 +40,6 @@ public class SelectExpandJavaMapperMethodGenerator extends AbstractJavaMapperMet
         importedTypes.add(parameterType);
         // 为方法添加参数，变量名称record
         method.addParameter(new Parameter(parameterType, "record")); //$NON-NLS-1$
-
-        addMapperAnnotations(interfaze, method);
         context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
         if (context.getPlugins().clientSelectByPrimaryKeyMethodGenerated(method, interfaze, introspectedTable)) {
             interfaze.addImportedTypes(importedTypes);
@@ -49,7 +47,7 @@ public class SelectExpandJavaMapperMethodGenerator extends AbstractJavaMapperMet
         }
     }
 
-    private void addInterfaceList(Interface interfaze) {
+    private void addSelectByEntity(Interface interfaze) {
         // 先创建import对象
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
         // 添加Lsit的包
@@ -80,8 +78,6 @@ public class SelectExpandJavaMapperMethodGenerator extends AbstractJavaMapperMet
         importedTypes.add(parameterType);
         // 为方法添加参数，变量名称record
         method.addParameter(new Parameter(parameterType, "record")); //$NON-NLS-1$
-        //
-        addMapperAnnotations(interfaze, method);
         context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
         if (context.getPlugins().clientSelectByPrimaryKeyMethodGenerated(method, interfaze, introspectedTable)) {
             interfaze.addImportedTypes(importedTypes);
@@ -89,7 +85,7 @@ public class SelectExpandJavaMapperMethodGenerator extends AbstractJavaMapperMet
         }
     }
 
-    private void addInterfacePageList(Interface interfaze) {
+    private void addSelectByPage(Interface interfaze) {
         // 先创建import对象
         Set<FullyQualifiedJavaType> importedTypes = new TreeSet<>();
         // 添加Page的包
@@ -117,15 +113,10 @@ public class SelectExpandJavaMapperMethodGenerator extends AbstractJavaMapperMet
         importedTypes.add(parameterType);
         // 为方法添加参数，变量名称record
         method.addParameter(new Parameter(parameterType, "record")); //$NON-NLS-1$
-        //
-        addMapperAnnotations(interfaze, method);
         context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
         if (context.getPlugins().clientSelectByPrimaryKeyMethodGenerated(method, interfaze, introspectedTable)) {
             interfaze.addImportedTypes(importedTypes);
             interfaze.addMethod(method);
         }
-    }
-
-    public void addMapperAnnotations(Interface interfaze, Method method) {
     }
 }
