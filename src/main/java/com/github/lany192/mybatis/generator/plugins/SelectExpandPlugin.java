@@ -12,12 +12,6 @@ import java.util.List;
 
 /**
  * 自定义查询增强插件
- * 增加
- * 1. find
- * 2. list
- * 3. pageList
- * <p>
- * 参考
  *
  * @see org.mybatis.generator.plugins.ToStringPlugin
  */
