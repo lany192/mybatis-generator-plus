@@ -10,7 +10,7 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElem
 /**
  * @author Administrator
  */
-public class CustomAbstractXmlElementGenerator extends AbstractXmlElementGenerator {
+public class SelectExpandXmlElementGenerator extends AbstractXmlElementGenerator {
 
 	@Override
 	public void addElements(XmlElement parentElement) {

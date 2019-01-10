@@ -9,7 +9,7 @@ import java.util.TreeSet;
 /**
  * @author Administrator
  */
-public class CustomJavaMapperMethodGenerator extends AbstractJavaMapperMethodGenerator {
+public class SelectExpandJavaMapperMethodGenerator extends AbstractJavaMapperMethodGenerator {
 
     @Override
     public void addInterfaceElements(Interface interfaze) {

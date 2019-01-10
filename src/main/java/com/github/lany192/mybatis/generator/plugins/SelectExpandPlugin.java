@@ -11,7 +11,7 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElem
 import java.util.List;
 
 /**
- * 自定义插件
+ * 自定义查询增强插件
  * 增加
  * 1. find
  * 2. list
@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @see org.mybatis.generator.plugins.ToStringPlugin
  */
-public class CustomPlugin extends PluginAdapter {
+public class SelectExpandPlugin extends PluginAdapter {
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -30,7 +30,7 @@ public class CustomPlugin extends PluginAdapter {
 
     @Override
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
-        AbstractXmlElementGenerator elementGenerator = new CustomAbstractXmlElementGenerator();
+        AbstractXmlElementGenerator elementGenerator = new SelectExpandXmlElementGenerator();
         elementGenerator.setContext(context);
         elementGenerator.setIntrospectedTable(introspectedTable);
         elementGenerator.addElements(document.getRootElement());
@@ -39,7 +39,7 @@ public class CustomPlugin extends PluginAdapter {
 
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        AbstractJavaMapperMethodGenerator methodGenerator = new CustomJavaMapperMethodGenerator();
+        AbstractJavaMapperMethodGenerator methodGenerator = new SelectExpandJavaMapperMethodGenerator();
         methodGenerator.setContext(context);
         methodGenerator.setIntrospectedTable(introspectedTable);
         methodGenerator.addInterfaceElements(interfaze);
