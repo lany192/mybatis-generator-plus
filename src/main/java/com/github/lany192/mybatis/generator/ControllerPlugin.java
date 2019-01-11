@@ -1,6 +1,7 @@
 package com.github.lany192.mybatis.generator;
 
 import com.github.lany192.mybatis.generator.utils.CodeBuilder;
+import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.MapBuilder;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -19,11 +20,16 @@ public class ControllerPlugin extends PluginAdapter {
     /**
      * 目标包
      */
-    private String targetPackage;
+    private String controllerPackage;
     /**
      * 基础包名
      */
     private String basePackage;
+
+    /**
+     * service包
+     */
+    private String servicePackage;
 
     @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
@@ -34,42 +40,56 @@ public class ControllerPlugin extends PluginAdapter {
         String templatePath = System.getProperty("user.dir") + File.separator + "src"
                 + File.separator + "main" + File.separator + "resources"
                 + File.separator + "templates" + File.separator + "autocode";
-        System.out.println("Controller包名==" + targetPackage);
+        System.out.println("Controller包名==" + controllerPackage);
         System.out.println("model的名称:" + modelName);
         System.out.println("model的类型:" + modelType);
         System.out.println("model的包名:" + modelPackage);
         System.out.println("模板路径:" + templatePath);
 
+
         new CodeBuilder()
                 .module("")
                 .path("src/main/java")
-                .packageName(targetPackage)
+                .packageName(controllerPackage)
                 .modelName(modelName)
-                .suffix("Service")
+                .suffix("Controller")
                 .format("java")
                 .setTemplatePath(templatePath)
                 .setTemplateName("api-controller.ftl")
                 .setData(MapBuilder.of()
-                        .put("servicePackage", targetPackage)
                         .put("basePackage", basePackage)
+                        .put("modelPackage", modelPackage)
+                        .put("apiControllerPackage", controllerPackage)
+                        .put("servicePackage", servicePackage)
                         .put("nameUpper", modelName)
+                        //.put("nameLower", item.getLowerName())
+                        //.put("nameZh", modelName)
                         .build())
                 .build();
+
         return super.modelBaseRecordClassGenerated(topLevelClass, introspectedTable);
     }
 
     @Override
     public boolean validate(List<String> warnings) {
-        // 获取配置的目标package
         Properties properties = getProperties();
-        this.targetPackage = properties.getProperty("targetPackage");
-        if (this.targetPackage == null) {
-            warnings.add("请配置" + TAG + "插件的目标包名(targetPackage)！");
+        System.out.println("所有属性:" + JsonUtils.object2json(properties));
+
+        controllerPackage = properties.getProperty("controllerPackage");
+        if (controllerPackage == null) {
+            warnings.add("请配置" + TAG + "插件的（controllerPackage）属性");
             return false;
         }
-        this.basePackage = properties.getProperty("basePackage");
-        if (this.basePackage == null) {
-            warnings.add("请配置" + TAG + "插件的基础包名(basePackage)！");
+
+        servicePackage = properties.getProperty("servicePackage");
+        if (servicePackage == null) {
+            warnings.add("请配置" + TAG + "插件的（servicePackage）属性");
+            return false;
+        }
+
+        basePackage = properties.getProperty("basePackage");
+        if (basePackage == null) {
+            warnings.add("请配置" + TAG + "插件的（basePackage）属性");
             return false;
         }
         return true;

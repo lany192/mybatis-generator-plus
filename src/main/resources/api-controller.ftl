@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@Api(tags = "后台-${nameZh}相关接口")
+@Api(tags = "${nameZh}相关接口")
 @RequestMapping("/api/admin/${nameLower}/")
 public class ${nameUpper}Controller {
     private final ${nameUpper}Service service;
