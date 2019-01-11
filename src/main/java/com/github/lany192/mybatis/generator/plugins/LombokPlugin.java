@@ -224,10 +224,11 @@ public class LombokPlugin extends PluginAdapter {
         }
 
         private static Collection<Annotations> getDependencies(Annotations annotation) {
-            if (annotation == ALL_ARGS_CONSTRUCTOR)
+            if (annotation == ALL_ARGS_CONSTRUCTOR) {
                 return Collections.singleton(NO_ARGS_CONSTRUCTOR);
-            else
+            } else {
                 return Collections.emptyList();
+            }
         }
 
         // A trivial quoting.
@@ -235,7 +236,9 @@ public class LombokPlugin extends PluginAdapter {
         private static String quote(String value) {
             if (Boolean.TRUE.toString().equals(value) || Boolean.FALSE.toString().equals(value))
                 // case of boolean, not passed as an array.
+            {
                 return value;
+            }
             return value.replaceAll("[\\w]+", "\"$0\"");
         }
 

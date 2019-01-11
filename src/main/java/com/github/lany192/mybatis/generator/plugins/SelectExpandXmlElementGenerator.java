@@ -87,7 +87,6 @@ public class SelectExpandXmlElementGenerator extends AbstractXmlElementGenerator
         parentElement.addElement(pageList);
 
         addSelectOneElement(parentElement);
-        addSelectOneByExampleElement(parentElement);
     }
 
     private void addSelectOneElement(XmlElement parentElement) {
@@ -131,31 +130,5 @@ public class SelectExpandXmlElementGenerator extends AbstractXmlElementGenerator
             selectTrimElement.addElement(selectNotNullElement);
         }
         return selectTrimElement;
-    }
-
-    private void addSelectOneByExampleElement(XmlElement parentElement) {
-        XmlElement answer = new XmlElement("select");
-        answer.addAttribute(new Attribute("id", "selectOneByExample"));
-        answer.addAttribute(new Attribute("resultMap", "BaseResultMap"));
-        answer.addAttribute(new Attribute("parameterType", introspectedTable.getExampleType()));
-        context.getCommentGenerator().addComment(answer);
-
-        answer.addElement(new TextElement("select"));
-
-        answer.addElement(getBaseColumnListElement());
-
-        StringBuilder sb = new StringBuilder();
-        sb.setLength(0);
-        sb.append("from ");
-        sb.append(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime());
-        answer.addElement(new TextElement(sb.toString()));
-        answer.addElement(getExampleIncludeElement());
-
-        XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", "orderByClause != null"));
-        ifElement.addElement(new TextElement("order by ${orderByClause}"));
-        answer.addElement(ifElement);
-
-        parentElement.addElement(answer);
     }
 }
