@@ -27,7 +27,7 @@ public class SelectOneByExamplePlugin extends PluginAdapter {
 
     @Override
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
-        AbstractXmlElementGenerator elementGenerator = new SelectOneByExampleXmlElementGenerator();
+        AbstractXmlElementGenerator elementGenerator = new XmlElementGenerator();
         elementGenerator.setContext(context);
         elementGenerator.setIntrospectedTable(introspectedTable);
         elementGenerator.addElements(document.getRootElement());
@@ -36,14 +36,14 @@ public class SelectOneByExamplePlugin extends PluginAdapter {
 
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        AbstractJavaMapperMethodGenerator methodGenerator = new SelectOneByExampleMethodGenerator();
+        AbstractJavaMapperMethodGenerator methodGenerator = new MapperMethodGenerator();
         methodGenerator.setContext(context);
         methodGenerator.setIntrospectedTable(introspectedTable);
         methodGenerator.addInterfaceElements(interfaze);
         return super.clientGenerated(interfaze, topLevelClass, introspectedTable);
     }
 
-    class SelectOneByExampleMethodGenerator extends AbstractJavaMapperMethodGenerator {
+    class MapperMethodGenerator extends AbstractJavaMapperMethodGenerator {
 
         @Override
         public void addInterfaceElements(Interface interfaze) {
@@ -76,7 +76,7 @@ public class SelectOneByExamplePlugin extends PluginAdapter {
         }
     }
 
-    class SelectOneByExampleXmlElementGenerator extends AbstractXmlElementGenerator {
+    class XmlElementGenerator extends AbstractXmlElementGenerator {
 
         @Override
         public void addElements(XmlElement parentElement) {
