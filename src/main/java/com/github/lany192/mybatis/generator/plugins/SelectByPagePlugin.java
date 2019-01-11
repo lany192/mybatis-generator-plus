@@ -20,7 +20,7 @@ import java.util.TreeSet;
  * 分页查询插件
  */
 public class SelectByPagePlugin extends PluginAdapter {
-
+    private final String METHOD_NAME = "selectByPage";
     @Override
     public boolean validate(List<String> warnings) {
         return true;
@@ -95,7 +95,7 @@ public class SelectByPagePlugin extends PluginAdapter {
 
             // 增加pageList
             XmlElement pageList = new XmlElement("select");
-            pageList.addAttribute(new Attribute("id", "selectByPage"));
+            pageList.addAttribute(new Attribute("id", METHOD_NAME));
             pageList.addAttribute(new Attribute("resultMap", "BaseResultMap"));
             pageList.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
             pageList.addElement(selectText);
@@ -127,14 +127,14 @@ public class SelectByPagePlugin extends PluginAdapter {
             // 方法对象设置返回类型对象
             method.setReturnType(returnType);
             // 设置方法名称为我们在IntrospectedTable类中初始化的 “selectByObject”
-            method.setName("selectByPage");
+            method.setName(METHOD_NAME);
 
             // 设置参数类型是对象
             FullyQualifiedJavaType parameterType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
             // import参数类型对象
             importedTypes.add(parameterType);
             // 为方法添加参数，变量名称record
-            method.addParameter(new Parameter(parameterType, "record")); //$NON-NLS-1$
+            method.addParameter(new Parameter(parameterType, "record"));
             context.getCommentGenerator().addGeneralMethodComment(method, introspectedTable);
             if (context.getPlugins().clientSelectByPrimaryKeyMethodGenerated(method, interfaze, introspectedTable)) {
                 interfaze.addImportedTypes(importedTypes);
