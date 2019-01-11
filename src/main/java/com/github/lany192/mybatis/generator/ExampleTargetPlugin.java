@@ -9,14 +9,16 @@ import java.util.Properties;
 
 /**
  * 修改Example类的目标地址
+ * <p>
+ * <!-- 修改Example包名插件 -->
+ * <plugin type="com.github.lany192.mybatis.generator.plugins.ExampleTargetPlugin">
+ * <property name="targetPackage" value="cn.taoduorou.server.entity.example"/>
+ * </plugin>
  *
- *         <!-- 修改Example包名插件 -->
- *         <plugin type="com.github.lany192.mybatis.generator.plugins.ExampleTargetPlugin">
- *             <property name="targetPackage" value="cn.taoduorou.server.entity.example"/>
- *         </plugin>
  * @author Administrator
  */
 public class ExampleTargetPlugin extends PluginAdapter {
+    private final String TAG = getClass().getSimpleName();
     /**
      * 目标包
      */
@@ -24,11 +26,10 @@ public class ExampleTargetPlugin extends PluginAdapter {
 
     @Override
     public boolean validate(List<String> warnings) {
-        // 获取配置的目标package
         Properties properties = getProperties();
         this.targetPackage = properties.getProperty("targetPackage");
         if (this.targetPackage == null) {
-            warnings.add("请配置com.itfsw.mybatis.generator.plugins.ExampleTargetPlugin插件的目标包名(targetPackage)！");
+            warnings.add("请配置" + TAG + "插件的目标包名(targetPackage)！");
             return false;
         }
         return true;
