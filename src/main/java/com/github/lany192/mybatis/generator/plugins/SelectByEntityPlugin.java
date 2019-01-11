@@ -102,14 +102,12 @@ public class SelectByEntityPlugin extends PluginAdapter {
 
             xmlElement.addElement(new TextElement("select"));
 
-            if (stringHasValue(introspectedTable
-                    .getSelectByPrimaryKeyQueryId())) {
-                StringBuilder sb = new StringBuilder();
-                sb.append('\'');
-                sb.append(introspectedTable.getSelectByPrimaryKeyQueryId());
-                sb.append("' as QUERYID,");
-                xmlElement.addElement(new TextElement(sb.toString()));
-            }
+            XmlElement ifElement = new XmlElement("if");
+            ifElement.addAttribute(new Attribute("test", "distinct"));
+            ifElement.addElement(new TextElement("distinct"));
+            xmlElement.addElement(ifElement);
+
+            xmlElement.addElement(new TextElement("'true' as QUERYID,"));
 
             xmlElement.addElement(getBaseColumnListElement());
 
