@@ -82,46 +82,46 @@ public class SelectOneByEntityPlugin extends PluginAdapter {
 
         @Override
         public void addElements(XmlElement parentElement) {
-            XmlElement answer = new XmlElement("select");
-            answer.addAttribute(new Attribute("id", METHOD_NAME));
-            answer.addAttribute(new Attribute("resultMap", "BaseResultMap"));
-            answer.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
-            context.getCommentGenerator().addComment(answer);
+            XmlElement xmlElement = new XmlElement("select");
+            xmlElement.addAttribute(new Attribute("id", METHOD_NAME));
+            xmlElement.addAttribute(new Attribute("resultMap", "BaseResultMap"));
+            xmlElement.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
+            context.getCommentGenerator().addComment(xmlElement);
 
-            answer.addElement(new TextElement("select"));
-            answer.addElement(getBaseColumnListElement());
-            answer.addElement(new TextElement(" from "));
-            answer.addElement(new TextElement(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
-            answer.addElement(getRecordWhereXmlElement());
+            xmlElement.addElement(new TextElement("select"));
+            xmlElement.addElement(getBaseColumnListElement());
+            xmlElement.addElement(new TextElement(" from "));
+            xmlElement.addElement(new TextElement(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
+            xmlElement.addElement(getEntityWhereXmlElement());
 
-            parentElement.addElement(answer);
+            parentElement.addElement(xmlElement);
         }
 
-        private XmlElement getRecordWhereXmlElement() {
+        private XmlElement getEntityWhereXmlElement() {
             //在这里添加where条件
             //设置trim标签
-            XmlElement selectTrimElement = new XmlElement("trim");
-            selectTrimElement.addAttribute(new Attribute("prefix", "WHERE"));
+            XmlElement xmlElement = new XmlElement("trim");
+            xmlElement.addAttribute(new Attribute("prefix", "WHERE"));
             //添加where和and
-            selectTrimElement.addAttribute(new Attribute("prefixOverrides", "AND | OR"));
-            StringBuilder sb2 = new StringBuilder();
+            xmlElement.addAttribute(new Attribute("prefixOverrides", "AND | OR"));
+            StringBuilder sb = new StringBuilder();
             for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
                 XmlElement selectNotNullElement = new XmlElement("if");
-                sb2.setLength(0);
-                sb2.append("null != ");
-                sb2.append(introspectedColumn.getJavaProperty());
-                selectNotNullElement.addAttribute(new Attribute("test", sb2.toString()));
-                sb2.setLength(0);
+                sb.setLength(0);
+                sb.append("null != ");
+                sb.append(introspectedColumn.getJavaProperty());
+                selectNotNullElement.addAttribute(new Attribute("test", sb.toString()));
+                sb.setLength(0);
                 // 添加and
-                sb2.append(" and ");
-                sb2.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
+                sb.append(" and ");
+                sb.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
                 // 添加等号
-                sb2.append(" = ");
-                sb2.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn));
-                selectNotNullElement.addElement(new TextElement(sb2.toString()));
-                selectTrimElement.addElement(selectNotNullElement);
+                sb.append(" = ");
+                sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn));
+                selectNotNullElement.addElement(new TextElement(sb.toString()));
+                xmlElement.addElement(selectNotNullElement);
             }
-            return selectTrimElement;
+            return xmlElement;
         }
     }
 }
