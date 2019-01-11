@@ -59,8 +59,17 @@ public class SelectByEntityPlugin extends PluginAdapter {
             Method method = new Method();
             // 设置该方法为public
             method.setVisibility(JavaVisibility.PUBLIC);
+
+
             // 设置返回类型是List
-            FullyQualifiedJavaType returnType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+            FullyQualifiedJavaType returnType = FullyQualifiedJavaType.getNewListInstance();
+            FullyQualifiedJavaType listType;
+            // 设置List的类型是实体类的对象
+            listType = new FullyQualifiedJavaType(introspectedTable.getBaseRecordType());
+            importedTypes.add(listType);
+            // 返回类型对象设置为List
+            returnType.addTypeArgument(listType);
+
             // 方法对象设置返回类型对象
             method.setReturnType(returnType);
             // 设置方法名称为我们在IntrospectedTable类中初始化的 “selectByObject”
