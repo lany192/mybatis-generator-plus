@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator.plugins;
+package com.github.lany192.mybatis.generator;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -15,8 +15,6 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElem
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
 /**
  * 查询多个记录

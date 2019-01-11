@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator.plugins;
+package com.github.lany192.mybatis.generator;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -14,6 +14,7 @@ import java.util.Properties;
  *         <plugin type="com.github.lany192.mybatis.generator.plugins.ExampleTargetPlugin">
  *             <property name="targetPackage" value="cn.taoduorou.server.entity.example"/>
  *         </plugin>
+ * @author Administrator
  */
 public class ExampleTargetPlugin extends PluginAdapter {
     /**

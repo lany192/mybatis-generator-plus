@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator.plugins;
+package com.github.lany192.mybatis.generator;
 
 
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -14,6 +14,7 @@ import java.util.*;
 
 /**
  * Lombok插件
+ * @author Administrator
  */
 public class LombokPlugin extends PluginAdapter {
     private final Collection<Annotations> annotations;

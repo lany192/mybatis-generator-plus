@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator.plugins;
+package com.github.lany192.mybatis.generator;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 /**
  * 查询单个记录
+ * @author Administrator
  */
 public class SelectOneByExamplePlugin extends PluginAdapter {
     private final String METHOD_NAME = "selectOneByExample";

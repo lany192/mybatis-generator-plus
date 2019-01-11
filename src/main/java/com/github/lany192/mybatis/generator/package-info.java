@@ -1,1 +1,0 @@
-package com.github.lany192.mybatis.generator;
