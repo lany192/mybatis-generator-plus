@@ -31,18 +31,19 @@ public class ServicePlugin extends PluginAdapter {
         String modelPackage = modelConfig.getTargetPackage();
         String modelName = modelType.replace(modelPackage + ".", "");
         String implPackage = targetPackage + ".impl";
-
+        String templatePath = System.getProperty("user.dir") + "/src/main/resources";
         System.out.println("service包名==" + targetPackage);
         System.out.println("service impl包名==" + implPackage);
         System.out.println("model的名称:" + modelName);
         System.out.println("model的类型:" + modelType);
         System.out.println("model的包名:" + modelPackage);
-        System.out.println("模板:" + modelPackage);
+        System.out.println("模板路径:" + templatePath);
 
         Map<String, Object> data1 = new HashMap<>();
         data1.put("servicePackage", targetPackage);
         data1.put("basePackage", basePackage);
         data1.put("nameUpper", modelName);
+
 
         new CodeBuilder()
                 .module("")
@@ -51,7 +52,7 @@ public class ServicePlugin extends PluginAdapter {
                 .modelName(modelName)
                 .suffix("Service")
                 .format("java")
-                .setTemplatePath(System.getProperty("user.dir") + "/src/main/resources")
+                .setTemplatePath(templatePath)
                 .setTemplateName("service.ftl")
                 .setData(data1)
                 .build();
@@ -69,7 +70,7 @@ public class ServicePlugin extends PluginAdapter {
                 .modelName(modelName)
                 .suffix("ServiceImpl")
                 .format("java")
-                .setTemplatePath(System.getProperty("user.dir") + "/src/main/resources")
+                .setTemplatePath(templatePath)
                 .setTemplateName("service-impl.ftl")
                 .setData(data2)
                 .build();
