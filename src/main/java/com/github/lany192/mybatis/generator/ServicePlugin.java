@@ -6,6 +6,7 @@ import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,8 @@ public class ServicePlugin extends PluginAdapter {
         String modelPackage = modelConfig.getTargetPackage();
         String modelName = modelType.replace(modelPackage + ".", "");
         String implPackage = targetPackage + ".impl";
-        String templatePath = System.getProperty("user.dir") + "/src/main/resources";
+        String templatePath = System.getProperty("user.dir") + File.separator + "src"
+                + File.separator + "main" + File.separator + "resources";
         System.out.println("service包名==" + targetPackage);
         System.out.println("service impl包名==" + implPackage);
         System.out.println("model的名称:" + modelName);
