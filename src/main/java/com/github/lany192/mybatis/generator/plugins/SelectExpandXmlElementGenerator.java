@@ -85,50 +85,5 @@ public class SelectExpandXmlElementGenerator extends AbstractXmlElementGenerator
         pageList.addElement(selectText);
         pageList.addElement(include);
         parentElement.addElement(pageList);
-
-        addSelectOneElement(parentElement);
-    }
-
-    private void addSelectOneElement(XmlElement parentElement) {
-        XmlElement answer = new XmlElement("select");
-        answer.addAttribute(new Attribute("id", "selectOne"));
-        answer.addAttribute(new Attribute("resultMap", "BaseResultMap"));
-        answer.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
-        context.getCommentGenerator().addComment(answer);
-
-        answer.addElement(new TextElement("select"));
-        answer.addElement(getBaseColumnListElement());
-        answer.addElement(new TextElement(" from "));
-        answer.addElement(new TextElement(introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
-        answer.addElement(getRecordWhereXmlElement());
-
-        parentElement.addElement(answer);
-    }
-
-    private XmlElement getRecordWhereXmlElement() {
-        //在这里添加where条件
-        //设置trim标签
-        XmlElement selectTrimElement = new XmlElement("trim");
-        selectTrimElement.addAttribute(new Attribute("prefix", "WHERE"));
-        //添加where和and
-        selectTrimElement.addAttribute(new Attribute("prefixOverrides", "AND | OR"));
-        StringBuilder sb2 = new StringBuilder();
-        for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
-            XmlElement selectNotNullElement = new XmlElement("if");
-            sb2.setLength(0);
-            sb2.append("null != ");
-            sb2.append(introspectedColumn.getJavaProperty());
-            selectNotNullElement.addAttribute(new Attribute("test", sb2.toString()));
-            sb2.setLength(0);
-            // 添加and
-            sb2.append(" and ");
-            sb2.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
-            // 添加等号
-            sb2.append(" = ");
-            sb2.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn));
-            selectNotNullElement.addElement(new TextElement(sb2.toString()));
-            selectTrimElement.addElement(selectNotNullElement);
-        }
-        return selectTrimElement;
     }
 }
