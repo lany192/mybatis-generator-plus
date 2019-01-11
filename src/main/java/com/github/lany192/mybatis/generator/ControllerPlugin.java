@@ -32,7 +32,8 @@ public class ControllerPlugin extends PluginAdapter {
         String modelPackage = modelConfig.getTargetPackage();
         String modelName = modelType.replace(modelPackage + ".", "");
         String templatePath = System.getProperty("user.dir") + File.separator + "src"
-                + File.separator + "main" + File.separator + "resources";
+                + File.separator + "main" + File.separator + "resources"
+                + File.separator + "templates" + File.separator + "autocode";
         System.out.println("Controller包名==" + targetPackage);
         System.out.println("model的名称:" + modelName);
         System.out.println("model的类型:" + modelType);

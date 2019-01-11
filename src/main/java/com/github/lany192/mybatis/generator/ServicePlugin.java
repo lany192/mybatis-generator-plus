@@ -33,7 +33,8 @@ public class ServicePlugin extends PluginAdapter {
         String modelName = modelType.replace(modelPackage + ".", "");
         String implPackage = targetPackage + ".impl";
         String templatePath = System.getProperty("user.dir") + File.separator + "src"
-                + File.separator + "main" + File.separator + "resources";
+                + File.separator + "main" + File.separator + "resources"
+                + File.separator + "templates" + File.separator + "autocode";
         System.out.println("service包名==" + targetPackage);
         System.out.println("service impl包名==" + implPackage);
         System.out.println("model的名称:" + modelName);
