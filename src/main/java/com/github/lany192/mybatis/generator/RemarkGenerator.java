@@ -61,16 +61,16 @@ public final class RemarkGenerator implements CommentGenerator {
 
     @Override
     public void addComment(XmlElement xmlElement) {
-        if (!this.suppressAllComments) {
-            xmlElement.addElement(new TextElement("<!--"));
-            xmlElement.addElement(new TextElement("mybatis generator plus自动生成,请勿编辑."));
-            xmlElement.addElement(new TextElement("-->"));
-        }
+
     }
 
     @Override
     public void addRootComment(XmlElement rootElement) {
-
+        if (!this.suppressAllComments) {
+            rootElement.addElement(new TextElement("<!--"));
+            rootElement.addElement(new TextElement("mybatis generator plus自动生成,请勿编辑."));
+            rootElement.addElement(new TextElement("-->"));
+        }
     }
 
     /**
