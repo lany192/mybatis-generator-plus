@@ -215,13 +215,13 @@ public final class RemarkGenerator implements CommentGenerator {
             } else if ("updateByExample".equals(methodName)) {
                 method.addJavaDocLine(" * 根据条件更新记录");
                 method.addJavaDocLine(" * ");
-                method.addJavaDocLine(" * @param record 要更新的内容");
+                method.addJavaDocLine(" * @param record  要更新的内容");
                 method.addJavaDocLine(" * @param example 更新条件");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("updateByExampleSelective".equals(methodName)) {
                 method.addJavaDocLine(" * 根据条件，更新存在的字段");
                 method.addJavaDocLine(" * ");
-                method.addJavaDocLine(" * @param record 要更新的内容");
+                method.addJavaDocLine(" * @param record  要更新的内容");
                 method.addJavaDocLine(" * @param example 更新条件");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("selectByPrimaryKey".equals(methodName)) {
