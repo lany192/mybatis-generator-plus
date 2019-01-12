@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Map;
 
+/**
+ * @author Administrator
+ */
 public class CodeBuilder {
     private String rootPath = System.getProperty("user.dir");
     private String module;
@@ -30,7 +33,7 @@ public class CodeBuilder {
     public void build() {
         String outPath = getPath();
         try {
-            Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
+            Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
             cfg.setDirectoryForTemplateLoading(new File(templatePath));
             cfg.setDefaultEncoding("UTF-8");
             cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);

@@ -1,15 +1,18 @@
-package ${servicePackage};
+package ${packageName};
 
-import ${basePackage}.entity.${nameUpper};
+import ${modelType};
 import ${basePackage}.utils.Result;
 
 import java.util.List;
 
-public interface ${nameUpper}Service {
+/**
+* @author Lany
+*/
+public interface ${modelNameUpper}Service {
     /**
      * 新增记录
      */
-    Result save(${nameUpper} record);
+    Result save(${modelNameUpper} record);
 
     /**
      * 根据id删除记录
@@ -24,7 +27,7 @@ public interface ${nameUpper}Service {
     /**
     * 修改记录
     */
-    Result update(${nameUpper} record);
+    Result update(${modelNameUpper} record);
 
     /**
     * 根据id查询记录
