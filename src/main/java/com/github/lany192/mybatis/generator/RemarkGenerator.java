@@ -13,7 +13,10 @@ import org.mybatis.generator.internal.util.StringUtility;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * 生成的数据库注释
@@ -171,60 +174,74 @@ public final class RemarkGenerator implements CommentGenerator {
             String methodName = method.getName();
             if ("countByExample".equals(methodName)) {
                 method.addJavaDocLine(" * 根据条件统计数量");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param example 统计条件");
                 method.addJavaDocLine(" * @return 记录数量");
             } else if ("deleteByExample".equals(methodName)) {
                 method.addJavaDocLine(" * 删除记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param example 删除的条件");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("deleteByPrimaryKey".equals(methodName)) {
                 method.addJavaDocLine(" * 根据记录id，删除记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param id 要删除的记录id");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("selectByEntity".equals(methodName)) {
                 method.addJavaDocLine(" * 查询记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param record 查询条件");
                 method.addJavaDocLine(" * @return 记录集");
             } else if ("selectOneByExample".equals(methodName)) {
                 method.addJavaDocLine(" * 查询单个记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param example 查询条件");
                 method.addJavaDocLine(" * @return 查询结果");
             } else if ("selectOneByEntity".equals(methodName)) {
                 method.addJavaDocLine(" * 查询单个记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param record 查询条件");
                 method.addJavaDocLine(" * @return 查询结果");
             } else if ("updateByPrimaryKey".equals(methodName)) {
                 method.addJavaDocLine(" * 根据记录id，更新记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param record 要更新的内容");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("updateByPrimaryKeySelective".equals(methodName)) {
                 method.addJavaDocLine(" * 根据记录id，更新存在的字段");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param record 要更新的内容");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("updateByExample".equals(methodName)) {
                 method.addJavaDocLine(" * 根据条件更新记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param record 要更新的内容");
                 method.addJavaDocLine(" * @param example 更新条件");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("updateByExampleSelective".equals(methodName)) {
                 method.addJavaDocLine(" * 根据条件，更新存在的字段");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param record 要更新的内容");
                 method.addJavaDocLine(" * @param example 更新条件");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("selectByPrimaryKey".equals(methodName)) {
                 method.addJavaDocLine(" * 根据记录id，查询记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param id 查询的记录id");
                 method.addJavaDocLine(" * @return 记录");
             } else if ("selectByExample".equals(methodName)) {
                 method.addJavaDocLine(" * 根据条件，查询多条记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param example 查询的条件");
                 method.addJavaDocLine(" * @return 记录集");
             } else if ("insert".equals(methodName)) {
                 method.addJavaDocLine(" * 保存新记录");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param record 要保存的记录");
                 method.addJavaDocLine(" * @return 影响数量");
             } else if ("insertSelective".equals(methodName)) {
                 method.addJavaDocLine(" * 保存新记录，保存有值的字段");
+                method.addJavaDocLine(" * ");
                 method.addJavaDocLine(" * @param record 要保存的记录");
                 method.addJavaDocLine(" * @return 影响数量");
             } else {
