@@ -16,7 +16,7 @@ import java.util.TreeSet;
 
 /**
  * 查询单个记录
- * @author Administrator
+ * @author Lany
  */
 public class SelectOneByExamplePlugin extends PluginAdapter {
     private final String METHOD_NAME = "selectOneByExample";

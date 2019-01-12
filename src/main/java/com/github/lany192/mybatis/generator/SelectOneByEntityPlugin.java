@@ -18,7 +18,7 @@ import java.util.TreeSet;
 
 /**
  * 查询单个记录
- * @author Administrator
+ * @author Lany
  */
 public class SelectOneByEntityPlugin extends PluginAdapter {
     private final String METHOD_NAME = "selectOneByEntity";

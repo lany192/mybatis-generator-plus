@@ -17,7 +17,7 @@ import java.util.Properties;
 /**
  * Freemarker插件
  *
- * @author Administrator
+ * @author Lany
  */
 public class FreemarkerPlugin extends PluginAdapter {
     private final String TAG = getClass().getSimpleName();
@@ -45,9 +45,11 @@ public class FreemarkerPlugin extends PluginAdapter {
         String modelPackage = modelConfig.getTargetPackage();
         String modelName = modelType.replace(modelPackage + ".", "");
 
+
         data.put("modelType", modelType);
         data.put("modelPackage", modelPackage);
         data.put("modelNameUpper", modelName);
+        data.put("modelNameLower", toLower(modelName));
 
 
         String templatePath = (String) params.get(TEMPLATE_PATH);
@@ -79,6 +81,19 @@ public class FreemarkerPlugin extends PluginAdapter {
                 .setData(data)
                 .build();
         return super.modelBaseRecordClassGenerated(topLevelClass, introspectedTable);
+    }
+
+    /**
+     * 首字母转小写
+     *
+     * @param name 单词
+     */
+    private String toLower(String name) {
+        if (Character.isLowerCase(name.charAt(0))) {
+            return name;
+        } else {
+            return Character.toLowerCase(name.charAt(0)) + name.substring(1);
+        }
     }
 
     @Override

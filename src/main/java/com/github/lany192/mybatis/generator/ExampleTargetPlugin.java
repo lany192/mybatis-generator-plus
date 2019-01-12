@@ -15,7 +15,7 @@ import java.util.Properties;
  * <property name="targetPackage" value="cn.taoduorou.server.entity.example"/>
  * </plugin>
  *
- * @author Administrator
+ * @author Lany
  */
 public class ExampleTargetPlugin extends PluginAdapter {
     private final String TAG = getClass().getSimpleName();

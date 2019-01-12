@@ -14,7 +14,7 @@ import java.util.*;
 
 /**
  * Lombok插件
- * @author Administrator
+ * @author Lany
  */
 public class LombokPlugin extends PluginAdapter {
     private final Collection<Annotations> annotations;
