@@ -11,10 +11,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 
@@ -55,7 +52,7 @@ public final class RemarkGenerator implements CommentGenerator {
             unit.addFileCommentLine("* " + unit.getType().getShortName() + ".java");
             unit.addFileCommentLine("* mybatis generator plus自动生成,请勿编辑.");
             unit.addFileCommentLine("* Copyright(C) " + Calendar.getInstance().get(Calendar.YEAR) + " Lany");
-            unit.addFileCommentLine("* @date " + dateFormat.format(new Date()) + "");
+//            unit.addFileCommentLine("* @date " + dateFormat.format(new Date()) + "");
             unit.addFileCommentLine("*/");
         }
     }
@@ -361,11 +358,11 @@ public final class RemarkGenerator implements CommentGenerator {
 
         buffer.append(MyBatisGenerator.class.getName());
         buffer.append('"');
-        if (!this.suppressDate && !this.suppressAllComments) {
-            buffer.append(", date=\"");
-            buffer.append(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(ZonedDateTime.now()));
-            buffer.append('"');
-        }
+//        if (!this.suppressDate && !this.suppressAllComments) {
+//            buffer.append(", date=\"");
+//            buffer.append(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(ZonedDateTime.now()));
+//            buffer.append('"');
+//        }
 
         if (!this.suppressAllComments) {
             buffer.append(", comments=\"");
