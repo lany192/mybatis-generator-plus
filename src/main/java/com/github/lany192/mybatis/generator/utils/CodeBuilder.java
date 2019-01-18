@@ -45,6 +45,7 @@ public class CodeBuilder {
     }
 
     private String getPath() {
+        System.out.println("获取的根目录:" + System.getProperty("user.dir"));
         String result = rootPath + File.separator;
         if (!isEmpty(module)) {
             result += module + File.separator;

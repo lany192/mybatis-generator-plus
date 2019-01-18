@@ -25,6 +25,7 @@ public class FreemarkerPlugin extends PluginAdapter {
     private final String TEMPLATE_NAME = "templateName";
     private final String FILE_SUFFIX = "fileSuffix";
     private final String FILE_FORMAT = "fileFormat";
+    private final String ROOT_DIR_PATH = "rootDirPath";
     private Map<String, Object> params = new HashMap<>();
 
     @Override
@@ -38,6 +39,7 @@ public class FreemarkerPlugin extends PluginAdapter {
         data.remove(TEMPLATE_NAME);
         data.remove(FILE_SUFFIX);
         data.remove(FILE_FORMAT);
+        data.remove(ROOT_DIR_PATH);
         data.remove(MODULE_NAME);
 
         JavaModelGeneratorConfiguration modelConfig = getContext().getJavaModelGeneratorConfiguration();
@@ -69,7 +71,12 @@ public class FreemarkerPlugin extends PluginAdapter {
         if (StringsUtils.isEmpty(moduleName)) {
             moduleName = "";
         }
+        String rootDirPath = (String) params.get(ROOT_DIR_PATH);
+        if (StringsUtils.isEmpty(rootDirPath)) {
+            rootDirPath = "";
+        }
         new CodeBuilder()
+                .rootPath(rootDirPath)
                 .module(moduleName)
                 .path("src/main/java")
                 .packageName((String) params.get(PACKAGE_NAME))
