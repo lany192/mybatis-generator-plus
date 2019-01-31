@@ -143,7 +143,8 @@ public final class RemarkGenerator implements CommentGenerator {
             return;
         }
         field.addJavaDocLine("/**");
-        field.addJavaDocLine(" * " + introspectedColumn.getRemarks() + "，对应字段:" + introspectedColumn.getActualColumnName());
+        field.addJavaDocLine(" * " + introspectedColumn.getRemarks());
+        field.addJavaDocLine(" * 对应字段:" + introspectedColumn.getActualColumnName());
         field.addJavaDocLine(" */");
     }
 
