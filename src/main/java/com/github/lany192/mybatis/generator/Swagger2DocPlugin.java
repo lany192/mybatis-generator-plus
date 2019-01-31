@@ -29,10 +29,7 @@ public class Swagger2DocPlugin extends PluginAdapter {
 //            topLevelClass.addAnnotation(classAnnotation);
 //        }
 
-        field.addAnnotation("@ApiModelProperty(value=\""
-                + introspectedColumn.getJavaProperty()
-                + introspectedColumn.getRemarks() + "\")");
-
+        field.addAnnotation("@ApiModelProperty(value=\"" + introspectedColumn.getRemarks() + "\")");
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 }
