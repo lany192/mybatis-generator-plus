@@ -14,6 +14,7 @@ import java.util.*;
 
 /**
  * Lombok插件
+ *
  * @author Lany
  */
 public class LombokPlugin extends PluginAdapter {
@@ -152,7 +153,8 @@ public class LombokPlugin extends PluginAdapter {
         super.setProperties(properties);
 
         //@Data is default annotation
-        annotations.add(Annotations.DATA);
+        annotations.add(Annotations.SETTER);
+        annotations.add(Annotations.GETTER);
 
         for (String annotationName : properties.stringPropertyNames()) {
             if (annotationName.contains(".")) {
@@ -196,6 +198,8 @@ public class LombokPlugin extends PluginAdapter {
 
     private enum Annotations {
         DATA("data", "@Data", "lombok.Data"),
+        SETTER("setter", "@Setter", "lombok.Setter"),
+        GETTER("getter", "@Getter", "lombok.Getter"),
         BUILDER("builder", "@Builder", "lombok.Builder"),
         ALL_ARGS_CONSTRUCTOR("allArgsConstructor", "@AllArgsConstructor", "lombok.AllArgsConstructor"),
         NO_ARGS_CONSTRUCTOR("noArgsConstructor", "@NoArgsConstructor", "lombok.NoArgsConstructor"),
@@ -236,7 +240,7 @@ public class LombokPlugin extends PluginAdapter {
         // Because Lombok annotation options type is almost String or boolean.
         private static String quote(String value) {
             if (Boolean.TRUE.toString().equals(value) || Boolean.FALSE.toString().equals(value))
-                // case of boolean, not passed as an array.
+            // case of boolean, not passed as an array.
             {
                 return value;
             }
