@@ -13,13 +13,13 @@ import java.util.Properties;
 
 /**
  * 指定某些字段为某种自定义类型
- *
- *
+ * <p>
+ * <p>
  * 用法:
  *
- *         <javaTypeResolver type="com.github.lany192.mybatis.generator.CustomJavaTypeResolver">
- *             <property name="sex" value="xxx.xxx.xxx.enums.SexEnum"/>
- *         </javaTypeResolver>
+ * <javaTypeResolver type="com.github.lany192.mybatis.generator.CustomJavaTypeResolver">
+ * <property name="sex" value="xxx.xxx.xxx.enums.SexEnum"/>
+ * </javaTypeResolver>
  *
  * @author Administrator
  */
@@ -33,10 +33,14 @@ public class CustomJavaTypeResolver extends JavaTypeResolverDefaultImpl {
             String value = properties.getProperty(key);
             if (!StringsUtils.isEmpty(value)) {
                 mFieldsMap.put(key, value);
+//                typeMap.put(Types.INTEGER, new JdbcTypeInformation("INTEGER", //$NON-NLS-1$
+//                        new FullyQualifiedJavaType(value)));
             }
         }
         mFieldsMap.remove(PropertyRegistry.TYPE_RESOLVER_FORCE_BIG_DECIMALS);
         mFieldsMap.remove(PropertyRegistry.TYPE_RESOLVER_USE_JSR310_TYPES);
+
+
         System.out.println("自定义Java类型的属性映射关系:" + JsonUtils.object2json(mFieldsMap));
     }
 
