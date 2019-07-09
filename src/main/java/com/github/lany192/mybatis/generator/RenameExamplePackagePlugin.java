@@ -10,7 +10,7 @@ import java.util.List;
  * 修改Example类的目标地址
  * <p>
  * <!-- 修改Example包名插件 -->
- * <plugin type="com.github.lany192.mybatis.generator.plugins.RenameExamplePackagePlugin"/>
+ * <plugin type="com.github.lany192.mybatis.generator.RenameExamplePackagePlugin"/>
  *
  * @author Lany
  */
