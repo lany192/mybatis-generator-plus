@@ -2,7 +2,10 @@ package com.github.lany192.mybatis.generator;
 
 import com.github.lany192.mybatis.generator.utils.CodeBuilder;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
+import com.github.lany192.mybatis.generator.utils.Log;
 import com.github.lany192.mybatis.generator.utils.StringsUtils;
+import org.mybatis.generator.api.FullyQualifiedTable;
+import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
@@ -27,6 +30,53 @@ public class FreemarkerPlugin extends PluginAdapter {
     private final String FILE_FORMAT = "fileFormat";
     private final String ROOT_DIR_PATH = "rootDirPath";
     private Map<String, Object> params = new HashMap<>();
+
+    @Override
+    public boolean validate(List<String> warnings) {
+        Properties properties = getProperties();
+        for (String key : properties.stringPropertyNames()) {
+            String value = properties.getProperty(key);
+            if (!StringsUtils.isEmpty(value)) {
+                params.put(key, value);
+            }
+        }
+        if (StringsUtils.isEmpty((String) params.get(PACKAGE_NAME))) {
+            warnings.add("请配置" + TAG + "插件的" + PACKAGE_NAME + "属性");
+            return false;
+        }
+        if (StringsUtils.isEmpty((String) params.get(TEMPLATE_NAME))) {
+            warnings.add("请配置" + TAG + "插件的" + TEMPLATE_NAME + "属性");
+            return false;
+        }
+        if (StringsUtils.isEmpty((String) params.get(FILE_SUFFIX))) {
+            warnings.add("请配置" + TAG + "插件的" + FILE_SUFFIX + "属性");
+            return false;
+        }
+        if (StringsUtils.isEmpty((String) params.get(FILE_FORMAT))) {
+            warnings.add("请配置" + TAG + "插件的" + FILE_FORMAT + "属性");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles() {
+        return super.contextGenerateAdditionalJavaFiles();
+    }
+
+    @Override
+    public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
+        FullyQualifiedTable fullyQualifiedTable = introspectedTable.getFullyQualifiedTable();
+        Log.i(TAG, fullyQualifiedTable.getIntrospectedTableName());
+        Log.i(TAG, fullyQualifiedTable.getDomainObjectName());
+        Log.i(TAG, fullyQualifiedTable.getDomainObjectSubPackage());
+        Log.i(TAG, fullyQualifiedTable.getAlias());
+        Log.i(TAG, fullyQualifiedTable.getIbatis2SqlMapNamespace());
+        Log.i(TAG, fullyQualifiedTable.getIntrospectedCatalog());
+        Log.i(TAG, fullyQualifiedTable.getIntrospectedSchema());
+        Log.i(TAG, "\n");
+        return super.contextGenerateAdditionalJavaFiles(introspectedTable);
+    }
 
     @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
@@ -103,31 +153,4 @@ public class FreemarkerPlugin extends PluginAdapter {
         }
     }
 
-    @Override
-    public boolean validate(List<String> warnings) {
-        Properties properties = getProperties();
-        for (String key : properties.stringPropertyNames()) {
-            String value = properties.getProperty(key);
-            if (!StringsUtils.isEmpty(value)) {
-                params.put(key, value);
-            }
-        }
-        if (StringsUtils.isEmpty((String) params.get(PACKAGE_NAME))) {
-            warnings.add("请配置" + TAG + "插件的" + PACKAGE_NAME + "属性");
-            return false;
-        }
-        if (StringsUtils.isEmpty((String) params.get(TEMPLATE_NAME))) {
-            warnings.add("请配置" + TAG + "插件的" + TEMPLATE_NAME + "属性");
-            return false;
-        }
-        if (StringsUtils.isEmpty((String) params.get(FILE_SUFFIX))) {
-            warnings.add("请配置" + TAG + "插件的" + FILE_SUFFIX + "属性");
-            return false;
-        }
-        if (StringsUtils.isEmpty((String) params.get(FILE_FORMAT))) {
-            warnings.add("请配置" + TAG + "插件的" + FILE_FORMAT + "属性");
-            return false;
-        }
-        return true;
-    }
 }
