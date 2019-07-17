@@ -4,10 +4,8 @@ import com.github.lany192.mybatis.generator.utils.CodeBuilder;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
 import com.github.lany192.mybatis.generator.utils.StringsUtils;
-import org.mybatis.generator.api.FullyQualifiedTable;
-import org.mybatis.generator.api.GeneratedJavaFile;
-import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.PluginAdapter;
+import org.mybatis.generator.api.*;
+import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
 
@@ -74,7 +72,29 @@ public class FreemarkerPlugin extends PluginAdapter {
         Log.i(TAG, fullyQualifiedTable.getIbatis2SqlMapNamespace());
         Log.i(TAG, fullyQualifiedTable.getIntrospectedCatalog());
         Log.i(TAG, fullyQualifiedTable.getIntrospectedSchema());
-        Log.i(TAG, "\n");
+
+        List<IntrospectedColumn> columns = introspectedTable.getAllColumns();
+        for (IntrospectedColumn column : columns) {
+            Log.i(TAG, column.getActualColumnName());
+            Log.i(TAG, column.getJavaProperty());
+            Log.i(TAG, column.getRemarks());
+            Log.i(TAG, column.getJdbcTypeName());
+            Log.i(TAG, column.getJdbcType());
+            Log.i(TAG, column.getDefaultValue());
+            Log.i(TAG, column.getLength());
+            Log.i(TAG, column.getScale());
+            Log.i(TAG, column.getTableAlias());
+            Log.i(TAG, column.getTypeHandler());
+
+            FullyQualifiedJavaType javaType = column.getFullyQualifiedJavaType();
+            Log.i(TAG, javaType.getFullyQualifiedName());
+            Log.i(TAG, javaType.getShortName());
+            Log.i(TAG, javaType.getPackageName());
+            Log.i(TAG, javaType.getFullyQualifiedNameWithoutTypeParameters());
+            Log.i(TAG, javaType.getShortNameWithoutTypeArguments());
+            Log.i(TAG, "-----------------------------------");
+        }
+        Log.i(TAG, "\n\n");
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 
