@@ -75,23 +75,23 @@ public class FreemarkerPlugin extends PluginAdapter {
 
         List<IntrospectedColumn> columns = introspectedTable.getAllColumns();
         for (IntrospectedColumn column : columns) {
-            Log.i(TAG, column.getActualColumnName());
-            Log.i(TAG, column.getJavaProperty());
-            Log.i(TAG, column.getRemarks());
-            Log.i(TAG, column.getJdbcTypeName());
-            Log.i(TAG, column.getJdbcType());
-            Log.i(TAG, column.getDefaultValue());
-            Log.i(TAG, column.getLength());
-            Log.i(TAG, column.getScale());
-            Log.i(TAG, column.getTableAlias());
-            Log.i(TAG, column.getTypeHandler());
+            Log.i(TAG, "ActualColumnName:" + column.getActualColumnName());
+            Log.i(TAG, "JavaProperty:" + column.getJavaProperty());
+            Log.i(TAG, "Remarks:" + column.getRemarks());
+            Log.i(TAG, "JdbcTypeName:" + column.getJdbcTypeName());
+            Log.i(TAG, "JdbcType:" + column.getJdbcType());
+            Log.i(TAG, "DefaultValue:" + column.getDefaultValue());
+            Log.i(TAG, "Length:" + column.getLength());
+            Log.i(TAG, "Scale:" + column.getScale());
+            Log.i(TAG, "TableAlias:" + column.getTableAlias());
+            Log.i(TAG, "TypeHandler:" + column.getTypeHandler());
 
             FullyQualifiedJavaType javaType = column.getFullyQualifiedJavaType();
-            Log.i(TAG, javaType.getFullyQualifiedName());
-            Log.i(TAG, javaType.getShortName());
-            Log.i(TAG, javaType.getPackageName());
-            Log.i(TAG, javaType.getFullyQualifiedNameWithoutTypeParameters());
-            Log.i(TAG, javaType.getShortNameWithoutTypeArguments());
+            Log.i(TAG, "FullyQualifiedName:" + javaType.getFullyQualifiedName());
+            Log.i(TAG, "ShortName:" + javaType.getShortName());
+            Log.i(TAG, "PackageName:" + javaType.getPackageName());
+            Log.i(TAG, "FullyQualifiedName2:" + javaType.getFullyQualifiedNameWithoutTypeParameters());
+            Log.i(TAG, "ShortName2:" + javaType.getShortNameWithoutTypeArguments());
             Log.i(TAG, "-----------------------------------");
         }
         Log.i(TAG, "\n\n");
