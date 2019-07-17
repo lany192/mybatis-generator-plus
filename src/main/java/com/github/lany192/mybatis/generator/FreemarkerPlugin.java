@@ -65,14 +65,31 @@ public class FreemarkerPlugin extends PluginAdapter {
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
         FullyQualifiedTable fullyQualifiedTable = introspectedTable.getFullyQualifiedTable();
-        Log.i(TAG, fullyQualifiedTable.getIntrospectedTableName());
-        Log.i(TAG, fullyQualifiedTable.getDomainObjectName());
-        Log.i(TAG, fullyQualifiedTable.getDomainObjectSubPackage());
-        Log.i(TAG, fullyQualifiedTable.getAlias());
-        Log.i(TAG, fullyQualifiedTable.getIbatis2SqlMapNamespace());
-        Log.i(TAG, fullyQualifiedTable.getIntrospectedCatalog());
-        Log.i(TAG, fullyQualifiedTable.getIntrospectedSchema());
+        Log.i(TAG, "***********************************************");
+        Log.i(TAG, "TableName:" + fullyQualifiedTable.getIntrospectedTableName());
+        Log.i(TAG, "DomainObjectName:" + fullyQualifiedTable.getDomainObjectName());
 
+        Log.i(TAG, "DomainObjectSubPackage:" + fullyQualifiedTable.getDomainObjectSubPackage());
+        Log.i(TAG, "Alias:" + fullyQualifiedTable.getAlias());
+        Log.i(TAG, "Ibatis2SqlMapNamespace:" + fullyQualifiedTable.getIbatis2SqlMapNamespace());
+        Log.i(TAG, "Catalog:" + fullyQualifiedTable.getIntrospectedCatalog());
+        Log.i(TAG, "Schema:" + fullyQualifiedTable.getIntrospectedSchema());
+
+
+        Log.i(TAG, "BaseRecordType:" + introspectedTable.getBaseRecordType());
+        Log.i(TAG, "RecordWithBLOBsType:" + introspectedTable.getRecordWithBLOBsType());
+        Log.i(TAG, "ExampleType:" + introspectedTable.getExampleType());
+        Log.i(TAG, "Remarks:" + introspectedTable.getRemarks());
+        Log.i(TAG, "DAOImplementationType:" + introspectedTable.getDAOImplementationType());
+        Log.i(TAG, "DAOInterfaceType:" + introspectedTable.getDAOInterfaceType());
+        Log.i(TAG, "SqlMapFileName:" + introspectedTable.getIbatis2SqlMapFileName());
+        Log.i(TAG, "SqlMapPackage:" + introspectedTable.getIbatis2SqlMapPackage());
+        Log.i(TAG, "XmlMapperFileName:" + introspectedTable.getMyBatis3XmlMapperFileName());
+        Log.i(TAG, "XmlMapperPackage:" + introspectedTable.getMyBatis3XmlMapperPackage());
+        Log.i(TAG, "JavaMapperType:" + introspectedTable.getMyBatis3JavaMapperType());
+
+
+        Log.i(TAG, "以下是表的字段:");
         List<IntrospectedColumn> columns = introspectedTable.getAllColumns();
         for (IntrospectedColumn column : columns) {
             Log.i(TAG, "ActualColumnName:" + column.getActualColumnName());
@@ -94,7 +111,7 @@ public class FreemarkerPlugin extends PluginAdapter {
             Log.i(TAG, "ShortName2:" + javaType.getShortNameWithoutTypeArguments());
             Log.i(TAG, "-----------------------------------");
         }
-        Log.i(TAG, "\n\n");
+        Log.i(TAG, "\n\n\n\n");
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 
