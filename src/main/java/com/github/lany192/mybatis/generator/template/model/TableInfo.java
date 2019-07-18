@@ -1,7 +1,6 @@
 package com.github.lany192.mybatis.generator.template.model;
 
-import lombok.Data;
-import org.mybatis.generator.api.FullyQualifiedTable;
+import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -11,65 +10,44 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 public class TableInfo implements Serializable {
-    private IntrospectedTable introspectedTable;
-    private FullyQualifiedJavaType type;
-
+    /**
+     * 备注
+     */
+    private String remark;
+    /**
+     * 表名
+     */
     private String tableName;
-    private String variableName;
-    private String lowerCaseName;
-    private String shortClassName;
-    private String fullClassName;
-    private String packageName;
-    private String remarks;
-
-    private List<ColumnField> pkFields;
-    private List<ColumnField> baseFields;
-    private List<ColumnField> blobFields;
-    private List<ColumnField> allFields;
+    /**
+     * 实体名称
+     */
+    private String name;
+    /**
+     * 实体完整名称
+     */
+    private String fullTypeName;
+    /**
+     * 首字母小写名称
+     */
+    private String lowerName;
+    /**
+     * 实体字段
+     */
+    private List<ColumnField> fields;
 
     public TableInfo(IntrospectedTable table) {
-        setIntrospectedTable(table);
-        setRemarks(table.getRemarks());
-
-        FullyQualifiedTable fullyQualifiedTable = table.getFullyQualifiedTable();
-        setTableName(fullyQualifiedTable.getIntrospectedTableName());
-
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(table.getBaseRecordType());
-        setType(type);
-        setVariableName(Introspector.decapitalize(type.getShortName()));
-        setLowerCaseName(type.getShortName().toLowerCase());
-        setShortClassName(type.getShortName());
-        setFullClassName(type.getFullyQualifiedName());
-        setPackageName(type.getPackageName());
-
-        List<ColumnField> pkFields = new ArrayList<>();
-        List<ColumnField> baseFields = new ArrayList<>();
-        List<ColumnField> blobFields = new ArrayList<>();
-        List<ColumnField> allFields = new ArrayList<>();
-        for (IntrospectedColumn column : table.getPrimaryKeyColumns()) {
-            ColumnField field = new ColumnField(column);
-            field.setTableInfo(this);
-            pkFields.add(field);
-            allFields.add(field);
+        remark = table.getRemarks();
+        tableName = table.getFullyQualifiedTable().getIntrospectedTableName();
+        name = type.getShortName();
+        fullTypeName = type.getFullyQualifiedName();
+        lowerName = Introspector.decapitalize(type.getShortName());
+        List<ColumnField> fields = new ArrayList<>();
+        for (IntrospectedColumn item : table.getAllColumns()) {
+            fields.add(new ColumnField(item));
         }
-        for (IntrospectedColumn column : table.getBaseColumns()) {
-            ColumnField field = new ColumnField(column);
-            field.setTableInfo(this);
-            baseFields.add(field);
-            allFields.add(field);
-        }
-        for (IntrospectedColumn column : table.getBLOBColumns()) {
-            ColumnField field = new ColumnField(column);
-            field.setTableInfo(this);
-            blobFields.add(field);
-            allFields.add(field);
-        }
-        setPkFields(pkFields);
-        setBaseFields(baseFields);
-        setBlobFields(blobFields);
-        setAllFields(allFields);
+        this.fields = fields;
     }
-
 }
