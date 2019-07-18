@@ -37,15 +37,30 @@ public class TableInfo implements Serializable {
      */
     private List<FieldInfo> fields;
 
-    public TableInfo(IntrospectedTable table) {
-        FullyQualifiedJavaType type = new FullyQualifiedJavaType(table.getBaseRecordType());
-        remark = table.getRemarks();
-        tableName = table.getFullyQualifiedTable().getIntrospectedTableName();
+    /**
+     * 包含BLOBColumns字段
+     */
+    private boolean hasBlob;
+
+    public TableInfo(IntrospectedTable info) {
+        //是否包含BLOBColumns字段
+        if (info.getBLOBColumns() != null && info.getBLOBColumns().size() > 0) {
+            hasBlob = true;
+        }
+        FullyQualifiedJavaType type;
+        if (hasBlob) {
+            type = new FullyQualifiedJavaType(info.getRecordWithBLOBsType());
+        } else {
+            type = new FullyQualifiedJavaType(info.getBaseRecordType());
+        }
         name = type.getShortName();
         fullTypeName = type.getFullyQualifiedName();
         lowerName = Introspector.decapitalize(type.getShortName());
+
+        remark = info.getRemarks();
+        tableName = info.getFullyQualifiedTable().getIntrospectedTableName();
         List<FieldInfo> fields = new ArrayList<>();
-        for (IntrospectedColumn item : table.getAllColumns()) {
+        for (IntrospectedColumn item : info.getAllColumns()) {
             fields.add(new FieldInfo(item));
         }
         this.fields = fields;
