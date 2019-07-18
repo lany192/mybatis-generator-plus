@@ -6,12 +6,11 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 
 import java.beans.Introspector;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class TableInfo implements Serializable {
+public class TableInfo {
     /**
      * 备注
      */

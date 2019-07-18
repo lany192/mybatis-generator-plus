@@ -4,11 +4,11 @@ package com.github.lany192.mybatis.generator;
 import com.github.lany192.mybatis.generator.model.TableInfo;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
-import com.github.lany192.mybatis.generator.utils.StringsUtils;
 import org.mybatis.generator.api.FullyQualifiedTable;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
+import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public class TemplatePlugin extends PluginAdapter {
         Properties properties = getProperties();
         for (String key : properties.stringPropertyNames()) {
             String value = properties.getProperty(key);
-            if (!StringsUtils.isEmpty(value)) {
+            if (StringUtility.stringHasValue(value)) {
                 params.put(key, value);
             }
         }

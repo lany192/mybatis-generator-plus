@@ -8,14 +8,14 @@ import java.util.List;
 /**
 * @author Lany
 */
-public interface ${modelNameUpper}Service {
+public interface ${modelName}Service {
     /**
     * 新增记录
     *
     * @param record 记录
     * @return 操作结果
     */
-    Result save(${modelNameUpper} record);
+    Result save(${modelName} record);
 
     /**
     * 根据id删除记录
@@ -39,7 +39,7 @@ public interface ${modelNameUpper}Service {
     * @param record 记录
     * @return 操作结果
     */
-    Result update(${modelNameUpper} record);
+    Result update(${modelName} record);
 
     /**
     * 根据id查询记录

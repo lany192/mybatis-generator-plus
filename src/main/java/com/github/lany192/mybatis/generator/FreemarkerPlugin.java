@@ -1,13 +1,16 @@
 package com.github.lany192.mybatis.generator;
 
-import com.github.lany192.mybatis.generator.utils.CodeBuilder;
+import com.github.lany192.mybatis.generator.model.TableInfo;
+import com.github.lany192.mybatis.generator.utils.FileBuilder;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
-import com.github.lany192.mybatis.generator.utils.StringsUtils;
+import com.github.lany192.mybatis.generator.utils.Log;
+import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
+import org.mybatis.generator.internal.util.StringUtility;
 
+import java.beans.Introspector;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -21,11 +24,6 @@ import java.util.Properties;
  */
 public class FreemarkerPlugin extends PluginAdapter {
     private final String TAG = getClass().getSimpleName();
-    private final String PACKAGE_NAME = "packageName";
-    private final String TEMPLATE_NAME = "templateName";
-    private final String FILE_SUFFIX = "fileSuffix";
-    private final String FILE_FORMAT = "fileFormat";
-    private final String ROOT_DIR_PATH = "rootDirPath";
     private Map<String, Object> params = new HashMap<>();
 
     @Override
@@ -33,42 +31,45 @@ public class FreemarkerPlugin extends PluginAdapter {
         Properties properties = getProperties();
         for (String key : properties.stringPropertyNames()) {
             String value = properties.getProperty(key);
-            if (!StringsUtils.isEmpty(value)) {
+            if (StringUtility.stringHasValue(value)) {
                 params.put(key, value);
             }
         }
-        if (StringsUtils.isEmpty((String) params.get(PACKAGE_NAME))) {
-            warnings.add("请配置" + TAG + "插件的" + PACKAGE_NAME + "属性");
+        Log.i(TAG, "所有属性:" + JsonUtils.object2json(params));
+        if (!StringUtility.stringHasValue(getProperty(Keys.PACKAGE_NAME))) {
+            warnings.add(TAG + ":请配置" + Keys.PACKAGE_NAME + "属性");
             return false;
         }
-        if (StringsUtils.isEmpty((String) params.get(TEMPLATE_NAME))) {
-            warnings.add("请配置" + TAG + "插件的" + TEMPLATE_NAME + "属性");
+        if (!StringUtility.stringHasValue(getProperty(Keys.TEMPLATE_NAME))) {
+            warnings.add(TAG + ":请配置" + Keys.TEMPLATE_NAME + "属性");
             return false;
         }
-        if (StringsUtils.isEmpty((String) params.get(FILE_SUFFIX))) {
-            warnings.add("请配置" + TAG + "插件的" + FILE_SUFFIX + "属性");
+        if (!StringUtility.stringHasValue(getProperty(Keys.FILE_SUFFIX))) {
+            warnings.add(TAG + ":请配置" + Keys.FILE_SUFFIX + "属性");
             return false;
         }
-        if (StringsUtils.isEmpty((String) params.get(FILE_FORMAT))) {
-            warnings.add("请配置" + TAG + "插件的" + FILE_FORMAT + "属性");
+        if (!StringUtility.stringHasValue(getProperty(Keys.FILE_FORMAT))) {
+            warnings.add(TAG + ":请配置" + Keys.FILE_FORMAT + "属性");
             return false;
         }
         return true;
     }
 
+    private String getProperty(String key) {
+        return (String) params.get(key);
+    }
+
     @Override
-    public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        System.out.println("FreemarkerPlugin属性:" + JsonUtils.object2json(params));
-        final String TEMPLATE_PATH = "templatePath";
-        final String MODULE_NAME = "moduleName";
+    public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
+        TableInfo info = new TableInfo(introspectedTable);
 
         Map<String, Object> data = new HashMap<>(params);
-        data.remove(TEMPLATE_PATH);
-        data.remove(TEMPLATE_NAME);
-        data.remove(FILE_SUFFIX);
-        data.remove(FILE_FORMAT);
-        data.remove(ROOT_DIR_PATH);
-        data.remove(MODULE_NAME);
+        data.remove(Keys.TEMPLATE_PATH);
+        data.remove(Keys.TEMPLATE_NAME);
+        data.remove(Keys.FILE_SUFFIX);
+        data.remove(Keys.FILE_FORMAT);
+        data.remove(Keys.ROOT_DIR_PATH);
+        data.remove(Keys.MODULE_NAME);
 
         JavaModelGeneratorConfiguration modelConfig = getContext().getJavaModelGeneratorConfiguration();
         String modelType = introspectedTable.getBaseRecordType();
@@ -78,12 +79,12 @@ public class FreemarkerPlugin extends PluginAdapter {
 
         data.put("modelType", modelType);
         data.put("modelPackage", modelPackage);
-        data.put("modelNameUpper", modelName);
-        data.put("modelNameLower", toLower(modelName));
+        data.put("modelName", modelName);
+        data.put("modelNameLower", Introspector.decapitalize(modelName));
 
 
-        String templatePath = (String) params.get(TEMPLATE_PATH);
-        if (StringsUtils.isEmpty(templatePath)) {
+        String templatePath = getProperty(Keys.TEMPLATE_PATH);
+        if (!StringUtility.stringHasValue(templatePath)) {
             templatePath = System.getProperty("user.dir")
                     + File.separator + "src"
                     + File.separator + "main"
@@ -93,42 +94,28 @@ public class FreemarkerPlugin extends PluginAdapter {
         } else {
             templatePath = System.getProperty("user.dir") + templatePath;
         }
-        System.out.println("Freemarker模板属性:" + JsonUtils.object2json(data));
 
-        String moduleName = (String) params.get(MODULE_NAME);
-        if (StringsUtils.isEmpty(moduleName)) {
+        String moduleName = getProperty(Keys.MODULE_NAME);
+        if (!StringUtility.stringHasValue(moduleName)) {
             moduleName = "";
         }
-        String rootDirPath = (String) params.get(ROOT_DIR_PATH);
-        if (StringsUtils.isEmpty(rootDirPath)) {
+        String rootDirPath = getProperty(Keys.ROOT_DIR_PATH);
+        if (!StringUtility.stringHasValue(rootDirPath)) {
             rootDirPath = "";
         }
-        new CodeBuilder()
+        new FileBuilder()
                 .rootPath(rootDirPath)
                 .module(moduleName)
                 .path("src/main/java")
-                .packageName((String) params.get(PACKAGE_NAME))
+                .packageName(getProperty(Keys.PACKAGE_NAME))
                 .modelName(modelName)
-                .suffix((String) params.get(FILE_SUFFIX))
-                .format((String) params.get(FILE_FORMAT))
+                .suffix(getProperty(Keys.FILE_SUFFIX))
+                .format(getProperty(Keys.FILE_FORMAT))
                 .setTemplatePath(templatePath)
-                .setTemplateName((String) params.get(TEMPLATE_NAME))
+                .setTemplateName(getProperty(Keys.TEMPLATE_NAME))
                 .setData(data)
                 .build();
-        return super.modelBaseRecordClassGenerated(topLevelClass, introspectedTable);
-    }
-
-    /**
-     * 首字母转小写
-     *
-     * @param name 单词
-     */
-    private String toLower(String name) {
-        if (Character.isLowerCase(name.charAt(0))) {
-            return name;
-        } else {
-            return Character.toLowerCase(name.charAt(0)) + name.substring(1);
-        }
+        return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 
 }

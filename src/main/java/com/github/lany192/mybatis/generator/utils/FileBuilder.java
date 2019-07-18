@@ -1,16 +1,18 @@
 package com.github.lany192.mybatis.generator.utils;
 
 import freemarker.template.Configuration;
+import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.Writer;
 import java.util.Map;
 
 /**
  * @author Lany
  */
-public class CodeBuilder {
+public class FileBuilder {
     private String rootPath = System.getProperty("user.dir");
     private String module;
     private String path;
@@ -37,7 +39,11 @@ public class CodeBuilder {
             cfg.setDirectoryForTemplateLoading(new File(templatePath));
             cfg.setDefaultEncoding("UTF-8");
             cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
-            cfg.getTemplate(templateName).process(data, new FileWriter(new File(outPath)));
+
+            Template template = cfg.getTemplate(templateName);
+            Writer writer = new FileWriter(new File(outPath));
+
+            template.process(data, writer);
             System.out.println("接口文件" + outPath + "生成成功");
         } catch (Exception e) {
             throw new RuntimeException("生成" + outPath + "失败", e);
@@ -83,17 +89,17 @@ public class CodeBuilder {
         return str == null || str.length() == 0;
     }
 
-    public CodeBuilder setTemplatePath(String templatePath) {
+    public FileBuilder setTemplatePath(String templatePath) {
         this.templatePath = templatePath;
         return this;
     }
 
-    public CodeBuilder setTemplateName(String templateName) {
+    public FileBuilder setTemplateName(String templateName) {
         this.templateName = templateName;
         return this;
     }
 
-    public CodeBuilder setData(Map<String, Object> data) {
+    public FileBuilder setData(Map<String, Object> data) {
         this.data = data;
         return this;
     }
@@ -103,42 +109,42 @@ public class CodeBuilder {
         return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
     }
 
-    public CodeBuilder rootPath(String rootPath) {
+    public FileBuilder rootPath(String rootPath) {
         this.rootPath = rootPath;
         return this;
     }
 
-    public CodeBuilder module(String module) {
+    public FileBuilder module(String module) {
         this.module = module;
         return this;
     }
 
-    public CodeBuilder path(String path) {
+    public FileBuilder path(String path) {
         this.path = path;
         return this;
     }
 
-    public CodeBuilder packageName(String packageName) {
+    public FileBuilder packageName(String packageName) {
         this.packageName = packageName;
         return this;
     }
 
-    public CodeBuilder modelName(String modelName) {
+    public FileBuilder modelName(String modelName) {
         this.modelName = modelName;
         return this;
     }
 
-    public CodeBuilder format(String format) {
+    public FileBuilder format(String format) {
         this.format = format;
         return this;
     }
 
-    public CodeBuilder prefix(String prefix) {
+    public FileBuilder prefix(String prefix) {
         this.prefix = prefix;
         return this;
     }
 
-    public CodeBuilder suffix(String suffix) {
+    public FileBuilder suffix(String suffix) {
         this.suffix = suffix;
         return this;
     }

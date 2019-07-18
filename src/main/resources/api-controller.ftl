@@ -1,7 +1,7 @@
 package ${packageName};
 
 import ${modelType};
-import ${servicePackage}.${modelNameUpper}Service;
+import ${servicePackage}.${modelName}Service;
 import ${basePackage}.utils.JsonUtils;
 import ${basePackage}.utils.Result;
 import io.swagger.annotations.Api;
@@ -23,19 +23,19 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@Api(tags = "后台-${modelNameUpper}相关接口")
+@Api(tags = "后台-${modelName}相关接口")
 @RequestMapping("/api/admin/${modelNameLower}/")
-public class ${modelNameUpper}Controller {
-    private final ${modelNameUpper}Service service;
+public class ${modelName}Controller {
+    private final ${modelName}Service service;
 
     @Autowired
-    public ${modelNameUpper}Controller(${modelNameUpper}Service service) {
+    public ${modelName}Controller(${modelName}Service service) {
         this.service = service;
     }
 
     @ApiOperation("添加记录")
     @PostMapping("/add")
-    public Result add(@RequestBody @NotNull(message = "参数不能为null") ${modelNameUpper} record) {
+    public Result add(@RequestBody @NotNull(message = "参数不能为null") ${modelName} record) {
         log.info("添加:" + JsonUtils.object2json(record));
         return service.save(record);
     }
@@ -56,7 +56,7 @@ public class ${modelNameUpper}Controller {
 
     @ApiOperation("修改记录")
     @PostMapping("/update")
-    public Result update(@RequestBody @NotNull(message = "参数不能为null") ${modelNameUpper} record) {
+    public Result update(@RequestBody @NotNull(message = "参数不能为null") ${modelName} record) {
         log.info("修改记录:" + JsonUtils.object2json(record));
         return service.update(record);
     }
