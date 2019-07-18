@@ -12,11 +12,25 @@ public class Keys {
 
     public static final String TEMPLATE_NAME = "templateName";
 
-    public static final String FILE_SUFFIX = "fileSuffix";
 
     public static final String ROOT_DIR_PATH = "rootDirPath";
 
+    public static final String MODULE_NAME = "moduleName";
+
+    /**
+     * 文件后缀
+     */
+    public static final String FILE_SUFFIX = "fileSuffix";
+    /**
+     * 文件前缀
+     */
+    public static final String FILE_PREFIX = "filePrefix";
+
     public static final String TEMPLATE_PATH = "templatePath";
 
-    public static final String MODULE_NAME = "moduleName";
+    public static final String TARGET_PACKAGE = "targetPackage";
+    /**
+     * 相对路径，例如"src/main/java/"
+     */
+    public static final String TARGET_PROJECT = "targetProject";
 }
