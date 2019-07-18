@@ -1,6 +1,6 @@
 package com.github.lany192.mybatis.generator;
 
-import com.github.lany192.mybatis.generator.utils.JsonUtils;
+import com.github.lany192.mybatis.generator.utils.Log;
 import com.github.lany192.mybatis.generator.utils.StringsUtils;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -18,12 +18,11 @@ import java.util.Properties;
  * 用法:
  *
  * <javaTypeResolver type="com.github.lany192.mybatis.generator.CustomJavaTypeResolver">
- * <property name="sex" value="xxx.xxx.xxx.enums.SexEnum"/>
+ *      <property name="sex" value="xxx.xxx.xxx.enums.SexEnum"/>
  * </javaTypeResolver>
- *
- * @author Administrator
  */
 public class CustomJavaTypeResolver extends JavaTypeResolverDefaultImpl {
+    private final String TAG = getClass().getSimpleName();
     private Map<String, String> mFieldsMap = new HashMap<>();
 
     @Override
@@ -40,8 +39,7 @@ public class CustomJavaTypeResolver extends JavaTypeResolverDefaultImpl {
         mFieldsMap.remove(PropertyRegistry.TYPE_RESOLVER_FORCE_BIG_DECIMALS);
         mFieldsMap.remove(PropertyRegistry.TYPE_RESOLVER_USE_JSR310_TYPES);
 
-
-        System.out.println("自定义Java类型的属性映射关系:" + JsonUtils.object2json(mFieldsMap));
+        //Log.i(TAG, "自定义Java类型的属性映射关系:" + JsonUtils.object2json(mFieldsMap));
     }
 
     @Override
@@ -50,7 +48,7 @@ public class CustomJavaTypeResolver extends JavaTypeResolverDefaultImpl {
         //判断是否是自定义字段
         if (mFieldsMap.containsKey(tableFiledName)) {
             String customJavaType = mFieldsMap.get(tableFiledName);
-            System.out.println("数据库字段:" + tableFiledName + "，使用自定义的Java类型:" + customJavaType);
+            Log.i(TAG, tableFiledName + "字段转成自定义类型:" + customJavaType);
             return new FullyQualifiedJavaType(customJavaType);
         }
         return super.calculateJavaType(introspectedColumn);
