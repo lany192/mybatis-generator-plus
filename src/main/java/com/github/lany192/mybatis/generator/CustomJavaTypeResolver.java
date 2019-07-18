@@ -1,11 +1,11 @@
 package com.github.lany192.mybatis.generator;
 
 import com.github.lany192.mybatis.generator.utils.Log;
-import com.github.lany192.mybatis.generator.utils.StringsUtils;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.config.PropertyRegistry;
 import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
+import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,10 +30,8 @@ public class CustomJavaTypeResolver extends JavaTypeResolverDefaultImpl {
         super.addConfigurationProperties(properties);
         for (String key : properties.stringPropertyNames()) {
             String value = properties.getProperty(key);
-            if (!StringsUtils.isEmpty(value)) {
+            if (StringUtility.stringHasValue(value)) {
                 mFieldsMap.put(key, value);
-//                typeMap.put(Types.INTEGER, new JdbcTypeInformation("INTEGER", //$NON-NLS-1$
-//                        new FullyQualifiedJavaType(value)));
             }
         }
         mFieldsMap.remove(PropertyRegistry.TYPE_RESOLVER_FORCE_BIG_DECIMALS);
