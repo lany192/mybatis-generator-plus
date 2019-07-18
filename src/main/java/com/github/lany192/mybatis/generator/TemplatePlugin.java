@@ -1,7 +1,7 @@
 package com.github.lany192.mybatis.generator;
 
 
-import com.github.lany192.mybatis.generator.template.model.TableInfo;
+import com.github.lany192.mybatis.generator.model.TableInfo;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
 import com.github.lany192.mybatis.generator.utils.StringsUtils;

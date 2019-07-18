@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator.template.model;
+package com.github.lany192.mybatis.generator.model;
 
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -35,7 +35,7 @@ public class TableInfo implements Serializable {
     /**
      * 实体字段
      */
-    private List<ColumnField> fields;
+    private List<FieldInfo> fields;
 
     public TableInfo(IntrospectedTable table) {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(table.getBaseRecordType());
@@ -44,9 +44,9 @@ public class TableInfo implements Serializable {
         name = type.getShortName();
         fullTypeName = type.getFullyQualifiedName();
         lowerName = Introspector.decapitalize(type.getShortName());
-        List<ColumnField> fields = new ArrayList<>();
+        List<FieldInfo> fields = new ArrayList<>();
         for (IntrospectedColumn item : table.getAllColumns()) {
-            fields.add(new ColumnField(item));
+            fields.add(new FieldInfo(item));
         }
         this.fields = fields;
     }
