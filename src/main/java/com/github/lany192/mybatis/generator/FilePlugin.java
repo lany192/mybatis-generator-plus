@@ -1,11 +1,11 @@
 package com.github.lany192.mybatis.generator;
 
 import com.github.lany192.mybatis.generator.model.TableInfo;
+import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
 import com.github.lany192.mybatis.generator.utils.Utils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
 
 import java.beans.Introspector;
 import java.io.File;
@@ -58,28 +58,28 @@ public class FilePlugin extends BasePlugin {
         //模板文件，相对完整路径。例如"/src/main/resources/templates/service.ftl"
         String templatePath = getProperty(Keys.TEMPLATE_PATH);
 
-        TableInfo info = new TableInfo(getContext(), introspectedTable);
 
         Map<String, Object> data = new HashMap<>(getParams());
         data.remove(Keys.TEMPLATE_PATH);
         data.remove(Keys.FILE_SUFFIX);
         data.remove(Keys.FILE_FORMAT);
 
-        JavaModelGeneratorConfiguration modelConfig = getContext().getJavaModelGeneratorConfiguration();
-        String modelType = introspectedTable.getBaseRecordType();
-        String modelPackage = modelConfig.getTargetPackage();
-        String modelName = modelType.replace(modelPackage + ".", "");
 
-
-        data.put("modelType", modelType);
-        data.put("modelPackage", modelPackage);
-        data.put("modelName", modelName);
-        data.put("modelNameLower", Introspector.decapitalize(modelName));
-
+        TableInfo info = new TableInfo(getContext(), introspectedTable);
+        Log.i(TAG, info.getName() + "信息:" + JsonUtils.object2json(info));
+        if (info.isHasBlob()) {
+            data.put("modelType", info.getFullBlobType());
+            data.put("modelName", info.getBlobName());
+            data.put("modelNameLower", Introspector.decapitalize(info.getBlobName()));
+        } else {
+            data.put("modelType", info.getFullType());
+            data.put("modelName", info.getName());
+            data.put("modelNameLower", Introspector.decapitalize(info.getName()));
+        }
         data.put(Keys.AUTHOR, Utils.getAuthor(author));
 
         String outDir = Utils.getRootPath(true) + File.separator + targetProject + Utils.package2path(targetPackage);
-        String fileName = filePrefix + modelName + fileSuffix;
+        String fileName = filePrefix + info.getName() + fileSuffix;
         //完整路径
         String outFullPath = outDir + fileName + "." + fileFormat;
 

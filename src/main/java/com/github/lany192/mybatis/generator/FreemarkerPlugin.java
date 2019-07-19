@@ -1,6 +1,5 @@
 package com.github.lany192.mybatis.generator;
 
-import com.github.lany192.mybatis.generator.model.TableInfo;
 import com.github.lany192.mybatis.generator.utils.FileBuilder;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
@@ -61,8 +60,6 @@ public class FreemarkerPlugin extends PluginAdapter {
 
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
-        TableInfo info = new TableInfo(introspectedTable);
-
         Map<String, Object> data = new HashMap<>(params);
         data.remove(Keys.TEMPLATE_PATH);
         data.remove(Keys.TEMPLATE_NAME);

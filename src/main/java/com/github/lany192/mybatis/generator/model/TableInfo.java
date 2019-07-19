@@ -25,17 +25,31 @@ public class TableInfo {
      */
     private String name;
     /**
-     * 实体完整名称
-     */
-    private String fullTypeName;
-    /**
      * 首字母小写名称
      */
     private String lowerName;
     /**
+     * 实体完整名称
+     */
+    private String fullType;
+
+    /**
      * 实体字段
      */
     private List<FieldInfo> fields;
+
+    /**
+     * Blob实体名称
+     */
+    private String blobName;
+    /**
+     * Blob实体完整名称
+     */
+    private String fullBlobType;
+    /**
+     * 首字母小写Blob名称
+     */
+    private String lowerBlobName;
 
     /**
      * 包含BLOBColumns字段
@@ -43,22 +57,20 @@ public class TableInfo {
     private boolean hasBlob;
 
     public TableInfo(Context context, IntrospectedTable info) {
-        //是否包含BLOBColumns字段
-        if (info.getBLOBColumns() != null && info.getBLOBColumns().size() > 0) {
-            hasBlob = true;
-        }
-        FullyQualifiedJavaType type;
-        if (hasBlob) {
-            type = new FullyQualifiedJavaType(info.getRecordWithBLOBsType());
-        } else {
-            type = new FullyQualifiedJavaType(info.getBaseRecordType());
-        }
+        FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
-        fullTypeName = type.getFullyQualifiedName();
+        fullType = type.getFullyQualifiedName();
         lowerName = Introspector.decapitalize(type.getShortName());
-
         remark = info.getRemarks();
         tableName = info.getFullyQualifiedTable().getIntrospectedTableName();
+        //是否包含BLOBColumns字段,注意：数量大于2个才会生成BLOB实体类
+        if (info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1) {
+            hasBlob = true;
+            FullyQualifiedJavaType blobType = new FullyQualifiedJavaType(info.getRecordWithBLOBsType());
+            blobName = blobType.getShortName();
+            fullBlobType = blobType.getFullyQualifiedName();
+            lowerBlobName = Introspector.decapitalize(blobType.getShortName());
+        }
         List<FieldInfo> fields = new ArrayList<>();
         for (IntrospectedColumn item : info.getAllColumns()) {
             fields.add(new FieldInfo(item));
