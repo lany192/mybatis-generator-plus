@@ -3,6 +3,7 @@ package com.github.lany192.mybatis.generator;
 import com.github.lany192.mybatis.generator.model.TableInfo;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
+import com.github.lany192.mybatis.generator.utils.Utils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
@@ -40,12 +41,8 @@ public class FilePlugin extends PluginAdapter {
             }
         }
         Log.i(TAG, "所有属性:" + JsonUtils.object2json(params));
-        if (!StringUtility.stringHasValue(getProperty(Keys.PACKAGE_NAME))) {
-            warnings.add(TAG + ":请配置" + Keys.PACKAGE_NAME + "属性");
-            return false;
-        }
-        if (!StringUtility.stringHasValue(getProperty(Keys.TEMPLATE_NAME))) {
-            warnings.add(TAG + ":请配置" + Keys.TEMPLATE_NAME + "属性");
+        if (!StringUtility.stringHasValue(getProperty(Keys.TARGET_PACKAGE))) {
+            warnings.add(TAG + ":请配置" + Keys.TARGET_PACKAGE + "属性");
             return false;
         }
         if (!StringUtility.stringHasValue(getProperty(Keys.FILE_SUFFIX))) {
@@ -69,11 +66,25 @@ public class FilePlugin extends PluginAdapter {
 
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
+        //前缀
+        String filePrefix = getProperty(Keys.FILE_PREFIX);
+        //后缀
+        String fileSuffix = getProperty(Keys.FILE_SUFFIX);
+        //文件格式
+        String fileFormat = getProperty(Keys.FILE_FORMAT);
+        //输出文件相对路径
+        String targetProject = getProperty(Keys.TARGET_PROJECT);
+        //包名
+        String targetPackage = getProperty(Keys.TARGET_PACKAGE);
+        //作者
+        String author = getProperty(Keys.AUTHOR);
+        //模板文件，相对完整路径。例如"/src/main/resources/templates/service.ftl"
+        String templatePath = getProperty(Keys.TEMPLATE_PATH);
+
         TableInfo info = new TableInfo(introspectedTable);
 
         Map<String, Object> data = new HashMap<>(params);
         data.remove(Keys.TEMPLATE_PATH);
-        data.remove(Keys.TEMPLATE_NAME);
         data.remove(Keys.FILE_SUFFIX);
         data.remove(Keys.FILE_FORMAT);
 
@@ -88,60 +99,52 @@ public class FilePlugin extends PluginAdapter {
         data.put("modelName", modelName);
         data.put("modelNameLower", Introspector.decapitalize(modelName));
 
-        //前缀
-        String prefix = getProperty(Keys.FILE_PREFIX);
-        //后缀
-        String suffix = getProperty(Keys.FILE_SUFFIX);
-        //文件格式
-        String format = getProperty(Keys.FILE_FORMAT);
+        data.put(Keys.AUTHOR, author.equals("") ? System.getProperty("user.name") : author);
 
-        String targetProject = getProperty(Keys.TARGET_PROJECT);
-        String targetPackage = getProperty(Keys.TARGET_PACKAGE);
+        String outDir = getRootPath(true) + File.separator + targetProject + Utils.package2path(targetPackage);
+        String fileName = filePrefix + modelName + fileSuffix;
+        String outFilePath = outDir + fileName + "." + fileFormat;
 
-        String outDir = System.getProperty("user.dir") + File.pathSeparator + targetProject + packagePath(targetPackage);
-        String outFileName = outDir + prefix + modelName + suffix + "." + format;
-
-        String templateDir = getProperty(Keys.TEMPLATE_PATH);
-        String templateName = getProperty(Keys.TEMPLATE_NAME);
-        String templatePath = System.getProperty("user.dir") + templateDir + templateName;
-        File templateFile = new File(templatePath);
+        File templateFile = new File(getRootPath(false) + templatePath);
         Log.i(TAG, "模板文件:" + templateFile.getPath());
-        File outFile = new File(outFileName);
 
+        File outFile = new File(outFilePath);
+        Log.i(TAG, "目标文件:" + outFile.getPath());
+
+        data.put(Keys.FILE_NAME, fileName);
         //生成文件
         build(templateFile, outFile, data);
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 
-    private String packagePath(String packageName) {
-        return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
+    private String getRootPath(boolean check) {
+        String rootPath = System.getProperty("user.dir");
+        if (!check || !rootPath.contains("dao")) {
+            return rootPath;
+        }
+        File rootFile = new File(rootPath);
+        return rootFile.getParentFile().getPath();
     }
 
     public void build(File templateFile, File outFile, Map<String, Object> params) {
-        File templateDir = templateFile.getParentFile();
-        if (!templateDir.isDirectory()) {
-            Log.i(TAG, "模板文件路径异常");
+        if (!templateFile.exists()) {
+            Log.i(TAG, "找不到对应的模板文件");
             return;
-        }
-        if (outFile.exists()) {
-            Log.i(TAG, "已经存在旧的文件，删除");
-            outFile.delete();
         }
         if (!outFile.getParentFile().exists()) {
             outFile.getParentFile().mkdirs();
         }
         try {
             Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
-            cfg.setDirectoryForTemplateLoading(templateFile);
+            cfg.setDirectoryForTemplateLoading(templateFile.getParentFile());
             cfg.setDefaultEncoding("UTF-8");
             cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
-
             Template template = cfg.getTemplate(templateFile.getName());
             Writer writer = new FileWriter(outFile);
             template.process(params, writer);
-            Log.i(TAG, "接口文件" + outFile.getPath() + "生成成功");
+            Log.i(TAG, outFile.getPath() + "文件生成成功");
         } catch (Exception e) {
-            throw new RuntimeException("生成" + outFile.getPath() + "失败", e);
+            throw new RuntimeException(outFile.getPath() + "文件生成失败", e);
         }
     }
 }

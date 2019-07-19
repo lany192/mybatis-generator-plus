@@ -10,6 +10,7 @@ public class Keys {
      */
     public static final String FILE_FORMAT = "fileFormat";
 
+    @Deprecated
     public static final String TEMPLATE_NAME = "templateName";
 
 
@@ -33,4 +34,12 @@ public class Keys {
      * 相对路径，例如"src/main/java/"
      */
     public static final String TARGET_PROJECT = "targetProject";
+    /**
+     * 文件名称，不含后缀
+     */
+    public static final String FILE_NAME = "fileName";
+    /**
+     * 作者
+     */
+    public static final String AUTHOR = "author";
 }
