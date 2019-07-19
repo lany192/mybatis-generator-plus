@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
+import org.mybatis.generator.config.Context;
 
 import java.beans.Introspector;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class TableInfo {
      */
     private boolean hasBlob;
 
-    public TableInfo(IntrospectedTable info) {
+    public TableInfo(Context context, IntrospectedTable info) {
         //是否包含BLOBColumns字段
         if (info.getBLOBColumns() != null && info.getBLOBColumns().size() > 0) {
             hasBlob = true;
