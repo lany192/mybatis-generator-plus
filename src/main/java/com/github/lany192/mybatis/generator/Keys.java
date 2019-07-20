@@ -10,7 +10,6 @@ public class Keys {
      */
     public static final String FILE_FORMAT = "fileFormat";
 
-    @Deprecated
     public static final String TEMPLATE_NAME = "templateName";
 
 
