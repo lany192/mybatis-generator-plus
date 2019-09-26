@@ -18,6 +18,7 @@ import java.util.Map;
  *
  * @author Lany
  */
+@Deprecated
 public class FilePlugin extends BasePlugin {
 
     @Override

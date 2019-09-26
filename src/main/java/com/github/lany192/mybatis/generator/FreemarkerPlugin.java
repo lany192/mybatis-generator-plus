@@ -21,6 +21,7 @@ import java.util.Properties;
  *
  * @author Lany
  */
+@Deprecated
 public class FreemarkerPlugin extends PluginAdapter {
     private final String TAG = getClass().getSimpleName();
     private Map<String, Object> params = new HashMap<>();

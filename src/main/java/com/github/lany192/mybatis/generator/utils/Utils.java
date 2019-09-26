@@ -55,6 +55,7 @@ public class Utils {
         if (!outFile.getParentFile().exists()) {
             outFile.getParentFile().mkdirs();
         }
+        Log.i("定义的属性:" + JsonUtils.object2json(params));
         try {
             Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
             cfg.setDirectoryForTemplateLoading(templateFile.getParentFile());
