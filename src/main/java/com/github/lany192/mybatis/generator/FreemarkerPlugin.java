@@ -1,119 +1,129 @@
 package com.github.lany192.mybatis.generator;
 
-import com.github.lany192.mybatis.generator.utils.FileBuilder;
-import com.github.lany192.mybatis.generator.utils.JsonUtils;
+import com.alibaba.fastjson.JSON;
+import com.github.lany192.mybatis.generator.model.TableInfo;
 import com.github.lany192.mybatis.generator.utils.Log;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateExceptionHandler;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.PluginAdapter;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
-import org.mybatis.generator.internal.util.StringUtility;
 
 import java.beans.Introspector;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-/**
- * Freemarker插件
- *
- * @author Lany
- */
-@Deprecated
-public class FreemarkerPlugin extends PluginAdapter {
-    private final String TAG = getClass().getSimpleName();
-    private Map<String, Object> params = new HashMap<>();
+public class FreemarkerPlugin extends BasePlugin {
+    //模板文件绝对路径
+    private final String TEMPLATE_FILE_ABSOLUTE_PATH = "template_file_absolute_path";
+    //目标文件格式
+    private final String TARGET_FILE_FORMAT = "target_file_format";
+    //生成目标文件所在目录
+    private final String TARGET_FILE_OUT_DIR = "target_file_out_dir";
+    //目标文件名称前缀
+    private final String TARGET_FILE_NAME_PREFIX = "target_file_name_prefix";
+    //目标文件名称后缀
+    private final String TARGET_FILE_NAME_SUFFIX = "target_file_name_suffix";
 
     @Override
     public boolean validate(List<String> warnings) {
-        Properties properties = getProperties();
-        for (String key : properties.stringPropertyNames()) {
-            String value = properties.getProperty(key);
-            if (StringUtility.stringHasValue(value)) {
-                params.put(key, value);
-            }
-        }
-        Log.i(TAG, "所有属性:" + JsonUtils.object2json(params));
-        if (!StringUtility.stringHasValue(getProperty(Keys.PACKAGE_NAME))) {
-            warnings.add(TAG + ":请配置" + Keys.PACKAGE_NAME + "属性");
+        if (isEmpty(TEMPLATE_FILE_ABSOLUTE_PATH)) {
+            warnings.add(TAG + ":请配置模板文件绝对路径" + TEMPLATE_FILE_ABSOLUTE_PATH + "属性");
             return false;
         }
-        if (!StringUtility.stringHasValue(getProperty(Keys.TEMPLATE_NAME))) {
-            warnings.add(TAG + ":请配置" + Keys.TEMPLATE_NAME + "属性");
+        if (isEmpty(TARGET_FILE_OUT_DIR)) {
+            warnings.add(TAG + ":请配置目标文件输出目录" + TARGET_FILE_OUT_DIR + "属性");
             return false;
         }
-        if (!StringUtility.stringHasValue(getProperty(Keys.FILE_SUFFIX))) {
-            warnings.add(TAG + ":请配置" + Keys.FILE_SUFFIX + "属性");
-            return false;
-        }
-        if (!StringUtility.stringHasValue(getProperty(Keys.FILE_FORMAT))) {
-            warnings.add(TAG + ":请配置" + Keys.FILE_FORMAT + "属性");
+        if (isEmpty(TARGET_FILE_FORMAT)) {
+            warnings.add(TAG + ":请配置目标文件的文件格式" + TARGET_FILE_FORMAT + "属性");
             return false;
         }
         return true;
     }
 
-    private String getProperty(String key) {
-        return (String) params.get(key);
-    }
-
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
-        Map<String, Object> data = new HashMap<>(params);
-        data.remove(Keys.TEMPLATE_PATH);
-        data.remove(Keys.TEMPLATE_NAME);
-        data.remove(Keys.FILE_SUFFIX);
-        data.remove(Keys.FILE_FORMAT);
-        data.remove(Keys.ROOT_DIR_PATH);
-        data.remove(Keys.MODULE_NAME);
+        //前缀
+        String filePrefix = getProperty(TARGET_FILE_NAME_PREFIX);
+        //后缀
+        String fileSuffix = getProperty(TARGET_FILE_NAME_SUFFIX);
+        //文件格式
+        String fileFormat = getProperty(TARGET_FILE_FORMAT);
+        //输出文件路径
+        String targetOutDirPath = getProperty(TARGET_FILE_OUT_DIR);
+        //模板文件完整路径
+        String templateFilePath = getProperty(TEMPLATE_FILE_ABSOLUTE_PATH);
 
-        JavaModelGeneratorConfiguration modelConfig = getContext().getJavaModelGeneratorConfiguration();
-        String modelType = introspectedTable.getBaseRecordType();
-        String modelPackage = modelConfig.getTargetPackage();
-        String modelName = modelType.replace(modelPackage + ".", "");
+        Map<String, Object> data = new HashMap<>(getParams());
+        data.remove(TARGET_FILE_NAME_PREFIX);
+        data.remove(TARGET_FILE_NAME_SUFFIX);
+        data.remove(TARGET_FILE_FORMAT);
+        data.remove(TARGET_FILE_OUT_DIR);
+        data.remove(TEMPLATE_FILE_ABSOLUTE_PATH);
 
+        TableInfo info = new TableInfo(getContext(), introspectedTable);
+        Log.i(info.getName() + "信息:" + JSON.toJSONString(info));
 
-        data.put("modelType", modelType);
-        data.put("modelPackage", modelPackage);
-        data.put("modelName", modelName);
-        data.put("modelNameLower", Introspector.decapitalize(modelName));
+        File templateFile = new File(templateFilePath);
+        Log.i("模板文件:" + templateFile.getPath());
+        File outDirFile = new File(targetOutDirPath);
+        Log.i("目标文件输出目录:" + outDirFile.getPath());
 
+        String targetFileName = filePrefix + info.getName() + fileSuffix;
+        //完整路径
+        String outFileFullPath = targetOutDirPath + targetFileName + "." + fileFormat;
+        File outFile = new File(outFileFullPath);
+        Log.i("目标文件:" + outFile.getPath());
+        data.put("target_file_name", targetFileName);
+        data.put("author", System.getProperty("user.name"));
 
-        String templatePath = getProperty(Keys.TEMPLATE_PATH);
-        if (!StringUtility.stringHasValue(templatePath)) {
-            templatePath = System.getProperty("user.dir")
-                    + File.separator + "src"
-                    + File.separator + "main"
-                    + File.separator + "resources"
-                    + File.separator + "templates"
-                    + File.separator + "autocode";
-        } else {
-            templatePath = System.getProperty("user.dir") + templatePath;
+        data.put("model_type", info.getFullType());
+        data.put("model_name", info.getName());
+        data.put("model_name_lower", Introspector.decapitalize(info.getName()));
+        data.put("model_has_blob", info.isHasBlob());
+        if (info.isHasBlob()) {
+            data.put("model_blob_type", info.getFullBlobType());
+            data.put("model_blob_name", info.getBlobName());
+            data.put("model_blob_name_lower", Introspector.decapitalize(info.getBlobName()));
         }
-
-        String moduleName = getProperty(Keys.MODULE_NAME);
-        if (!StringUtility.stringHasValue(moduleName)) {
-            moduleName = "";
-        }
-        String rootDirPath = getProperty(Keys.ROOT_DIR_PATH);
-        if (!StringUtility.stringHasValue(rootDirPath)) {
-            rootDirPath = "";
-        }
-        new FileBuilder()
-                .rootPath(rootDirPath)
-                .module(moduleName)
-                .path("src/main/java")
-                .packageName(getProperty(Keys.PACKAGE_NAME))
-                .modelName(modelName)
-                .suffix(getProperty(Keys.FILE_SUFFIX))
-                .format(getProperty(Keys.FILE_FORMAT))
-                .setTemplatePath(templatePath)
-                .setTemplateName(getProperty(Keys.TEMPLATE_NAME))
-                .setData(data)
-                .build();
+        //生成文件
+        buildFile(templateFile, outFile, data);
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 
+
+    /**
+     * 根据模板文件生成新文件
+     *
+     * @param templateFile 模板
+     * @param outFile      新文件
+     * @param params       参数
+     */
+    private void buildFile(File templateFile, File outFile, Map<String, Object> params) {
+        if (!templateFile.exists()) {
+            Log.i("找不到对应的模板文件" + templateFile.getPath());
+            return;
+        }
+        if (!outFile.getParentFile().exists()) {
+            outFile.getParentFile().mkdirs();
+        }
+        Log.i("定义的属性:" + JSON.toJSONString(params));
+        try {
+            Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
+            cfg.setDirectoryForTemplateLoading(templateFile.getParentFile());
+            cfg.setDefaultEncoding("UTF-8");
+            cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
+            Template template = cfg.getTemplate(templateFile.getName());
+            Writer writer = new FileWriter(outFile);
+            template.process(params, writer);
+            Log.i(outFile.getPath() + "文件生成成功");
+        } catch (Exception e) {
+            throw new RuntimeException(outFile.getPath() + "文件生成失败", e);
+        }
+    }
 }

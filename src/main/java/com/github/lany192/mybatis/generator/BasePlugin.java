@@ -1,6 +1,6 @@
 package com.github.lany192.mybatis.generator;
 
-import com.github.lany192.mybatis.generator.utils.JsonUtils;
+import com.alibaba.fastjson.JSON;
 import com.github.lany192.mybatis.generator.utils.Log;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.internal.util.StringUtility;
@@ -25,7 +25,7 @@ public abstract class BasePlugin extends PluginAdapter {
                 params.put(key, value);
             }
         }
-        Log.i(TAG, "所有属性:" + JsonUtils.object2json(params));
+        Log.i(TAG, "所有属性:" + JSON.toJSONString(params));
     }
 
     public Map<String, Object> getParams() {
