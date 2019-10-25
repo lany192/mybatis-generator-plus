@@ -29,22 +29,19 @@ public class BaseMapperPlugin extends BasePlugin {
 
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-        //输出文件路径
         String rootMapperClass = getProperty(ROOT_MAPPER_CLASS);
         Log.i(TAG, "属性值:" + rootMapperClass);
         //例如:"my.mabatis.example.base.BaseMapper"
-        FullyQualifiedJavaType imp = new FullyQualifiedJavaType(rootMapperClass);
-
+        FullyQualifiedJavaType superJavaType = new FullyQualifiedJavaType(rootMapperClass);
         //主键默认采用java.lang.Long
-        FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(imp.getShortName() + "<"
+        FullyQualifiedJavaType superInterface = new FullyQualifiedJavaType(superJavaType.getShortName() + "<"
                 + introspectedTable.getBaseRecordType() + ","
                 + introspectedTable.getExampleType() + ","
                 + "java.lang.Long" + ">");
-
         //添加 extends BaseMapper
-        interfaze.addSuperInterface(fqjt);
+        interfaze.addSuperInterface(superInterface);
         //添加import my.mabatis.example.base.BaseMapper;
-        interfaze.addImportedType(imp);
+        interfaze.addImportedType(superJavaType);
         //方法不需要
         interfaze.getMethods().clear();
         interfaze.getAnnotations().clear();
