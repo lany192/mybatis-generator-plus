@@ -34,9 +34,6 @@ public class BaseMapperPlugin extends BasePlugin {
         Log.i(TAG, "属性值:" + rootMapperClass);
         //例如:"my.mabatis.example.base.BaseMapper"
         FullyQualifiedJavaType imp = new FullyQualifiedJavaType(rootMapperClass);
-        Log.i(TAG, "属性1:" + imp.getShortName());
-        Log.i(TAG, "属性1:" + imp.getFullyQualifiedName());
-        Log.i(TAG, "属性1:" + imp.getPackageName());
 
         //主键默认采用java.lang.Long
         FullyQualifiedJavaType fqjt = new FullyQualifiedJavaType(imp.getShortName() + "<"
@@ -44,9 +41,9 @@ public class BaseMapperPlugin extends BasePlugin {
                 + introspectedTable.getExampleType() + ","
                 + "java.lang.Long" + ">");
 
-        //添加 extends MybatisBaseMapper
+        //添加 extends BaseMapper
         interfaze.addSuperInterface(fqjt);
-        //添加import my.mabatis.example.base.MybatisBaseMapper;
+        //添加import my.mabatis.example.base.BaseMapper;
         interfaze.addImportedType(imp);
         //方法不需要
         interfaze.getMethods().clear();
