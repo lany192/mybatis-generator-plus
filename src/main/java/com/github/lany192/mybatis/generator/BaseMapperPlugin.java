@@ -44,7 +44,7 @@ public class BaseMapperPlugin extends BasePlugin {
         interfaze.addImportedType(superJavaType);
         //方法不需要
         interfaze.getMethods().clear();
-        interfaze.getAnnotations().clear();
+        //interfaze.getAnnotations().clear();
         return true;
     }
 }
