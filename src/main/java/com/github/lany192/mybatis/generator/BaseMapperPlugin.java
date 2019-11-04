@@ -37,42 +37,62 @@ public class BaseMapperPlugin extends BasePlugin {
         //例如:"my.mabatis.example.base.BaseMapper"
         FullyQualifiedJavaType superJavaType = new FullyQualifiedJavaType(rootMapperClass);
 
-        TableInfo info = new TableInfo(getContext(), introspectedTable);
-
-        FullyQualifiedJavaType superInterface;
-        if (info.isHasBlob()) {
-            //主键默认采用java.lang.Long
-            superInterface = new FullyQualifiedJavaType(superJavaType.getShortName() + "<"
-                    + introspectedTable.getBaseRecordType() + ","
-                    + introspectedTable.getRecordWithBLOBsType() + ","
-                    + introspectedTable.getExampleType() + ","
-                    + "java.lang.Long" + ">");
-        } else {
-            //主键默认采用java.lang.Long
-            superInterface = new FullyQualifiedJavaType(superJavaType.getShortName() + "<"
-                    + introspectedTable.getBaseRecordType() + ","
-                    + introspectedTable.getBaseRecordType() + ","
-                    + introspectedTable.getExampleType() + ","
-                    + "java.lang.Long" + ">");
-        }
+        //主键默认采用java.lang.Long
+        FullyQualifiedJavaType superInterface = new FullyQualifiedJavaType(superJavaType.getShortName() + "<"
+                + introspectedTable.getBaseRecordType() + ","
+                + introspectedTable.getExampleType() + ","
+                + "java.lang.Long" + ">");
         //添加 extends BaseMapper
         interfaze.addSuperInterface(superInterface);
         //添加import my.mabatis.example.base.BaseMapper;
         interfaze.addImportedType(superJavaType);
-        //清除不要的方法
-        if (info.isHasBlob()) {
-            List<Method> methods = interfaze.getMethods();
-            List<Method> clearMethods = new ArrayList<>();
-            for (Method method : methods) {
-                if (!method.getName().contains("WithBLOBs")) {
-                    clearMethods.add(method);
-                }
-            }
-            interfaze.getMethods().removeAll(clearMethods);
-        } else {
-            interfaze.getMethods().clear();
-        }
-        //interfaze.getAnnotations().clear();
+        interfaze.getAnnotations().clear();
+
+
+
+
+
+
+
+
+
+
+//        TableInfo info = new TableInfo(getContext(), introspectedTable);
+//
+//        FullyQualifiedJavaType superInterface;
+//        if (info.isHasBlob()) {
+//            //主键默认采用java.lang.Long
+//            superInterface = new FullyQualifiedJavaType(superJavaType.getShortName() + "<"
+//                    + introspectedTable.getBaseRecordType() + ","
+//                    + introspectedTable.getRecordWithBLOBsType() + ","
+//                    + introspectedTable.getExampleType() + ","
+//                    + "java.lang.Long" + ">");
+//        } else {
+//            //主键默认采用java.lang.Long
+//            superInterface = new FullyQualifiedJavaType(superJavaType.getShortName() + "<"
+//                    + introspectedTable.getBaseRecordType() + ","
+//                    + introspectedTable.getBaseRecordType() + ","
+//                    + introspectedTable.getExampleType() + ","
+//                    + "java.lang.Long" + ">");
+//        }
+//        //添加 extends BaseMapper
+//        interfaze.addSuperInterface(superInterface);
+//        //添加import my.mabatis.example.base.BaseMapper;
+//        interfaze.addImportedType(superJavaType);
+//        //清除不要的方法
+//        if (info.isHasBlob()) {
+//            List<Method> methods = interfaze.getMethods();
+//            List<Method> clearMethods = new ArrayList<>();
+//            for (Method method : methods) {
+//                if (!method.getName().contains("WithBLOBs")) {
+//                    clearMethods.add(method);
+//                }
+//            }
+//            interfaze.getMethods().removeAll(clearMethods);
+//        } else {
+//            interfaze.getMethods().clear();
+//        }
+//        //interfaze.getAnnotations().clear();
         return true;
     }
 }
