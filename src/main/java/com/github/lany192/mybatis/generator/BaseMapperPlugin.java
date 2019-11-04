@@ -46,7 +46,6 @@ public class BaseMapperPlugin extends BasePlugin {
         interfaze.addSuperInterface(superInterface);
         //添加import my.mabatis.example.base.BaseMapper;
         interfaze.addImportedType(superJavaType);
-        interfaze.getAnnotations().clear();
         interfaze.getMethods().clear();
 
 
