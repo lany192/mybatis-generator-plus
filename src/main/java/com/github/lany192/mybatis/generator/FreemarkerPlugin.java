@@ -81,7 +81,8 @@ public class FreemarkerPlugin extends BasePlugin {
         Log.i("目标文件:" + outFile.getPath());
         data.put("target_file_name", targetFileName);
         data.put("author", System.getProperty("user.name"));
-
+        //中文名称，从备注中获取
+        data.put("model_zname", info.getRemark());
         data.put("model_type", info.getFullType());
         data.put("model_name", info.getName());
         data.put("model_name_lower", Introspector.decapitalize(info.getName()));
