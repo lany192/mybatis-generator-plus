@@ -92,6 +92,7 @@ public class FreemarkerPlugin extends BasePlugin {
             data.put("model_blob_name", info.getBlobName());
             data.put("model_blob_name_lower", Introspector.decapitalize(info.getBlobName()));
         }
+        data.put("model_fields", info.getFields());
         //生成文件
         buildFile(templateFile, outFile, data);
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
