@@ -79,29 +79,25 @@ public class FreemarkerPlugin extends BasePlugin {
         if (templateFile.exists()) {
             File outDirFile = new File(rootPath + targetRelativeOutDirPath);
             Log.i("目标文件输出目录:" + outDirFile.getPath());
-            if (outDirFile.exists()) {
-                String targetFileName = filePrefix + info.getName() + fileSuffix;
-                File outFile = new File(outDirFile.getPath() + targetFileName + "." + fileFormat);
-                Log.i("目标文件:" + outFile.getPath());
-                data.put("target_file_name", targetFileName);
-                data.put("author", System.getProperty("user.name"));
-                //中文名称，从备注中获取
-                data.put("model_zname", info.getRemark());
-                data.put("model_type", info.getFullType());
-                data.put("model_name", info.getName());
-                data.put("model_name_lower", Introspector.decapitalize(info.getName()));
-                data.put("model_has_blob", info.isHasBlob());
-                if (info.isHasBlob()) {
-                    data.put("model_blob_type", info.getFullBlobType());
-                    data.put("model_blob_name", info.getBlobName());
-                    data.put("model_blob_name_lower", Introspector.decapitalize(info.getBlobName()));
-                }
-                data.put("model_fields", info.getFields());
-                //生成文件
-                buildFile(templateFile, outFile, data);
-            } else {
-                Log.i("目标文件输出目录:" + outDirFile.getPath() + "不存在！");
+            String targetFileName = filePrefix + info.getName() + fileSuffix;
+            File outFile = new File(outDirFile.getPath() + targetFileName + "." + fileFormat);
+            Log.i("目标文件:" + outFile.getPath());
+            data.put("target_file_name", targetFileName);
+            data.put("author", System.getProperty("user.name"));
+            //中文名称，从备注中获取
+            data.put("model_zname", info.getRemark());
+            data.put("model_type", info.getFullType());
+            data.put("model_name", info.getName());
+            data.put("model_name_lower", Introspector.decapitalize(info.getName()));
+            data.put("model_has_blob", info.isHasBlob());
+            if (info.isHasBlob()) {
+                data.put("model_blob_type", info.getFullBlobType());
+                data.put("model_blob_name", info.getBlobName());
+                data.put("model_blob_name_lower", Introspector.decapitalize(info.getBlobName()));
             }
+            data.put("model_fields", info.getFields());
+            //生成文件
+            buildFile(templateFile, outFile, data);
         } else {
             Log.i("模板文件:" + templateFile.getPath() + "不存在！");
         }
