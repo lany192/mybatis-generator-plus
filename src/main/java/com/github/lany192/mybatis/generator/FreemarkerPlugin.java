@@ -80,7 +80,7 @@ public class FreemarkerPlugin extends BasePlugin {
             File outDirFile = new File(rootPath + targetRelativeOutDirPath);
             Log.i("目标文件输出目录:" + outDirFile.getPath());
             String targetFileName = filePrefix + info.getName() + fileSuffix;
-            File outFile = new File(outDirFile.getPath() + targetFileName + "." + fileFormat);
+            File outFile = new File(outDirFile.getPath() + File.separator + targetFileName + "." + fileFormat);
             Log.i("目标文件:" + outFile.getPath());
             data.put("target_file_name", targetFileName);
             data.put("author", System.getProperty("user.name"));
