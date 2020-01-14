@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.Map;
 
 public class FreemarkerPlugin extends BasePlugin {
-    //模板文件绝对路径
-    private final String TEMPLATE_FILE_ABSOLUTE_PATH = "template_file_absolute_path";
+    //模板文件相对路径
+    private final String TEMPLATE_FILE_RELATIVE_PATH = "template_file_relative_path";
     //目标文件格式
     private final String TARGET_FILE_FORMAT = "target_file_format";
     //生成目标文件所在目录
-    private final String TARGET_FILE_OUT_DIR = "target_file_out_dir";
+    private final String TARGET_FILE_RELATIVE_OUT_DIR = "target_file_relative_out_dir";
     //目标文件名称前缀
     private final String TARGET_FILE_NAME_PREFIX = "target_file_name_prefix";
     //目标文件名称后缀
@@ -31,12 +31,12 @@ public class FreemarkerPlugin extends BasePlugin {
 
     @Override
     public boolean validate(List<String> warnings) {
-        if (isEmpty(TEMPLATE_FILE_ABSOLUTE_PATH)) {
-            warnings.add(TAG + ":请配置模板文件绝对路径" + TEMPLATE_FILE_ABSOLUTE_PATH + "属性");
+        if (isEmpty(TEMPLATE_FILE_RELATIVE_PATH)) {
+            warnings.add(TAG + ":请配置模板文件相对路径" + TEMPLATE_FILE_RELATIVE_PATH + "属性");
             return false;
         }
-        if (isEmpty(TARGET_FILE_OUT_DIR)) {
-            warnings.add(TAG + ":请配置目标文件输出目录" + TARGET_FILE_OUT_DIR + "属性");
+        if (isEmpty(TARGET_FILE_RELATIVE_OUT_DIR)) {
+            warnings.add(TAG + ":请配置目标文件输出目录" + TARGET_FILE_RELATIVE_OUT_DIR + "属性");
             return false;
         }
         if (isEmpty(TARGET_FILE_FORMAT)) {
@@ -55,46 +55,53 @@ public class FreemarkerPlugin extends BasePlugin {
         //文件格式
         String fileFormat = getProperty(TARGET_FILE_FORMAT);
         //输出文件路径
-        String targetOutDirPath = getProperty(TARGET_FILE_OUT_DIR);
+        String targetRelativeOutDirPath = getProperty(TARGET_FILE_RELATIVE_OUT_DIR);
         //模板文件完整路径
-        String templateFilePath = getProperty(TEMPLATE_FILE_ABSOLUTE_PATH);
+        String templateFilePath = getProperty(TEMPLATE_FILE_RELATIVE_PATH);
 
         Map<String, Object> data = new HashMap<>(getParams());
         data.remove(TARGET_FILE_NAME_PREFIX);
         data.remove(TARGET_FILE_NAME_SUFFIX);
         data.remove(TARGET_FILE_FORMAT);
-        data.remove(TARGET_FILE_OUT_DIR);
-        data.remove(TEMPLATE_FILE_ABSOLUTE_PATH);
+        data.remove(TARGET_FILE_RELATIVE_OUT_DIR);
+        data.remove(TEMPLATE_FILE_RELATIVE_PATH);
 
         TableInfo info = new TableInfo(getContext(), introspectedTable);
         Log.i(info.getName() + "信息:" + JSON.toJSONString(info));
-
-        File templateFile = new File(templateFilePath);
+        //项目的根目录，相对多模块而言
+        String rootPath = new File(System.getProperty("user.dir")).getParent();
+        //模板文件
+        File templateFile = new File(rootPath + templateFilePath);
         Log.i("模板文件:" + templateFile.getPath());
-        File outDirFile = new File(targetOutDirPath);
-        Log.i("目标文件输出目录:" + outDirFile.getPath());
-
-        String targetFileName = filePrefix + info.getName() + fileSuffix;
-        //完整路径
-        String outFileFullPath = targetOutDirPath + targetFileName + "." + fileFormat;
-        File outFile = new File(outFileFullPath);
-        Log.i("目标文件:" + outFile.getPath());
-        data.put("target_file_name", targetFileName);
-        data.put("author", System.getProperty("user.name"));
-        //中文名称，从备注中获取
-        data.put("model_zname", info.getRemark());
-        data.put("model_type", info.getFullType());
-        data.put("model_name", info.getName());
-        data.put("model_name_lower", Introspector.decapitalize(info.getName()));
-        data.put("model_has_blob", info.isHasBlob());
-        if (info.isHasBlob()) {
-            data.put("model_blob_type", info.getFullBlobType());
-            data.put("model_blob_name", info.getBlobName());
-            data.put("model_blob_name_lower", Introspector.decapitalize(info.getBlobName()));
+        if (templateFile.exists()) {
+            File outDirFile = new File(rootPath + targetRelativeOutDirPath);
+            Log.i("目标文件输出目录:" + outDirFile.getPath());
+            if (outDirFile.exists()) {
+                String targetFileName = filePrefix + info.getName() + fileSuffix;
+                File outFile = new File(outDirFile.getPath() + targetFileName + "." + fileFormat);
+                Log.i("目标文件:" + outFile.getPath());
+                data.put("target_file_name", targetFileName);
+                data.put("author", System.getProperty("user.name"));
+                //中文名称，从备注中获取
+                data.put("model_zname", info.getRemark());
+                data.put("model_type", info.getFullType());
+                data.put("model_name", info.getName());
+                data.put("model_name_lower", Introspector.decapitalize(info.getName()));
+                data.put("model_has_blob", info.isHasBlob());
+                if (info.isHasBlob()) {
+                    data.put("model_blob_type", info.getFullBlobType());
+                    data.put("model_blob_name", info.getBlobName());
+                    data.put("model_blob_name_lower", Introspector.decapitalize(info.getBlobName()));
+                }
+                data.put("model_fields", info.getFields());
+                //生成文件
+                buildFile(templateFile, outFile, data);
+            } else {
+                Log.i("目标文件输出目录:" + outDirFile.getPath() + "不存在！");
+            }
+        } else {
+            Log.i("模板文件:" + templateFile.getPath() + "不存在！");
         }
-        data.put("model_fields", info.getFields());
-        //生成文件
-        buildFile(templateFile, outFile, data);
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 
