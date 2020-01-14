@@ -99,7 +99,7 @@ public class FreemarkerPlugin extends BasePlugin {
             //生成文件
             buildFile(templateFile, outFile, data);
         } else {
-            Log.i("模板文件:" + templateFile.getPath() + "不存在！");
+            Log.i("不存在！模板文件:" + templateFile.getPath());
         }
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
@@ -122,7 +122,7 @@ public class FreemarkerPlugin extends BasePlugin {
      */
     private void buildFile(File templateFile, File outFile, Map<String, Object> params) {
         if (!templateFile.exists()) {
-            Log.i("找不到对应的模板文件" + templateFile.getPath());
+            Log.i("找不到对应的模板文件：" + templateFile.getPath());
             return;
         }
         if (!outFile.getParentFile().exists()) {
@@ -137,9 +137,9 @@ public class FreemarkerPlugin extends BasePlugin {
             Template template = cfg.getTemplate(templateFile.getName());
             Writer writer = new FileWriter(outFile);
             template.process(params, writer);
-            Log.i(outFile.getPath() + "文件生成成功");
+            Log.i("目标文件生成成功" + outFile.getPath());
         } catch (Exception e) {
-            throw new RuntimeException(outFile.getPath() + "文件生成失败", e);
+            throw new RuntimeException("目标文件生成失败!" + outFile.getPath(), e);
         }
     }
 }
