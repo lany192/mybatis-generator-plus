@@ -59,6 +59,9 @@ public class FreemarkerPlugin extends BasePlugin {
         //模板文件完整路径
         String templateFilePath = getProperty(TEMPLATE_FILE_RELATIVE_PATH);
 
+        targetRelativeOutDirPath = path2path(targetRelativeOutDirPath);
+        templateFilePath = path2path(templateFilePath);
+
         Map<String, Object> data = new HashMap<>(getParams());
         data.remove(TARGET_FILE_NAME_PREFIX);
         data.remove(TARGET_FILE_NAME_SUFFIX);
@@ -105,6 +108,14 @@ public class FreemarkerPlugin extends BasePlugin {
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 
+    /**
+     * 将路径中的路径分隔符转换成当前系统的路径分隔符
+     */
+    private String path2path(String path) {
+        path = path.replace("\\", File.separator);
+        path = path.replace("/", File.separator);
+        return path;
+    }
 
     /**
      * 根据模板文件生成新文件
