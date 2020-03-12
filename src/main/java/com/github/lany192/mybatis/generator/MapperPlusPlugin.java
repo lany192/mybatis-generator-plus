@@ -3,7 +3,6 @@ package com.github.lany192.mybatis.generator;
 import com.alibaba.fastjson.JSON;
 import com.github.lany192.mybatis.generator.model.TableInfo;
 import com.github.lany192.mybatis.generator.utils.Log;
-import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 
@@ -20,26 +19,25 @@ public class MapperPlusPlugin extends BasePlugin {
     }
 
     @Override
-    public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
-                                       IntrospectedTable introspectedTable, ModelClassType modelClassType) {
+    public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         TableInfo info = new TableInfo(getContext(), introspectedTable);
         Log.i(info.getName() + "信息:" + JSON.toJSONString(info));
 
-        topLevelClass.addImportedType(info.getFullType());
-        topLevelClass.addImportedType(info.getFullType() + "DynamicSqlSupport");
+        interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType() + "DynamicSqlSupport"));
 
-        topLevelClass.addImportedType("com.github.pagehelper.PageHelper");
-        topLevelClass.addImportedType("com.github.pagehelper.PageInfo");
-        topLevelClass.addImportedType("org.mybatis.dynamic.sql.SqlBuilder");
-        topLevelClass.addImportedType("org.mybatis.dynamic.sql.select.SelectDSLCompleter");
-        topLevelClass.addImportedType("java.util.List");
+        interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageHelper"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.SqlBuilder"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("java.util.List"));
 
-        topLevelClass.addMethod(findAllMethod(info));
-        topLevelClass.addMethod(selectByIds(info));
-        topLevelClass.addMethod(deleteByIds(info));
-        topLevelClass.addMethod(selectByPage(info));
-        topLevelClass.addMethod(selectByPageAndSize(info));
-        return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
+        interfaze.addMethod(findAllMethod(info));
+        interfaze.addMethod(selectByIds(info));
+        interfaze.addMethod(deleteByIds(info));
+        interfaze.addMethod(selectByPage(info));
+        interfaze.addMethod(selectByPageAndSize(info));
+        return super.clientGenerated(interfaze, introspectedTable);
     }
 
     /**
@@ -62,7 +60,7 @@ public class MapperPlusPlugin extends BasePlugin {
         Method method = new Method("selectByIds");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(new FullyQualifiedJavaType(info.getFullType()));
+        method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
         method.addBodyLine("return select(dsl -> dsl.where(" + info.getName() + "DynamicSqlSupport.id, SqlBuilder.isIn(ids)));");
         return method;
