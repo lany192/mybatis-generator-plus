@@ -27,9 +27,6 @@ public class MapperPlusPlugin extends BasePlugin {
 
         interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageHelper"));
         interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo"));
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.SqlBuilder"));
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"));
-        interfaze.addImportedType(new FullyQualifiedJavaType("java.util.List"));
 
         interfaze.addMethod(findAllMethod(info));
         interfaze.addMethod(selectByIds(info));
@@ -61,7 +58,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
-        method.addBodyLine("return select(dsl -> dsl.where(" + info.getName() + "DynamicSqlSupport.id, SqlBuilder.isIn(ids)));");
+        method.addBodyLine("return select(dsl -> dsl.where(id, isIn(ids)));");
         return method;
     }
 
@@ -74,7 +71,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
-        method.addBodyLine("return delete(dsl -> dsl.where(" + info.getName() + "DynamicSqlSupport.id, SqlBuilder.isIn(ids)));");
+        method.addBodyLine("return delete(dsl -> dsl.where(id, isIn(ids)));");
         return method;
     }
 
