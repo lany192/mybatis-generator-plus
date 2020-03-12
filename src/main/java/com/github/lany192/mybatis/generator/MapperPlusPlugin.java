@@ -39,11 +39,11 @@ public class MapperPlusPlugin extends BasePlugin {
         return super.clientGenerated(interfaze, introspectedTable);
     }
 
-    /**
-     * 查看多有记录
-     */
     private Method findAllMethod(TableInfo info) {
         Method method = new Method("findAll");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 查看所有记录");
+        method.addJavaDocLine(" */");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         String returnType = "List<" + info.getFullType() + ">";
@@ -52,11 +52,11 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    /**
-     * 根据多个id，查询记录
-     */
     private Method selectByIds(TableInfo info) {
         Method method = new Method("selectByIds");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 根据多个id，查询记录");
+        method.addJavaDocLine(" */");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
@@ -65,11 +65,11 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    /**
-     * 根据多个id，删除记录
-     */
     private Method deleteByIds(TableInfo info) {
         Method method = new Method("deleteByIds");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 根据多个id，删除记录");
+        method.addJavaDocLine(" */");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
@@ -78,11 +78,11 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    /**
-     * 分页查询记录,指定页码
-     */
     private Method selectByPage(TableInfo info) {
         Method method = new Method("selectByPage");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 分页查询记录,指定页码");
+        method.addJavaDocLine(" */");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
@@ -91,11 +91,11 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    /**
-     * 分页查询记录,指定页码
-     */
     private Method selectByPageAndSize(TableInfo info) {
         Method method = new Method("selectByPage");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 分页查询记录,指定页码");
+        method.addJavaDocLine(" */");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
