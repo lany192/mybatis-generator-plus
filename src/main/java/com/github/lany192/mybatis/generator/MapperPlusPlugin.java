@@ -58,7 +58,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
-        method.addBodyLine("return select(dsl -> dsl.where(id, isIn(ids)));");
+        method.addBodyLine("return select(c -> c.where(id, isIn(ids)));");
         return method;
     }
 
@@ -71,7 +71,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
-        method.addBodyLine("return delete(dsl -> dsl.where(id, isIn(ids)));");
+        method.addBodyLine("return delete(c -> c.where(id, isIn(ids)));");
         return method;
     }
 
