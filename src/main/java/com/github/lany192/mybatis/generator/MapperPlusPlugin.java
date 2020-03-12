@@ -24,7 +24,6 @@ public class MapperPlusPlugin extends BasePlugin {
         Log.i(info.getName() + "信息:" + JSON.toJSONString(info));
 
         interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
-        interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType() + "DynamicSqlSupport"));
 
         interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageHelper"));
         interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo"));
