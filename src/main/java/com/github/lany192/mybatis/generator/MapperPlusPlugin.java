@@ -33,6 +33,8 @@ public class MapperPlusPlugin extends BasePlugin {
         interfaze.addMethod(deleteByIds(info));
         interfaze.addMethod(selectByPage(info));
         interfaze.addMethod(selectByPageAndSize(info));
+        interfaze.addMethod(findByPage(info));
+        interfaze.addMethod(findByPageAndSize(info));
         return super.clientGenerated(interfaze, introspectedTable);
     }
 
@@ -79,6 +81,7 @@ public class MapperPlusPlugin extends BasePlugin {
         Method method = new Method("selectByPage");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 分页查询记录,指定页码");
+        method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -92,6 +95,7 @@ public class MapperPlusPlugin extends BasePlugin {
         Method method = new Method("selectByPage");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 分页查询记录,指定页码");
+        method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
@@ -102,6 +106,38 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addBodyLine("PageHelper.startPage(page, size);");
         method.addBodyLine("List<" + info.getName() + "> records = select(completer);");
         method.addBodyLine("return new PageInfo<>(records);");
+        return method;
+    }
+
+
+    private Method findByPage(TableInfo info) {
+        Method method = new Method("findByPage");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 分页查询记录,指定页码");
+        method.addJavaDocLine(" * @return 记录List集");
+        method.addJavaDocLine(" */");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "page"));
+        method.addBodyLine("return findByPage(page, 30, SelectDSLCompleter.allRows());");
+        return method;
+    }
+
+    private Method findByPageAndSize(TableInfo info) {
+        Method method = new Method("findByPage");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 分页查询记录,指定页码");
+        method.addJavaDocLine(" * @return 记录List集");
+        method.addJavaDocLine(" */");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
+        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "page"));
+        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "size"));
+        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
+        method.addBodyLine("PageHelper.startPage(page, size);");
+        method.addBodyLine("return select(completer);");
         return method;
     }
 }
