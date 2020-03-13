@@ -27,6 +27,7 @@ public class MapperPlusPlugin extends BasePlugin {
 
         interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageHelper"));
         interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.SqlBuilder"));
 
         interfaze.addMethod(findAllMethod(info));
         interfaze.addMethod(selectByIds(info));
@@ -62,7 +63,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
-        method.addBodyLine("return select(c -> c.where(id, isIn(ids)));");
+        method.addBodyLine("return select(c -> c.where(id, SqlBuilder.isIn(ids)));");
         return method;
     }
 
@@ -76,7 +77,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
-        method.addBodyLine("return delete(c -> c.where(id, isIn(ids)));");
+        method.addBodyLine("return delete(c -> c.where(id, SqlBuilder.isIn(ids)));");
         return method;
     }
 
