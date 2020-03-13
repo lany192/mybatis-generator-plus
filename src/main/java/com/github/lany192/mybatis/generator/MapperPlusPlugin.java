@@ -90,8 +90,8 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "page"));
-        method.addBodyLine("return selectByPage(page, 30, SelectDSLCompleter.allRows());");
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addBodyLine("return selectByPage(pageNum, 30, SelectDSLCompleter.allRows());");
         return method;
     }
 
@@ -105,10 +105,10 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
-        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "page"));
-        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "size"));
+        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
-        method.addBodyLine("PageHelper.startPage(page, size);");
+        method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
         method.addBodyLine("List<" + info.getName() + "> records = select(completer);");
         method.addBodyLine("return new PageInfo<>(records);");
         return method;
@@ -125,8 +125,8 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "page"));
-        method.addBodyLine("return findByPage(page, 30, SelectDSLCompleter.allRows());");
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addBodyLine("return findByPage(pageNum, 30, SelectDSLCompleter.allRows());");
         return method;
     }
 
@@ -140,10 +140,10 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
-        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "page"));
-        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "size"));
+        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
-        method.addBodyLine("PageHelper.startPage(page, size);");
+        method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
         method.addBodyLine("return select(completer);");
         return method;
     }
