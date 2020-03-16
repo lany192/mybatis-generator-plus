@@ -36,6 +36,7 @@ public class MapperPlusPlugin extends BasePlugin {
         interfaze.addMethod(selectByPageAndSize(info));
         interfaze.addMethod(findByPage(info));
         interfaze.addMethod(findByPageAndSize(info));
+        interfaze.addMethod(insertMultiple(info));
         return super.clientGenerated(interfaze, introspectedTable);
     }
 
@@ -146,6 +147,27 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
         method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
         method.addBodyLine("return select(completer);");
+        return method;
+    }
+
+    private Method insertMultiple(TableInfo info) {
+        Method method = new Method("insertMultiple");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 批量插入");
+        method.addJavaDocLine(" * @return 插入数量");
+        method.addJavaDocLine(" */");
+        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("int"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "records"));
+        method.addBodyLine("if (records != null && records.size() > 0) {");
+        method.addBodyLine("for ("+info.getName()+" record : records) {");
+        method.addBodyLine("insertSelective(record);");
+        method.addBodyLine("}");
+        method.addBodyLine("return records.size();");
+        method.addBodyLine("}");
+        method.addBodyLine("return 0;");
         return method;
     }
 
