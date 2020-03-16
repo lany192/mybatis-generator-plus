@@ -45,7 +45,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 查看所有记录");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         String returnType = "List<" + info.getFullType() + ">";
@@ -59,7 +59,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 根据多个id，查询记录");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
@@ -73,7 +73,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 根据多个id，删除记录");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
@@ -88,7 +88,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addJavaDocLine(" * 分页查询记录,指定页码");
         method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
@@ -103,7 +103,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addJavaDocLine(" * 分页查询记录,指定页码");
         method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
@@ -123,7 +123,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addJavaDocLine(" * 分页查询记录,指定页码");
         method.addJavaDocLine(" * @return 记录List集");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
@@ -138,7 +138,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.addJavaDocLine(" * 分页查询记录,指定页码");
         method.addJavaDocLine(" * @return 记录List集");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
@@ -154,9 +154,10 @@ public class MapperPlusPlugin extends BasePlugin {
         Method method = new Method("insertMultiple");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 批量插入");
+        method.addJavaDocLine(" * ");
         method.addJavaDocLine(" * @return 插入数量");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value=\"org.mybatis.generator.api.MyBatisGenerator\", comments=\"Source Table: " + info.getTableName() + "\")");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
