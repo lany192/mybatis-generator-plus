@@ -1,7 +1,7 @@
 package com.github.lany192.mybatis.generator;
 
-import com.alibaba.fastjson.JSON;
 import com.github.lany192.mybatis.generator.model.TableInfo;
+import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -70,7 +70,7 @@ public class FreemarkerPlugin extends BasePlugin {
         data.remove(TEMPLATE_FILE_RELATIVE_PATH);
 
         TableInfo info = new TableInfo(getContext(), introspectedTable);
-        Log.i(info.getName() + "信息:" + JSON.toJSONString(info));
+        Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
         //项目的根目录，相对多模块而言
         String rootPath = new File(System.getProperty("user.dir")).getParent();
         //模板文件
@@ -128,7 +128,7 @@ public class FreemarkerPlugin extends BasePlugin {
         if (!outFile.getParentFile().exists()) {
             outFile.getParentFile().mkdirs();
         }
-        Log.i("定义的属性:" + JSON.toJSONString(params));
+        Log.i("定义的属性:" + JsonUtils.object2json(params));
         try {
             Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
             cfg.setDirectoryForTemplateLoading(templateFile.getParentFile());
