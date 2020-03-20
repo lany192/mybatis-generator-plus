@@ -3,6 +3,9 @@ package com.github.lany192.mybatis.generator;
 import com.github.lany192.mybatis.generator.model.TableInfo;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 
@@ -20,14 +23,14 @@ public class MapperPlusPlugin extends BasePlugin {
 
     @Override
     public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
-        TableInfo info = new TableInfo(getContext(), introspectedTable);
+        TableInfo info = new TableInfo(introspectedTable);
         Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
 
         interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
 
-        interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageHelper"));
-        interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo"));
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.SqlBuilder"));
+        interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
 
         interfaze.addMethod(findAllMethod(info));
         interfaze.addMethod(selectByIds(info));
@@ -163,7 +166,7 @@ public class MapperPlusPlugin extends BasePlugin {
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "records"));
         method.addBodyLine("if (records != null && records.size() > 0) {");
-        method.addBodyLine("for ("+info.getName()+" record : records) {");
+        method.addBodyLine("for (" + info.getName() + " record : records) {");
         method.addBodyLine("insertSelective(record);");
         method.addBodyLine("}");
         method.addBodyLine("return records.size();");
