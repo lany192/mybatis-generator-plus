@@ -1,5 +1,7 @@
 package com.github.lany192.mybatis.generator.model;
 
+import com.github.lany192.mybatis.generator.utils.JsonUtils;
+import com.github.lany192.mybatis.generator.utils.Log;
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
@@ -42,6 +44,7 @@ public class FieldInfo implements Serializable {
     private String defaultValue;
 
     public FieldInfo(IntrospectedColumn info) {
+        Log.i("表字段信息:" + JsonUtils.object2json(info));
         defaultValue = info.getDefaultValue();
         FullyQualifiedJavaType type = info.getFullyQualifiedJavaType();
         column = info.getActualColumnName();

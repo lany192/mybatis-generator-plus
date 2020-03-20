@@ -1,7 +1,7 @@
 package com.github.lany192.mybatis.generator;
 
-import com.alibaba.fastjson.JSON;
 import com.github.lany192.mybatis.generator.model.TableInfo;
+import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -21,7 +21,7 @@ public class MapperPlusPlugin extends BasePlugin {
     @Override
     public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         TableInfo info = new TableInfo(getContext(), introspectedTable);
-        Log.i(info.getName() + "信息:" + JSON.toJSONString(info));
+        Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
 
         interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
 
