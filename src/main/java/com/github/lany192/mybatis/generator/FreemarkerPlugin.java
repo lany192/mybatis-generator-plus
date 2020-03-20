@@ -24,9 +24,9 @@ public class FreemarkerPlugin extends BasePlugin {
     //生成目标文件所在目录
     private final String TARGET_OUT_PATH = "target_out_path";
     //目标文件名称前缀
-    private final String TARGET_FILE_NAME_PREFIX = "target_file_name_prefix";
+    private final String TARGET_NAME_PREFIX = "target_name_prefix";
     //目标文件名称后缀
-    private final String TARGET_FILE_NAME_SUFFIX = "target_file_name_suffix";
+    private final String TARGET_NAME_SUFFIX = "target_name_suffix";
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -48,9 +48,9 @@ public class FreemarkerPlugin extends BasePlugin {
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
         //前缀
-        String filePrefix = getProperty(TARGET_FILE_NAME_PREFIX);
+        String filePrefix = getProperty(TARGET_NAME_PREFIX);
         //后缀
-        String fileSuffix = getProperty(TARGET_FILE_NAME_SUFFIX);
+        String fileSuffix = getProperty(TARGET_NAME_SUFFIX);
         //文件格式
         String fileFormat = getProperty(TARGET_FILE_FORMAT);
         //输出文件路径
@@ -62,8 +62,8 @@ public class FreemarkerPlugin extends BasePlugin {
         templateFilePath = path2path(templateFilePath);
 
         Map<String, Object> data = new HashMap<>(getParams());
-        data.remove(TARGET_FILE_NAME_PREFIX);
-        data.remove(TARGET_FILE_NAME_SUFFIX);
+        data.remove(TARGET_NAME_PREFIX);
+        data.remove(TARGET_NAME_SUFFIX);
         data.remove(TARGET_FILE_FORMAT);
         data.remove(TARGET_OUT_PATH);
         data.remove(TEMPLATE_FILE_PATH);
