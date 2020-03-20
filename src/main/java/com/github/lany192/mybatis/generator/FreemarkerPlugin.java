@@ -69,7 +69,7 @@ public class FreemarkerPlugin extends BasePlugin {
         data.remove(TARGET_FILE_RELATIVE_OUT_DIR);
         data.remove(TEMPLATE_FILE_RELATIVE_PATH);
 
-        TableInfo info = new TableInfo(getContext(), introspectedTable);
+        TableInfo info = new TableInfo(introspectedTable);
         Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
         //项目的根目录，相对多模块而言
         String rootPath = new File(System.getProperty("user.dir")).getParent();

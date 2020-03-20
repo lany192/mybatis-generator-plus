@@ -1,5 +1,7 @@
 package com.github.lany192.mybatis.generator.model;
 
+import com.github.lany192.mybatis.generator.utils.JsonUtils;
+import com.github.lany192.mybatis.generator.utils.Log;
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -56,7 +58,14 @@ public class TableInfo {
      */
     private boolean hasBlob;
 
-    public TableInfo(Context context, IntrospectedTable info) {
+    /**
+     * 运行时是否是动态sql
+     */
+    private boolean isDynamicSql;
+
+    public TableInfo(IntrospectedTable info) {
+        isDynamicSql = info.getTargetRuntime().equals(IntrospectedTable.TargetRuntime.MYBATIS3_DSQL);
+
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
         fullType = type.getFullyQualifiedName();
@@ -70,6 +79,8 @@ public class TableInfo {
             blobName = blobType.getShortName();
             fullBlobType = blobType.getFullyQualifiedName();
             lowerBlobName = Introspector.decapitalize(blobType.getShortName());
+        } else {
+            hasBlob = false;
         }
         List<FieldInfo> fields = new ArrayList<>();
         for (IntrospectedColumn item : info.getAllColumns()) {

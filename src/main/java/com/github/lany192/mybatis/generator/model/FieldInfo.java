@@ -2,7 +2,6 @@ package com.github.lany192.mybatis.generator.model;
 
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
-import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 
 import java.io.Serializable;
 
