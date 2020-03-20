@@ -25,33 +25,33 @@ public class TableInfo {
     private String tableName;
 
     public TableInfo(IntrospectedTable info) {
-        //运行时是否是动态sql
-        map.put("is_dynamic_sql", info.getTargetRuntime().equals(IntrospectedTable.TargetRuntime.MYBATIS3_DSQL));
-        //备注
-        map.put("remark", info.getRemarks());
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
-        //实体名称
-        map.put("name", name);
-        //表名
         tableName = info.getFullyQualifiedTable().getIntrospectedTableName();
-        map.put("table_name", tableName);
-        //实体完整名称
         fullType = type.getFullyQualifiedName();
-        map.put("full_model_type", fullType);
-        //首字母小写名称
-        map.put("lower_model_name", Introspector.decapitalize(type.getShortName()));
-        //作者
-        map.put("author", System.getProperty("user.name"));
-
         List<FieldInfo> fields = new ArrayList<>();
         for (IntrospectedColumn item : info.getAllColumns()) {
             fields.add(new FieldInfo(item));
         }
+        boolean hasBlob = info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1;
+
+        //运行时是否是动态sql
+        map.put("is_dynamic_sql", info.getTargetRuntime().equals(IntrospectedTable.TargetRuntime.MYBATIS3_DSQL));
+        //表名
+        map.put("table_name", tableName);
+        //备注
+        map.put("table_remark", info.getRemarks());
+        //实体名称
+        map.put("model_name", name);
+        //实体完整名称
+        map.put("model_full_type", fullType);
+        //首字母小写名称
+        map.put("model_lower_name", Introspector.decapitalize(type.getShortName()));
+        //作者
+        map.put("author", System.getProperty("user.name"));
         //实体字段
         map.put("fields", fields);
         //包含BLOBColumns字段
-        boolean hasBlob = info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1;
         map.put("has_blob_column", hasBlob);
         //是否包含BLOBColumns字段,注意：数量大于2个才会生成BLOB实体类
         if (hasBlob) {
@@ -59,9 +59,9 @@ public class TableInfo {
             //Blob实体名称
             map.put("blob_model_name", blobType.getShortName());
             //Blob实体完整名称
-            map.put("full_blob_model_type", blobType.getFullyQualifiedName());
+            map.put("blob_model_full_type", blobType.getFullyQualifiedName());
             //首字母小写Blob名称
-            map.put("lower_blob_model_name", Introspector.decapitalize(blobType.getShortName()));
+            map.put("blob_model_lower_name", Introspector.decapitalize(blobType.getShortName()));
         }
     }
 

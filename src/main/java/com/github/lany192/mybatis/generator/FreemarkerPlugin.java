@@ -22,7 +22,7 @@ public class FreemarkerPlugin extends BasePlugin {
     //目标文件格式
     private final String TARGET_FILE_FORMAT = "target_file_format";
     //生成目标文件所在目录
-    private final String TARGET_FILE_OUT_DIR = "target_file_out_dir";
+    private final String TARGET_OUT_PATH = "target_out_path";
     //目标文件名称前缀
     private final String TARGET_FILE_NAME_PREFIX = "target_file_name_prefix";
     //目标文件名称后缀
@@ -34,8 +34,8 @@ public class FreemarkerPlugin extends BasePlugin {
             warnings.add(TAG + ":请配置模板文件相对路径" + TEMPLATE_FILE_PATH + "属性");
             return false;
         }
-        if (isEmpty(TARGET_FILE_OUT_DIR)) {
-            warnings.add(TAG + ":请配置目标文件输出目录" + TARGET_FILE_OUT_DIR + "属性");
+        if (isEmpty(TARGET_OUT_PATH)) {
+            warnings.add(TAG + ":请配置目标文件输出目录" + TARGET_OUT_PATH + "属性");
             return false;
         }
         if (isEmpty(TARGET_FILE_FORMAT)) {
@@ -54,7 +54,7 @@ public class FreemarkerPlugin extends BasePlugin {
         //文件格式
         String fileFormat = getProperty(TARGET_FILE_FORMAT);
         //输出文件路径
-        String targetRelativeOutDirPath = getProperty(TARGET_FILE_OUT_DIR);
+        String targetRelativeOutDirPath = getProperty(TARGET_OUT_PATH);
         //模板文件完整路径
         String templateFilePath = getProperty(TEMPLATE_FILE_PATH);
 
@@ -65,7 +65,7 @@ public class FreemarkerPlugin extends BasePlugin {
         data.remove(TARGET_FILE_NAME_PREFIX);
         data.remove(TARGET_FILE_NAME_SUFFIX);
         data.remove(TARGET_FILE_FORMAT);
-        data.remove(TARGET_FILE_OUT_DIR);
+        data.remove(TARGET_OUT_PATH);
         data.remove(TEMPLATE_FILE_PATH);
 
         TableInfo info = new TableInfo(introspectedTable);
