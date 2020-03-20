@@ -41,25 +41,32 @@ public class FieldInfo implements Serializable {
      */
     private String defaultValue;
     /**
-     * 是否自增长
-     */
-    private boolean identity;
-    /**
      * 表别名
      */
     private String tableAlias;
 
+    private boolean identity;
+    private boolean isColumnNameDelimited;
+    private boolean isSequenceColumn;
+    private boolean isAutoIncrement;
+    private boolean isGeneratedColumn;
+    private boolean isGeneratedAlways;
+
     public FieldInfo(IntrospectedColumn info) {
         identity = info.isIdentity();
+        isColumnNameDelimited = info.isColumnNameDelimited();
+        isSequenceColumn = info.isSequenceColumn();
+        isAutoIncrement = info.isAutoIncrement();
+        isGeneratedColumn = info.isGeneratedColumn();
+        isGeneratedAlways = info.isGeneratedAlways();
         tableAlias = info.getTableAlias();
         defaultValue = info.getDefaultValue();
-        FullyQualifiedJavaType type = info.getFullyQualifiedJavaType();
         column = info.getActualColumnName();
         name = info.getJavaProperty();
         remark = info.getRemarks();
         length = info.getLength();
         nullable = info.isNullable();
-        typeName = type.getShortName();
-        fullTypeName = type.getFullyQualifiedName();
+        typeName = info.getFullyQualifiedJavaType().getShortName();
+        fullTypeName = info.getFullyQualifiedJavaType().getFullyQualifiedName();
     }
 }
