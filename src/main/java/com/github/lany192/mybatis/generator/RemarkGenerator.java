@@ -48,10 +48,9 @@ public final class RemarkGenerator implements CommentGenerator {
                 dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             }
             unit.addFileCommentLine("/*");
-            unit.addFileCommentLine("*");
             unit.addFileCommentLine("* " + unit.getType().getShortName() + ".java");
             unit.addFileCommentLine("* mybatis generator plus自动生成,请勿编辑.");
-            unit.addFileCommentLine("* Copyright(C) " + Calendar.getInstance().get(Calendar.YEAR) + " Lany");
+            unit.addFileCommentLine("* Copyright(C) " + Calendar.getInstance().get(Calendar.YEAR) + " " + System.getProperty("user.name"));
 //            unit.addFileCommentLine("* @date " + dateFormat.format(new Date()) + "");
             unit.addFileCommentLine("*/");
         }
