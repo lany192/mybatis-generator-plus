@@ -1,91 +1,71 @@
 package com.github.lany192.mybatis.generator.model;
 
-import com.github.lany192.mybatis.generator.utils.JsonUtils;
-import com.github.lany192.mybatis.generator.utils.Log;
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
-import org.mybatis.generator.config.Context;
 
 import java.beans.Introspector;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public class TableInfo {
-    /**
-     * 备注
-     */
-    private String remark;
-    /**
-     * 表名
-     */
-    private String tableName;
-    /**
-     * 实体名称
-     */
+    private Map<String, Object> map = new HashMap<>();
     private String name;
-    /**
-     * 首字母小写名称
-     */
-    private String lowerName;
     /**
      * 实体完整名称
      */
     private String fullType;
-
     /**
-     * 实体字段
+     * 表名
      */
-    private List<FieldInfo> fields;
-
-    /**
-     * Blob实体名称
-     */
-    private String blobName;
-    /**
-     * Blob实体完整名称
-     */
-    private String fullBlobType;
-    /**
-     * 首字母小写Blob名称
-     */
-    private String lowerBlobName;
-
-    /**
-     * 包含BLOBColumns字段
-     */
-    private boolean hasBlob;
-
-    /**
-     * 运行时是否是动态sql
-     */
-    private boolean isDynamicSql;
+    private String tableName;
 
     public TableInfo(IntrospectedTable info) {
-        isDynamicSql = info.getTargetRuntime().equals(IntrospectedTable.TargetRuntime.MYBATIS3_DSQL);
-
+        //运行时是否是动态sql
+        map.put("is_dynamic_sql", info.getTargetRuntime().equals(IntrospectedTable.TargetRuntime.MYBATIS3_DSQL));
+        //备注
+        map.put("remark", info.getRemarks());
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
-        fullType = type.getFullyQualifiedName();
-        lowerName = Introspector.decapitalize(type.getShortName());
-        remark = info.getRemarks();
+        //实体名称
+        map.put("name", name);
+        //表名
         tableName = info.getFullyQualifiedTable().getIntrospectedTableName();
-        //是否包含BLOBColumns字段,注意：数量大于2个才会生成BLOB实体类
-        if (info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1) {
-            hasBlob = true;
-            FullyQualifiedJavaType blobType = new FullyQualifiedJavaType(info.getRecordWithBLOBsType());
-            blobName = blobType.getShortName();
-            fullBlobType = blobType.getFullyQualifiedName();
-            lowerBlobName = Introspector.decapitalize(blobType.getShortName());
-        } else {
-            hasBlob = false;
-        }
+        map.put("table_name", tableName);
+        //实体完整名称
+        fullType = type.getFullyQualifiedName();
+        map.put("full_model_type", fullType);
+        //首字母小写名称
+        map.put("lower_model_name", Introspector.decapitalize(type.getShortName()));
+        //作者
+        map.put("author", System.getProperty("user.name"));
+
         List<FieldInfo> fields = new ArrayList<>();
         for (IntrospectedColumn item : info.getAllColumns()) {
             fields.add(new FieldInfo(item));
         }
-        this.fields = fields;
+        //实体字段
+        map.put("fields", fields);
+        //包含BLOBColumns字段
+        boolean hasBlob = info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1;
+        map.put("has_blob_column", hasBlob);
+        //是否包含BLOBColumns字段,注意：数量大于2个才会生成BLOB实体类
+        if (hasBlob) {
+            FullyQualifiedJavaType blobType = new FullyQualifiedJavaType(info.getRecordWithBLOBsType());
+            //Blob实体名称
+            map.put("blob_model_name", blobType.getShortName());
+            //Blob实体完整名称
+            map.put("full_blob_model_type", blobType.getFullyQualifiedName());
+            //首字母小写Blob名称
+            map.put("lower_blob_model_name", Introspector.decapitalize(blobType.getShortName()));
+        }
+    }
+
+    public Map<String, Object> getMap() {
+        return map;
     }
 }
