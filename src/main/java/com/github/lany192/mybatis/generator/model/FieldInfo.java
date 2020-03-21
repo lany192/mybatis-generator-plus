@@ -7,7 +7,9 @@ import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -54,6 +56,11 @@ public class FieldInfo implements Serializable {
      */
     private boolean isCustomType;
 
+    /**
+     * 如果是自定义枚举类，所有值得几个
+     */
+    private List<Map<String, Object>> enums;
+
     private boolean identity;
     private boolean isColumnNameDelimited;
     private boolean isSequenceColumn;
@@ -78,6 +85,9 @@ public class FieldInfo implements Serializable {
         typeName = info.getFullyQualifiedJavaType().getShortName();
         fullTypeName = info.getFullyQualifiedJavaType().getFullyQualifiedName();
         isCustomType = isJdbcType(info.getJdbcType());
+        if (isCustomType) {
+            enums = getEnumValues(fullTypeName);
+        }
     }
 
     /**
@@ -126,5 +136,31 @@ public class FieldInfo implements Serializable {
         jdbcTypeMap.put(2014, new JavaTypeResolverDefaultImpl.JdbcTypeInformation("TIMESTAMP_WITH_TIMEZONE", new FullyQualifiedJavaType("java.time.OffsetDateTime")));
 
         return jdbcTypeMap.containsKey(jdbcType);
+    }
+
+    /**
+     * 获取枚举的所有值
+     */
+    private static List<Map<String, Object>> getEnumValues(String className) {
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            Class<?> clazz = Class.forName(className);
+            if (clazz.isEnum()) {
+                System.out.println(clazz.getSimpleName() + "是枚举");
+                //得到enum的所有实例
+                Object[] objects = clazz.getEnumConstants();
+                for (Object item : objects) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("index", clazz.getMethod("ordinal").invoke(item));
+                    map.put("name", clazz.getMethod("name").invoke(item));
+                    list.add(map);
+                }
+            } else {
+                System.out.println(clazz.getSimpleName() + "不是枚举");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }
