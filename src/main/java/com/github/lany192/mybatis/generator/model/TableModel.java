@@ -29,9 +29,9 @@ public class TableModel {
         name = type.getShortName();
         tableName = info.getFullyQualifiedTable().getIntrospectedTableName();
         fullType = type.getFullyQualifiedName();
-        List<ColumnModel> fields = new ArrayList<>();
+        List<ColumnModel> columns = new ArrayList<>();
         for (IntrospectedColumn item : info.getAllColumns()) {
-            fields.add(new ColumnModel(item));
+            columns.add(new ColumnModel(item));
         }
         boolean hasBlob = info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1;
 
@@ -50,7 +50,7 @@ public class TableModel {
         //作者
         map.put("author", System.getProperty("user.name"));
         //实体字段
-        map.put("fields", fields);
+        map.put("columns", columns);
         //包含BLOBColumns字段
         map.put("has_blob_column", hasBlob);
         //是否包含BLOBColumns字段,注意：数量大于2个才会生成BLOB实体类
