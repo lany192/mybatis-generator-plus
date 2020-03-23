@@ -1,5 +1,6 @@
 package com.github.lany192.mybatis.generator.model;
 
+import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.OtherUtils;
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -53,11 +54,15 @@ public class ColumnModel implements Serializable {
      * 自定义的字段类型
      */
     private boolean isCustomType;
+    /**
+     * 是否是枚举类型
+     */
+    private boolean isEnum;
 
     /**
-     * 如果是自定义枚举类，所有值得几个
+     * 自定义类的值
      */
-    private List<Map<String, Object>> enums;
+    private String customValue;
 
     private boolean identity;
     private boolean isColumnNameDelimited;
@@ -84,33 +89,32 @@ public class ColumnModel implements Serializable {
         fullTypeName = info.getFullyQualifiedJavaType().getFullyQualifiedName();
         isCustomType = OtherUtils.isJdbcType(info.getJdbcType());
         if (isCustomType) {
-            enums = getEnumValues(fullTypeName);
+            customValue = getCustomValue(fullTypeName);
         }
     }
 
     /**
      * 获取枚举的所有值
      */
-    private static List<Map<String, Object>> getEnumValues(String className) {
-        List<Map<String, Object>> list = new ArrayList<>();
+    private String getCustomValue(String className) {
         try {
             Class<?> clazz = Class.forName(className);
+            isEnum = clazz.isEnum();
             if (clazz.isEnum()) {
-                System.out.println(clazz.getSimpleName() + "是枚举");
                 //得到enum的所有实例
                 Object[] objects = clazz.getEnumConstants();
+                List<Map<String, Object>> list = new ArrayList<>();
                 for (Object item : objects) {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("index", clazz.getMethod("ordinal").invoke(item));
-                    map.put("name", clazz.getMethod("name").invoke(item));
+                    map.put("value", clazz.getMethod("ordinal").invoke(item));
+                    map.put("label", clazz.getMethod("name").invoke(item));
                     list.add(map);
                 }
-            } else {
-                System.out.println(clazz.getSimpleName() + "不是枚举");
+                return JsonUtils.object2json(list);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
+        return defaultValue;
     }
 }
