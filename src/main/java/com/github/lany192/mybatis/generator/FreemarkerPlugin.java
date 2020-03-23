@@ -6,6 +6,7 @@ import com.github.lany192.mybatis.generator.utils.Log;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 
@@ -27,6 +28,8 @@ public class FreemarkerPlugin extends BasePlugin {
     private final String TARGET_NAME_PREFIX = "target_name_prefix";
     //目标文件名称后缀
     private final String TARGET_NAME_SUFFIX = "target_name_suffix";
+    //是否删除旧的目标文件
+    private final String DELETE_OLD_FILE = "delete_old_file";
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -57,6 +60,12 @@ public class FreemarkerPlugin extends BasePlugin {
         String targetRelativeOutDirPath = getProperty(TARGET_OUT_PATH);
         //模板文件完整路径
         String templateFilePath = getProperty(TEMPLATE_FILE_PATH);
+        //是否删除旧的目标文件
+        String clearOldFile = getProperty(DELETE_OLD_FILE);
+        boolean deleteOldFile = true;
+        if (!StringUtils.isEmpty(clearOldFile) && clearOldFile.equals("false")) {
+            deleteOldFile = false;
+        }
 
         targetRelativeOutDirPath = path2path(targetRelativeOutDirPath);
         templateFilePath = path2path(templateFilePath);
@@ -83,8 +92,18 @@ public class FreemarkerPlugin extends BasePlugin {
             File outFile = new File(outDirFile.getPath() + File.separator + targetFileName + "." + fileFormat);
             Log.i("目标文件:" + outFile.getPath());
             data.put("target_file_name", targetFileName);
-            //生成文件
-            buildFile(templateFile, outFile, data);
+
+            if (outFile.exists()) {
+                if (deleteOldFile) {
+                    //生成文件
+                    buildFile(templateFile, outFile, data);
+                } else {
+                    Log.i("已存在不删除:" + outDirFile.getPath());
+                }
+            } else {
+                //生成文件
+                buildFile(templateFile, outFile, data);
+            }
         } else {
             Log.i("不存在！模板文件:" + templateFile.getPath());
         }
