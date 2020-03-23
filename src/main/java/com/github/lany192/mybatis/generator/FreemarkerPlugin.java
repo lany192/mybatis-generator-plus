@@ -1,18 +1,13 @@
 package com.github.lany192.mybatis.generator;
 
 import com.github.lany192.mybatis.generator.model.TableModel;
-import com.github.lany192.mybatis.generator.utils.JsonUtils;
+import com.github.lany192.mybatis.generator.utils.FreemarkerUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,16 +88,11 @@ public class FreemarkerPlugin extends BasePlugin {
             Log.i("目标文件:" + outFile.getPath());
             data.put("target_file_name", targetFileName);
 
-            if (outFile.exists()) {
-                if (deleteOldFile) {
-                    //生成文件
-                    buildFile(templateFile, outFile, data);
-                } else {
-                    Log.i("已存在不删除:" + outDirFile.getPath());
-                }
+            if (outFile.exists() && !deleteOldFile) {
+                Log.i("已存在不删除:" + outDirFile.getPath());
             } else {
                 //生成文件
-                buildFile(templateFile, outFile, data);
+                FreemarkerUtils.buildFile(templateFile, outFile, data);
             }
         } else {
             Log.i("不存在！模板文件:" + templateFile.getPath());
@@ -119,33 +109,4 @@ public class FreemarkerPlugin extends BasePlugin {
         return path;
     }
 
-    /**
-     * 根据模板文件生成新文件
-     *
-     * @param templateFile 模板
-     * @param outFile      新文件
-     * @param params       参数
-     */
-    private void buildFile(File templateFile, File outFile, Map<String, Object> params) {
-        if (!templateFile.exists()) {
-            Log.i("找不到对应的模板文件：" + templateFile.getPath());
-            return;
-        }
-        if (!outFile.getParentFile().exists()) {
-            outFile.getParentFile().mkdirs();
-        }
-        Log.i("定义的属性:" + JsonUtils.object2json(params));
-        try {
-            Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
-            cfg.setDirectoryForTemplateLoading(templateFile.getParentFile());
-            cfg.setDefaultEncoding("UTF-8");
-            cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
-            Template template = cfg.getTemplate(templateFile.getName());
-            Writer writer = new FileWriter(outFile);
-            template.process(params, writer);
-            Log.i("目标文件生成成功" + outFile.getPath());
-        } catch (Exception e) {
-            throw new RuntimeException("目标文件生成失败!" + outFile.getPath(), e);
-        }
-    }
 }
