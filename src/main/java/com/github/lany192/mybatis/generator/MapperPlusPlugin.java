@@ -1,6 +1,6 @@
 package com.github.lany192.mybatis.generator;
 
-import com.github.lany192.mybatis.generator.model.TableInfo;
+import com.github.lany192.mybatis.generator.model.TableModel;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
 import com.github.pagehelper.PageHelper;
@@ -23,7 +23,7 @@ public class MapperPlusPlugin extends BasePlugin {
 
     @Override
     public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
-        TableInfo info = new TableInfo(introspectedTable);
+        TableModel info = new TableModel(introspectedTable);
         Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
 
         interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
@@ -43,7 +43,7 @@ public class MapperPlusPlugin extends BasePlugin {
         return super.clientGenerated(interfaze, introspectedTable);
     }
 
-    private Method findAllMethod(TableInfo info) {
+    private Method findAllMethod(TableModel info) {
         Method method = new Method("findAll");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 查看所有记录");
@@ -57,7 +57,7 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    private Method selectByIds(TableInfo info) {
+    private Method selectByIds(TableModel info) {
         Method method = new Method("selectByIds");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 根据多个id，查询记录");
@@ -71,7 +71,7 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    private Method deleteByIds(TableInfo info) {
+    private Method deleteByIds(TableModel info) {
         Method method = new Method("deleteByIds");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 根据多个id，删除记录");
@@ -85,7 +85,7 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    private Method selectByPage(TableInfo info) {
+    private Method selectByPage(TableModel info) {
         Method method = new Method("selectByPage");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 分页查询记录,指定页码");
@@ -100,7 +100,7 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    private Method selectByPageAndSize(TableInfo info) {
+    private Method selectByPageAndSize(TableModel info) {
         Method method = new Method("selectByPage");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 分页查询记录,指定页码");
@@ -120,7 +120,7 @@ public class MapperPlusPlugin extends BasePlugin {
     }
 
 
-    private Method findByPage(TableInfo info) {
+    private Method findByPage(TableModel info) {
         Method method = new Method("findByPage");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 分页查询记录,指定页码");
@@ -135,7 +135,7 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    private Method findByPageAndSize(TableInfo info) {
+    private Method findByPageAndSize(TableModel info) {
         Method method = new Method("findByPage");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 分页查询记录,指定页码");
@@ -153,7 +153,7 @@ public class MapperPlusPlugin extends BasePlugin {
         return method;
     }
 
-    private Method insertMultiple(TableInfo info) {
+    private Method insertMultiple(TableModel info) {
         Method method = new Method("insertMultiple");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 批量插入");

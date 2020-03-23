@@ -1,6 +1,6 @@
 package com.github.lany192.mybatis.generator;
 
-import com.github.lany192.mybatis.generator.model.TableInfo;
+import com.github.lany192.mybatis.generator.model.TableModel;
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
 import com.github.lany192.mybatis.generator.utils.Log;
 import freemarker.template.Configuration;
@@ -68,7 +68,7 @@ public class FreemarkerPlugin extends BasePlugin {
         data.remove(TARGET_OUT_PATH);
         data.remove(TEMPLATE_FILE_PATH);
 
-        TableInfo info = new TableInfo(introspectedTable);
+        TableModel info = new TableModel(introspectedTable);
         data.putAll(info.getMap());
 
         //项目的根目录，相对多模块而言

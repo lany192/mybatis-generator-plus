@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class FieldInfo implements Serializable {
+public class ColumnModel implements Serializable {
     /**
      * 表中字段名称
      */
@@ -68,7 +68,7 @@ public class FieldInfo implements Serializable {
     private boolean isGeneratedColumn;
     private boolean isGeneratedAlways;
 
-    public FieldInfo(IntrospectedColumn info) {
+    public ColumnModel(IntrospectedColumn info) {
         identity = info.isIdentity();
         isColumnNameDelimited = info.isColumnNameDelimited();
         isSequenceColumn = info.isSequenceColumn();

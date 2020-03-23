@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-public class TableInfo {
+public class TableModel {
     private Map<String, Object> map = new HashMap<>();
     private String name;
     /**
@@ -24,14 +24,14 @@ public class TableInfo {
      */
     private String tableName;
 
-    public TableInfo(IntrospectedTable info) {
+    public TableModel(IntrospectedTable info) {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
         tableName = info.getFullyQualifiedTable().getIntrospectedTableName();
         fullType = type.getFullyQualifiedName();
-        List<FieldInfo> fields = new ArrayList<>();
+        List<ColumnModel> fields = new ArrayList<>();
         for (IntrospectedColumn item : info.getAllColumns()) {
-            fields.add(new FieldInfo(item));
+            fields.add(new ColumnModel(item));
         }
         boolean hasBlob = info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1;
 
