@@ -100,7 +100,7 @@ public class ColumnModel implements Serializable {
         try {
             Class<?> clazz = Class.forName(className);
             isEnum = clazz.isEnum();
-            if (clazz.isEnum()) {
+            if (isEnum) {
                 //得到enum的所有实例
                 Object[] objects = clazz.getEnumConstants();
                 List<Map<String, Object>> list = new ArrayList<>();
