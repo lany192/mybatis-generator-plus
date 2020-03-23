@@ -24,7 +24,7 @@ public class TableModel {
      */
     private String tableName;
 
-    public TableModel(IntrospectedTable info) {
+    public TableModel(IntrospectedTable info, String author) {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
         tableName = info.getFullyQualifiedTable().getIntrospectedTableName();
@@ -48,7 +48,7 @@ public class TableModel {
         //首字母小写名称
         map.put("model_lower_name", Introspector.decapitalize(type.getShortName()));
         //作者
-        map.put("author", System.getProperty("user.name"));
+        map.put("author", author);
         //实体字段
         map.put("columns", columns);
         //包含BLOBColumns字段

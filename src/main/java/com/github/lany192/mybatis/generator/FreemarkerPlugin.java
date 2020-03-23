@@ -25,6 +25,8 @@ public class FreemarkerPlugin extends BasePlugin {
     private final String TARGET_NAME_SUFFIX = "target_name_suffix";
     //是否删除旧的目标文件
     private final String DELETE_OLD_FILE = "delete_old_file";
+    //作者
+    private final String KEY_AUTHOR = "author";
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -57,6 +59,13 @@ public class FreemarkerPlugin extends BasePlugin {
         String templateFilePath = getProperty(TEMPLATE_FILE_PATH);
         //是否删除旧的目标文件
         String clearOldFile = getProperty(DELETE_OLD_FILE);
+        //获取作者
+        String author = getProperty(KEY_AUTHOR);
+
+        if (StringUtils.isEmpty(author)) {
+            author = System.getProperty("user.name");
+        }
+
         boolean deleteOldFile = true;
         if (!StringUtils.isEmpty(clearOldFile) && clearOldFile.equals("false")) {
             deleteOldFile = false;
@@ -72,7 +81,7 @@ public class FreemarkerPlugin extends BasePlugin {
         data.remove(TARGET_OUT_PATH);
         data.remove(TEMPLATE_FILE_PATH);
 
-        TableModel info = new TableModel(introspectedTable);
+        TableModel info = new TableModel(introspectedTable, author);
         data.putAll(info.getMap());
 
         //项目的根目录，相对多模块而言
