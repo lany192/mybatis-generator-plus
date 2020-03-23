@@ -89,7 +89,7 @@ public class FreemarkerPlugin extends BasePlugin {
             data.put("target_file_name", targetFileName);
 
             if (outFile.exists() && !deleteOldFile) {
-                Log.i("已存在不删除:" + outDirFile.getPath());
+                Log.i("已存在,忽略:" + outFile.getPath());
             } else {
                 //生成文件
                 FreemarkerUtils.buildFile(templateFile, outFile, data);
