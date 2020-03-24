@@ -1,6 +1,7 @@
 package com.github.lany192.mybatis.generator.model;
 
 import com.github.lany192.mybatis.generator.utils.JsonUtils;
+import com.github.lany192.mybatis.generator.utils.Log;
 import com.github.lany192.mybatis.generator.utils.OtherUtils;
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -112,6 +113,7 @@ public class ColumnModel implements Serializable {
                 }
                 return JsonUtils.object2json(list);
             } else if (clazz.isArray()) {
+                Log.i("数组的元素类型是:" + clazz.getComponentType().getName());
                 return "[]";
             }
         } catch (Exception e) {
