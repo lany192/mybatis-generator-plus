@@ -111,6 +111,8 @@ public class ColumnModel implements Serializable {
                     list.add(map);
                 }
                 return JsonUtils.object2json(list);
+            } else if (clazz.isArray()) {
+                return "[]";
             }
         } catch (Exception e) {
             e.printStackTrace();
