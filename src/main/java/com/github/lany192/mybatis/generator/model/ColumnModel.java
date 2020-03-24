@@ -95,7 +95,7 @@ public class ColumnModel implements Serializable {
     }
 
     /**
-     * 获取枚举的所有值
+     * 获取枚举的所有值.https://www.icode9.com/content-1-365784.html
      */
     private String getCustomValue(String className) {
         try {
