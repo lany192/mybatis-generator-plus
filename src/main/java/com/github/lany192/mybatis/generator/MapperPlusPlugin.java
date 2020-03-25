@@ -8,6 +8,7 @@ import com.github.pagehelper.PageInfo;
 import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
+import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
 
@@ -17,7 +18,12 @@ import java.util.List;
 public class MapperPlusPlugin extends BasePlugin {
 
     @Override
-    public boolean validate(List<String> list) {
+    public boolean validate(List<String> warnings) {
+        if (StringUtility.stringHasValue(getContext().getTargetRuntime())
+                && !"MyBatis3DynamicSQL".equalsIgnoreCase(getContext().getTargetRuntime())) {
+            warnings.add(this.getClass().getTypeName() + "插件要求运行targetRuntime必须为MyBatis3DynamicSQL！");
+            return false;
+        }
         return true;
     }
 
