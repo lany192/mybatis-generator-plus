@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 修改Example类的目标地址
  */
-public class ExampleTargetPlugin extends BasePlugin {
+public class ExamplePlugin extends BasePlugin {
     private final String TARGET_PACKAGE = "target_package";
     /**
      * 目标包

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 实体增加api文档注解
  */
-public class Swagger2DocPlugin extends PluginAdapter {
+public class SwaggerPlugin extends PluginAdapter {
 
     @Override
     public boolean validate(List<String> warnings) {

@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 拓展Mapper类的功能
  */
-public class MapperPlusPlugin extends BasePlugin {
+public class MapperPlugin extends BasePlugin {
 
     @Override
     public boolean validate(List<String> warnings) {
