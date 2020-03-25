@@ -81,7 +81,7 @@ public class BatchInsertPlugin extends BasePlugin {
         foreachElement.addElement(new TextElement("("));
         for (int i = 0; i < columns.size(); i++) {
             IntrospectedColumn column = columns.get(i);
-            String item = "#{item." + column.getActualTypeName() + ",jdbcType=" + column.getJdbcTypeName() + "}";
+            String item = "#{item." + column.getJavaProperty() + ",jdbcType=" + column.getJdbcTypeName() + "}";
             if (i != columns.size() - 1) {
                 item += ",";
             }
