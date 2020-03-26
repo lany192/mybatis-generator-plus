@@ -1,5 +1,6 @@
-package com.github.lany192.mybatis.generator;
+package com.github.lany192.generator.mybatis3;
 
+import com.github.lany192.generator.BasePlugin;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -78,7 +79,8 @@ public class BatchInsertPlugin extends BasePlugin {
         foreachElement.addAttribute(new Attribute("item", "item"));
         foreachElement.addAttribute(new Attribute("separator", ","));
         foreachElement.addAttribute(new Attribute("index", "index"));
-        foreachElement.addElement(new TextElement("("));
+        foreachElement.addAttribute(new Attribute("open", "("));
+        foreachElement.addAttribute(new Attribute("close", ")"));
         for (int i = 0; i < columns.size(); i++) {
             IntrospectedColumn column = columns.get(i);
             String item = "#{item." + column.getJavaProperty() + ",jdbcType=" + column.getJdbcTypeName() + "}";
@@ -87,7 +89,6 @@ public class BatchInsertPlugin extends BasePlugin {
             }
             foreachElement.addElement(new TextElement(item));
         }
-        foreachElement.addElement(new TextElement(")"));
         batchInsertEle.addElement(foreachElement);
         document.getRootElement().addElement(batchInsertEle);
         return true;

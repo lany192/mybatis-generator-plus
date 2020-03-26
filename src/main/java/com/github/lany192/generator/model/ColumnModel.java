@@ -1,8 +1,8 @@
-package com.github.lany192.mybatis.generator.model;
+package com.github.lany192.generator.model;
 
-import com.github.lany192.mybatis.generator.utils.JsonUtils;
-import com.github.lany192.mybatis.generator.utils.Log;
-import com.github.lany192.mybatis.generator.utils.OtherUtils;
+import com.github.lany192.generator.utils.JsonUtils;
+import com.github.lany192.generator.utils.Log;
+import com.github.lany192.generator.utils.OtherUtils;
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
 

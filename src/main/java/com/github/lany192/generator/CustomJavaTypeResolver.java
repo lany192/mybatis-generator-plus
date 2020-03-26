@@ -1,6 +1,6 @@
-package com.github.lany192.mybatis.generator;
+package com.github.lany192.generator;
 
-import com.github.lany192.mybatis.generator.utils.Log;
+import com.github.lany192.generator.utils.Log;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.config.PropertyRegistry;

@@ -1,8 +1,9 @@
-package com.github.lany192.mybatis.generator;
+package com.github.lany192.generator.dynamicsql;
 
-import com.github.lany192.mybatis.generator.model.TableModel;
-import com.github.lany192.mybatis.generator.utils.JsonUtils;
-import com.github.lany192.mybatis.generator.utils.Log;
+import com.github.lany192.generator.utils.Log;
+import com.github.lany192.generator.BasePlugin;
+import com.github.lany192.generator.model.TableModel;
+import com.github.lany192.generator.utils.JsonUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mybatis.dynamic.sql.SqlBuilder;

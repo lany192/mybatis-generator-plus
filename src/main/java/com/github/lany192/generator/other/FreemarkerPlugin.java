@@ -1,8 +1,9 @@
-package com.github.lany192.mybatis.generator;
+package com.github.lany192.generator.other;
 
-import com.github.lany192.mybatis.generator.model.TableModel;
-import com.github.lany192.mybatis.generator.utils.FreemarkerUtils;
-import com.github.lany192.mybatis.generator.utils.Log;
+import com.github.lany192.generator.BasePlugin;
+import com.github.lany192.generator.utils.FreemarkerUtils;
+import com.github.lany192.generator.utils.Log;
+import com.github.lany192.generator.model.TableModel;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;

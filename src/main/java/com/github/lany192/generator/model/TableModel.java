@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator.model;
+package com.github.lany192.generator.model;
 
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;

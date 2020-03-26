@@ -1,5 +1,6 @@
-package com.github.lany192.mybatis.generator;
+package com.github.lany192.generator.mybatis3;
 
+import com.github.lany192.generator.BasePlugin;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;

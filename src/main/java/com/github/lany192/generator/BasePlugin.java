@@ -1,7 +1,7 @@
-package com.github.lany192.mybatis.generator;
+package com.github.lany192.generator;
 
-import com.github.lany192.mybatis.generator.utils.JsonUtils;
-import com.github.lany192.mybatis.generator.utils.Log;
+import com.github.lany192.generator.utils.Log;
+import com.github.lany192.generator.utils.JsonUtils;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.internal.util.StringUtility;
 

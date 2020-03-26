@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator.utils;
+package com.github.lany192.generator.utils;
 
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;

@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator;
+package com.github.lany192.generator.other;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;

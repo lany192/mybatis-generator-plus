@@ -1,4 +1,4 @@
-package com.github.lany192.mybatis.generator.utils;
+package com.github.lany192.generator.utils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
