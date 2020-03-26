@@ -1,7 +1,6 @@
 package com.github.lany192.generator.mybatis3;
 
 import com.github.lany192.generator.BasePlugin;
-import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.Attribute;
@@ -56,11 +55,8 @@ public class SelectByIdsPlugin extends BasePlugin {
         selectElement.addAttribute(new Attribute("parameterType", "java.util.List"));
         selectElement.addAttribute(new Attribute("resultMap", "BaseResultMap"));
         selectElement.addElement(new TextElement("    select\n" +
-                "    <if test=\"distinct\">\n" +
-                "      distinct\n" +
-                "    </if>\n" +
                 "    <include refid=\"Base_Column_List\" />\n" +
-                "    from " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
+                "    from " + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " WHERE id IN"));
         // 添加foreach节点
         XmlElement foreachElement = new XmlElement("foreach");
         foreachElement.addAttribute(new Attribute("collection", "ids"));
