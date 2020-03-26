@@ -78,9 +78,11 @@ public class BatchInsertPlugin extends BasePlugin {
         foreachElement.addAttribute(new Attribute("collection", "list"));
         foreachElement.addAttribute(new Attribute("item", "item"));
         foreachElement.addAttribute(new Attribute("separator", ","));
-        foreachElement.addAttribute(new Attribute("index", "index"));
+//        foreachElement.addAttribute(new Attribute("index", "index"));
         foreachElement.addAttribute(new Attribute("open", "("));
         foreachElement.addAttribute(new Attribute("close", ")"));
+
+        foreachElement.addElement(new TextElement("("));
         for (int i = 0; i < columns.size(); i++) {
             IntrospectedColumn column = columns.get(i);
             String item = "#{item." + column.getJavaProperty() + ",jdbcType=" + column.getJdbcTypeName() + "}";
@@ -89,6 +91,8 @@ public class BatchInsertPlugin extends BasePlugin {
             }
             foreachElement.addElement(new TextElement(item));
         }
+        foreachElement.addElement(new TextElement(")"));
+
         batchInsertEle.addElement(foreachElement);
         document.getRootElement().addElement(batchInsertEle);
         return true;
