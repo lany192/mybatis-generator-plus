@@ -1,4 +1,4 @@
-package com.github.lany192.generator.dynamicsql;
+package com.github.lany192.generator.dsql;
 
 import com.github.lany192.generator.utils.Log;
 import com.github.lany192.generator.BasePlugin;
