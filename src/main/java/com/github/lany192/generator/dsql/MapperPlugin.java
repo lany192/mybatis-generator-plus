@@ -1,9 +1,9 @@
 package com.github.lany192.generator.dsql;
 
-import com.github.lany192.generator.utils.Log;
 import com.github.lany192.generator.BasePlugin;
 import com.github.lany192.generator.model.TableModel;
 import com.github.lany192.generator.utils.JsonUtils;
+import com.github.lany192.generator.utils.Log;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mybatis.dynamic.sql.SqlBuilder;
@@ -73,7 +73,7 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getPrimaryKeyType() + ">"), "ids"));
         method.addBodyLine("return select(c -> c.where(id, SqlBuilder.isIn(ids)));");
         return method;
     }
@@ -87,7 +87,7 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<Long>"), "ids"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getPrimaryKeyType() +">"), "ids"));
         method.addBodyLine("return delete(c -> c.where(id, SqlBuilder.isIn(ids)));");
         return method;
     }

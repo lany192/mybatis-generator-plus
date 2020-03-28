@@ -23,12 +23,21 @@ public class TableModel {
      * 表名
      */
     private String tableName;
+    /**
+     * 主键类型
+     */
+    private String primaryKeyType;
 
     public TableModel(IntrospectedTable info, String author) {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
         tableName = info.getFullyQualifiedTable().getIntrospectedTableName();
         fullType = type.getFullyQualifiedName();
+        if (info.getPrimaryKeyColumns() != null && info.getPrimaryKeyColumns().size() > 0) {
+            primaryKeyType = info.getPrimaryKeyColumns().get(0).getFullyQualifiedJavaType().getFullyQualifiedName();
+        } else {
+            primaryKeyType = "Long";
+        }
         List<ColumnModel> columns = new ArrayList<>();
         for (IntrospectedColumn item : info.getAllColumns()) {
             columns.add(new ColumnModel(item));
@@ -41,6 +50,8 @@ public class TableModel {
         map.put("table_name", tableName);
         //备注
         map.put("table_remark", info.getRemarks());
+        //主键类型
+        map.put("primary_key_type", info.getPrimaryKeyType());
         //实体名称
         map.put("model_name", name);
         //实体完整名称
