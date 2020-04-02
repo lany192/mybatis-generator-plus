@@ -1,6 +1,7 @@
 package com.github.lany192.generator;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -26,6 +27,7 @@ public final class RemarkGenerator implements CommentGenerator {
     private boolean suppressAllComments = false;
     private boolean addRemarkComments = false;
     private SimpleDateFormat dateFormat;
+    private String author;
 
     @Override
     public void addConfigurationProperties(Properties properties) {
@@ -35,6 +37,10 @@ public final class RemarkGenerator implements CommentGenerator {
         String dateFormatString = properties.getProperty("dateFormat");
         if (StringUtility.stringHasValue(dateFormatString)) {
             this.dateFormat = new SimpleDateFormat(dateFormatString);
+        }
+        this.author = properties.getProperty("author");
+        if (StringUtils.isEmpty(author)) {
+            author = System.getProperty("user.name");
         }
     }
 
@@ -50,7 +56,7 @@ public final class RemarkGenerator implements CommentGenerator {
             unit.addFileCommentLine("/*");
             unit.addFileCommentLine("* " + unit.getType().getShortName() + ".java");
             unit.addFileCommentLine("* mybatis generator plus自动生成,请勿编辑.");
-            unit.addFileCommentLine("* Copyright(C) " + Calendar.getInstance().get(Calendar.YEAR) + " " + System.getProperty("user.name"));
+            unit.addFileCommentLine("* Copyright(C) " + Calendar.getInstance().get(Calendar.YEAR) + " " + author);
 //            unit.addFileCommentLine("* @date " + dateFormat.format(new Date()) + "");
             unit.addFileCommentLine("*/");
         }
@@ -90,7 +96,7 @@ public final class RemarkGenerator implements CommentGenerator {
             sb.append(" * This class corresponds to the database table ");
             sb.append(introspectedTable.getFullyQualifiedTable());
             sb.append(" * @author ");
-            sb.append(System.getProperties().getProperty("user.name"));
+            sb.append(author);
             innerClass.addJavaDocLine(sb.toString());
             innerClass.addJavaDocLine(" */");
         }
