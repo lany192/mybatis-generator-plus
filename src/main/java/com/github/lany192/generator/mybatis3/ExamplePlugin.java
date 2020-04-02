@@ -24,11 +24,11 @@ public class ExamplePlugin extends BasePlugin {
             warnings.add(this.getClass().getTypeName() + "插件要求运行targetRuntime必须为MyBatis3！");
             return false;
         }
-        this.targetPackage = getProperty(TARGET_PACKAGE);
-        if (this.targetPackage == null) {
+        if (!check(TARGET_PACKAGE)) {
             warnings.add("请配置" + this.getClass().getName() + "插件的目标包名属性：" + TARGET_PACKAGE);
             return false;
         }
+        this.targetPackage = getProperty(TARGET_PACKAGE, "");
         return true;
     }
 
