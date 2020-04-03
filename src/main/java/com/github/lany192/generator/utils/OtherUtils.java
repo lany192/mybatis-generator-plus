@@ -3,11 +3,76 @@ package com.github.lany192.generator.utils;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
 public class OtherUtils {
+
+    /***
+     * 驼峰命名转成路径
+     *
+     * @param str  驼峰命名的字符串
+     */
+    public static String hump2path(String str) {
+        StringBuilder builder = new StringBuilder(str);
+        int temp = 0;//定位
+        //判断是否有路径符号/或者\
+        if (!(str.contains("/") || str.contains("\\"))) {
+            for (int i = 0; i < str.length(); i++) {
+                if (Character.isUpperCase(str.charAt(i))) {
+                    builder.insert(i + temp, File.separator);
+                    temp += 1;
+                }
+            }
+        }
+        return builder.toString().toLowerCase();
+    }
+
+    /***
+     * 下划线命名转为驼峰命名
+     *
+     * @param para 下划线命名的字符串
+     */
+    public static String underline2hump(String para) {
+        final String UNDERLINE = "_";
+        StringBuilder result = new StringBuilder();
+        String[] a = para.split(UNDERLINE);
+        for (String s : a) {
+            if (!para.contains(UNDERLINE)) {
+                result.append(s);
+                continue;
+            }
+            if (result.length() == 0) {
+                result.append(s.toLowerCase());
+            } else {
+                result.append(s.substring(0, 1).toUpperCase());
+                result.append(s.substring(1).toLowerCase());
+            }
+        }
+        return result.toString();
+    }
+
+    /***
+     * 驼峰命名转为下划线命名
+     *
+     * @param para 驼峰命名的字符串
+     */
+    public static String hump2underline(String para) {
+        final String UNDERLINE = "_";
+        StringBuilder sb = new StringBuilder(para);
+        int temp = 0;//定位
+        if (!para.contains(UNDERLINE)) {
+            for (int i = 0; i < para.length(); i++) {
+                if (Character.isUpperCase(para.charAt(i))) {
+                    sb.insert(i + temp, UNDERLINE);
+                    temp += 1;
+                }
+            }
+        }
+        return sb.toString().toUpperCase();
+    }
 
     /**
      * 是否是自定义类型

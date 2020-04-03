@@ -1,5 +1,6 @@
 package com.github.lany192.generator.model;
 
+import com.github.lany192.generator.utils.OtherUtils;
 import lombok.Getter;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -27,6 +28,10 @@ public class TableModel {
      * 主键类型
      */
     private String primaryKeyType;
+    /**
+     * 驼峰命名的名称转成的路径
+     */
+    private String modelNamePath;
 
     public TableModel(IntrospectedTable info, String author) {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
@@ -43,7 +48,7 @@ public class TableModel {
             columns.add(new ColumnModel(item));
         }
         boolean hasBlob = info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1;
-
+        modelNamePath = OtherUtils.hump2path(name);
         //运行时是否是动态sql
         map.put("is_dynamic_sql", info.getTargetRuntime().equals(IntrospectedTable.TargetRuntime.MYBATIS3_DSQL));
         //表名
@@ -58,6 +63,8 @@ public class TableModel {
         map.put("model_full_type", fullType);
         //首字母小写名称
         map.put("model_lower_name", Introspector.decapitalize(type.getShortName()));
+        //实体名称转路径
+        map.put("model_name_path", modelNamePath);
         //作者
         map.put("author", author);
         //实体字段

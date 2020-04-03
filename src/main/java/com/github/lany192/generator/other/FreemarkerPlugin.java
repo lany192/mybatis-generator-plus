@@ -79,7 +79,7 @@ public class FreemarkerPlugin extends BasePlugin {
         TableModel info = new TableModel(introspectedTable, author);
 
         if (needCustomPath) {
-            targetRelativeOutDirPath = targetRelativeOutDirPath + File.separator + info.getName().toLowerCase();
+            targetRelativeOutDirPath = targetRelativeOutDirPath + File.separator + info.getModelNamePath();
         }
 
         targetRelativeOutDirPath = path2path(targetRelativeOutDirPath);
