@@ -3,7 +3,6 @@ package com.github.lany192.generator.utils;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class OtherUtils {
         if (!(str.contains("/") || str.contains("\\"))) {
             for (int i = 0; i < str.length(); i++) {
                 if (i != 0 && Character.isUpperCase(str.charAt(i))) {
-                    builder.insert(i + temp, File.separator);
+                    builder.insert(i + temp, "/");
                     temp += 1;
                 }
             }
