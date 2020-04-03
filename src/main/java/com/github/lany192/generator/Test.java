@@ -15,5 +15,7 @@ public class Test {
         System.out.println("-------------------------------------");
         String name = "mmsMemberLevel";
         System.out.println(name + "转" + OtherUtils.hump2path(name));
+        String name2 = "IntegrationChangeHistory";
+        System.out.println(name2 + "转" + OtherUtils.hump2path(name2));
     }
 }

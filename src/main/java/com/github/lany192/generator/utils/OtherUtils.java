@@ -21,7 +21,7 @@ public class OtherUtils {
         //判断是否有路径符号/或者\
         if (!(str.contains("/") || str.contains("\\"))) {
             for (int i = 0; i < str.length(); i++) {
-                if (Character.isUpperCase(str.charAt(i))) {
+                if (i != 0 && Character.isUpperCase(str.charAt(i))) {
                     builder.insert(i + temp, File.separator);
                     temp += 1;
                 }
