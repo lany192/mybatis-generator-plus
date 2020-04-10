@@ -7,10 +7,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 
 import java.beans.Introspector;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public class TableModel {
@@ -65,6 +62,8 @@ public class TableModel {
         map.put("model_lower_name", Introspector.decapitalize(type.getShortName()));
         //实体名称转路径
         map.put("model_name_path", modelNamePath);
+        //年份
+        map.put("year", Calendar.getInstance().get(Calendar.YEAR));
         //作者
         map.put("author", author);
         //实体字段
