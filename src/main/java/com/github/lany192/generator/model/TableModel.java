@@ -85,4 +85,13 @@ public class TableModel {
     public Map<String, Object> getMap() {
         return map;
     }
+
+    /**
+     * 是否是关联表
+     * @return
+     */
+    public boolean isRelationTable(){
+        //根据表名是否包含relation作判断
+        return tableName.contains("relation");
+    }
 }

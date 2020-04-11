@@ -77,51 +77,55 @@ public class FreemarkerPlugin extends BasePlugin {
             author = System.getProperty("user.name");
         }
         TableModel info = new TableModel(introspectedTable, author);
-
-        if (needCustomPath) {
-            targetRelativeOutDirPath = targetRelativeOutDirPath + File.separator + info.getModelNamePath();
-        }
-
-        targetRelativeOutDirPath = path2path(targetRelativeOutDirPath);
-
-        templateFilePath = path2path(templateFilePath);
-
-        Map<String, Object> data = new HashMap<>(getParams());
-        data.remove(TARGET_NAME_PREFIX);
-        data.remove(TARGET_NAME_SUFFIX);
-        data.remove(TARGET_FILE_FORMAT);
-        data.remove(TARGET_OUT_PATH);
-        data.remove(TEMPLATE_FILE_PATH);
-
-
-        data.putAll(info.getMap());
-
-        //项目的根目录，相对多模块而言
-        String rootPath = new File(System.getProperty("user.dir")).getParent();
-        //模板文件
-        File templateFile = new File(rootPath + templateFilePath);
-        if (templateFile.exists()) {
-            Log.i("模板文件:" + templateFile.getPath());
-            File outDirFile = new File(rootPath + targetRelativeOutDirPath);
-            Log.i("目标文件输出目录:" + outDirFile.getPath());
-            String targetFileName = filePrefix + info.getName() + fileSuffix;
-            //如果有配置固定名字，使用固定名称。必须配置自定义文件路径，不然生成的文件路径和名称冲突
-            if (!StringUtils.isEmpty(fixationName) && needCustomPath) {
-                targetFileName = fixationName;
+        //判断是否是关联表
+        if (!info.isRelationTable()) {
+            if (needCustomPath) {
+                targetRelativeOutDirPath = targetRelativeOutDirPath + File.separator + info.getModelNamePath();
             }
 
-            File outFile = new File(outDirFile.getPath() + File.separator + targetFileName + "." + fileFormat);
-            Log.i("目标文件:" + outFile.getPath());
-            data.put("target_file_name", targetFileName);
+            targetRelativeOutDirPath = path2path(targetRelativeOutDirPath);
 
-            if (outFile.exists() && !clearOldFile) {
-                Log.i("已存在,忽略:" + outFile.getPath());
+            templateFilePath = path2path(templateFilePath);
+
+            Map<String, Object> data = new HashMap<>(getParams());
+            data.remove(TARGET_NAME_PREFIX);
+            data.remove(TARGET_NAME_SUFFIX);
+            data.remove(TARGET_FILE_FORMAT);
+            data.remove(TARGET_OUT_PATH);
+            data.remove(TEMPLATE_FILE_PATH);
+
+
+            data.putAll(info.getMap());
+
+            //项目的根目录，相对多模块而言
+            String rootPath = new File(System.getProperty("user.dir")).getParent();
+            //模板文件
+            File templateFile = new File(rootPath + templateFilePath);
+            if (templateFile.exists()) {
+                Log.i("模板文件:" + templateFile.getPath());
+                File outDirFile = new File(rootPath + targetRelativeOutDirPath);
+                Log.i("目标文件输出目录:" + outDirFile.getPath());
+                String targetFileName = filePrefix + info.getName() + fileSuffix;
+                //如果有配置固定名字，使用固定名称。必须配置自定义文件路径，不然生成的文件路径和名称冲突
+                if (!StringUtils.isEmpty(fixationName) && needCustomPath) {
+                    targetFileName = fixationName;
+                }
+
+                File outFile = new File(outDirFile.getPath() + File.separator + targetFileName + "." + fileFormat);
+                Log.i("目标文件:" + outFile.getPath());
+                data.put("target_file_name", targetFileName);
+
+                if (outFile.exists() && !clearOldFile) {
+                    Log.i("已存在,忽略:" + outFile.getPath());
+                } else {
+                    //生成文件
+                    FreemarkerUtils.buildFile(templateFile, outFile, data);
+                }
             } else {
-                //生成文件
-                FreemarkerUtils.buildFile(templateFile, outFile, data);
+                Log.i("不存在！模板文件:" + templateFile.getPath());
             }
         } else {
-            Log.i("不存在！模板文件:" + templateFile.getPath());
+            Log.i("忽略关联表:" + info.getTableName());
         }
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
