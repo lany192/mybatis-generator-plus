@@ -49,6 +49,17 @@ public class FreemarkerPlugin extends BasePlugin {
             warnings.add(TAG + ":请配置目标文件的文件格式" + TARGET_FILE_FORMAT + "属性");
             return false;
         }
+        //是否删除旧的目标文件
+        boolean clearOldFile = getProperty(DELETE_OLD_FILE, false);
+        if (clearOldFile) {
+            //模板文件完整路径
+            String templateFilePath = getProperty(TEMPLATE_FILE_PATH, "");
+            File file = new File(templateFilePath);
+            //删除整个目录
+            if (file.isDirectory()) {
+                file.deleteOnExit();
+            }
+        }
         return true;
     }
 
