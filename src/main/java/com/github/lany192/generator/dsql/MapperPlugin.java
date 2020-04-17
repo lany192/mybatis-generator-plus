@@ -51,7 +51,7 @@ public class MapperPlugin extends BasePlugin {
     }
 
     private Method findAllMethod(TableModel info) {
-        Method method = new Method("findAll");
+        Method method = new Method("selectAll");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 查看所有记录");
         method.addJavaDocLine(" */");
