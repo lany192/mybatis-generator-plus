@@ -44,8 +44,6 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(deleteByIds(info));
         interfaze.addMethod(selectByPage(info));
         interfaze.addMethod(selectByPageAndSize(info));
-//        interfaze.addMethod(findByPage(info));
-//        interfaze.addMethod(findByPageAndSize(info));
         interfaze.addMethod(insertMultiple(info));
         return super.clientGenerated(interfaze, introspectedTable);
     }
@@ -126,40 +124,6 @@ public class MapperPlugin extends BasePlugin {
         return method;
     }
 
-
-//    private Method findByPage(TableModel info) {
-//        Method method = new Method("findByPage");
-//        method.addJavaDocLine("/**");
-//        method.addJavaDocLine(" * 分页查询记录,指定页码");
-//        method.addJavaDocLine(" * @return 记录List集");
-//        method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
-//        method.setDefault(true);
-//        method.setVisibility(JavaVisibility.PUBLIC);
-//        method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
-//        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
-//        method.addBodyLine("return findByPage(pageNum, 30, SelectDSLCompleter.allRows());");
-//        return method;
-//    }
-//
-//    private Method findByPageAndSize(TableModel info) {
-//        Method method = new Method("findByPage");
-//        method.addJavaDocLine("/**");
-//        method.addJavaDocLine(" * 分页查询记录,指定页码");
-//        method.addJavaDocLine(" * @return 记录List集");
-//        method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
-//        method.setDefault(true);
-//        method.setVisibility(JavaVisibility.PUBLIC);
-//        method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
-//        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
-//        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
-//        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
-//        method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
-//        method.addBodyLine("return select(completer);");
-//        return method;
-//    }
-
     private Method insertMultiple(TableModel info) {
         Method method = new Method("insertMultiple");
         method.addJavaDocLine("/**");
@@ -181,5 +145,4 @@ public class MapperPlugin extends BasePlugin {
         method.addBodyLine("return 0;");
         return method;
     }
-
 }
