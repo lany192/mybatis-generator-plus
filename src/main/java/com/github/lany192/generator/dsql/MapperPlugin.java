@@ -39,7 +39,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
 
-        interfaze.addMethod(findAllMethod(info));
+        interfaze.addMethod(selectAllMethod(info));
         interfaze.addMethod(selectByIds(info));
         interfaze.addMethod(deleteByIds(info));
         interfaze.addMethod(selectByPage(info));
@@ -50,7 +50,7 @@ public class MapperPlugin extends BasePlugin {
         return super.clientGenerated(interfaze, introspectedTable);
     }
 
-    private Method findAllMethod(TableModel info) {
+    private Method selectAllMethod(TableModel info) {
         Method method = new Method("selectAll");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 查看所有记录");
