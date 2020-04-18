@@ -91,7 +91,9 @@ public class ColumnModel implements Serializable {
         isCustomType = OtherUtils.isJdbcType(info.getJdbcType());
         if (isCustomType) {
             customValue = getCustomValue(fullTypeName);
-            customValue = customValue.replace("},{","}, {");
+            if (customValue != null && customValue.contains("},{")) {
+                customValue = customValue.replace("},{", "}, {");
+            }
         }
     }
 
