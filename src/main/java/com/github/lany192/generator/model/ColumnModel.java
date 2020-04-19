@@ -17,7 +17,7 @@ public class ColumnModel implements Serializable {
     /**
      * 表中字段名称
      */
-    private String column;
+    private String tname;
     /**
      * 字段名称
      */
@@ -64,6 +64,10 @@ public class ColumnModel implements Serializable {
      * 自定义类的值
      */
     private String customValue;
+    /**
+     * 是否是数组
+     */
+    private boolean isArray;
 
     /**
      * 是否是富文本
@@ -90,8 +94,8 @@ public class ColumnModel implements Serializable {
         isGeneratedAlways = info.isGeneratedAlways();
         tableAlias = info.getTableAlias();
         defaultValue = info.getDefaultValue();
-        column = info.getActualColumnName();
-        imageColumn = isImage(column);
+        tname = info.getActualColumnName();
+        imageColumn = isImage(tname);
         name = info.getJavaProperty();
         remark = info.getRemarks();
         length = info.getLength();
@@ -143,6 +147,7 @@ public class ColumnModel implements Serializable {
         try {
             Class<?> clazz = Class.forName(className);
             isEnum = clazz.isEnum();
+            isArray = clazz.isArray();
             if (isEnum) {
                 //得到enum的所有实例
                 Object[] objects = clazz.getEnumConstants();
@@ -154,7 +159,7 @@ public class ColumnModel implements Serializable {
                     list.add(map);
                 }
                 return JsonUtils.object2json(list);
-            } else if (clazz.isArray()) {
+            } else if (isArray) {
                 Log.i("数组的元素类型是:" + clazz.getComponentType().getName());
                 return "[]";
             }
