@@ -94,6 +94,12 @@ public class ColumnModel implements Serializable {
             if (customValue != null && customValue.contains("},{")) {
                 customValue = customValue.replace("},{", "}, {");
             }
+            if (customValue != null && customValue.contains("\":")) {
+                customValue = customValue.replace("\":", "\": ");
+            }
+            if (customValue != null && customValue.contains("\",\"")) {
+                customValue = customValue.replace("\",\"", "\", \"");
+            }
         }
     }
 
