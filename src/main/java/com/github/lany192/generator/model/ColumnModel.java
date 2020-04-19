@@ -116,7 +116,7 @@ public class ColumnModel implements Serializable {
 
     private boolean isRich(IntrospectedColumn info) {
         if (info.getLength() >= 512) {
-            if (!info.getActualColumnName().equals("images")) {
+            if (info.getActualColumnName().equals("images")) {
                 return false;
             }
             return true;
