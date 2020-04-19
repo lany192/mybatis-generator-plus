@@ -95,7 +95,7 @@ public class ColumnModel implements Serializable {
         name = info.getJavaProperty();
         remark = info.getRemarks();
         length = info.getLength();
-        richColumn = info.getLength() >= 512;
+        richColumn = isRich(info);
         nullable = info.isNullable();
         typeName = info.getFullyQualifiedJavaType().getShortName();
         fullTypeName = info.getFullyQualifiedJavaType().getFullyQualifiedName();
@@ -112,6 +112,16 @@ public class ColumnModel implements Serializable {
                 customValue = customValue.replace("\",\"", "\", \"");
             }
         }
+    }
+
+    private boolean isRich(IntrospectedColumn info) {
+        if (info.getLength() >= 512) {
+            if (!info.getActualColumnName().equals("images")) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     private boolean isImage(String column) {
