@@ -65,6 +65,15 @@ public class ColumnModel implements Serializable {
      */
     private String customValue;
 
+    /**
+     * 是否是富文本
+     */
+    private boolean richColumn;
+    /**
+     * 是否是图片链接
+     */
+    private boolean imageColumn;
+
     private boolean identity;
     private boolean isColumnNameDelimited;
     private boolean isSequenceColumn;
@@ -82,9 +91,11 @@ public class ColumnModel implements Serializable {
         tableAlias = info.getTableAlias();
         defaultValue = info.getDefaultValue();
         column = info.getActualColumnName();
+        imageColumn = isImage(column);
         name = info.getJavaProperty();
         remark = info.getRemarks();
         length = info.getLength();
+        richColumn = info.getLength() >= 512;
         nullable = info.isNullable();
         typeName = info.getFullyQualifiedJavaType().getShortName();
         fullTypeName = info.getFullyQualifiedJavaType().getFullyQualifiedName();
@@ -101,6 +112,18 @@ public class ColumnModel implements Serializable {
                 customValue = customValue.replace("\",\"", "\", \"");
             }
         }
+    }
+
+    private boolean isImage(String column) {
+        if (column.contains("avatar")
+                || column.contains("picture")
+                || column.equals("pic")
+                || column.equals("icon")
+                || column.contains("image")
+                || column.contains("cover")) {
+            return true;
+        }
+        return false;
     }
 
     /**

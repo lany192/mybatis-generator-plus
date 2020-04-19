@@ -80,6 +80,10 @@ public class TableModel {
             //首字母小写Blob名称
             map.put("blob_model_lower_name", Introspector.decapitalize(blobType.getShortName()));
         }
+        //是否包含图片字段
+        map.put("contain_image_column", containImage(columns));
+        //是否包含富文本字段
+        map.put("contain_rich_column", containRichText(columns));
     }
 
     public Map<String, Object> getMap() {
@@ -88,10 +92,35 @@ public class TableModel {
 
     /**
      * 是否是关联表
+     *
      * @return
      */
-    public boolean isRelationTable(){
+    public boolean isRelationTable() {
         //根据表名是否包含relation作判断
         return tableName.contains("relation");
+    }
+
+    /**
+     * 是否包含图片
+     */
+    public boolean containImage(List<ColumnModel> columns) {
+        for (ColumnModel column : columns) {
+            if (column.isImageColumn()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是否包含富文本
+     */
+    public boolean containRichText(List<ColumnModel> columns) {
+        for (ColumnModel column : columns) {
+            if (column.isRichColumn()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
