@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class SupportPlugin extends BasePlugin {
     private String targetPackage;
     private String replaceString;
-    private String searchString;
+    private Pattern pattern;
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -24,12 +24,14 @@ public class SupportPlugin extends BasePlugin {
             return false;
         }
         this.targetPackage = getProperty("targetPackage", "");
-        this.searchString = getProperty("searchString", "");
+        String searchString = getProperty("searchString", "");
         this.replaceString = getProperty("replaceString", "");
         if (StringUtility.stringHasValue(searchString)) {
             if (!StringUtility.stringHasValue(this.replaceString)) {
                 warnings.add(this.getClass().getTypeName() + "插件:请配置replaceString参数！");
                 return false;
+            } else {
+                this.pattern = Pattern.compile(searchString);
             }
         } else {
             if (StringUtility.stringHasValue(this.replaceString)) {
@@ -49,8 +51,8 @@ public class SupportPlugin extends BasePlugin {
             supportType = supportType.replace(getContext().getJavaClientGeneratorConfiguration().getTargetPackage(), this.targetPackage);
         }
         //修改类名
-        if (!StringUtility.stringHasValue(this.searchString)) {
-            Matcher matcher = Pattern.compile(searchString).matcher(supportType);
+        if (pattern != null) {
+            Matcher matcher = pattern.matcher(supportType);
             supportType = matcher.replaceAll(this.replaceString);
         }
         introspectedTable.setMyBatisDynamicSqlSupportType(supportType);
