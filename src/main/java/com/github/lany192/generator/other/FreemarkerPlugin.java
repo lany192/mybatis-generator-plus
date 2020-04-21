@@ -88,8 +88,8 @@ public class FreemarkerPlugin extends BasePlugin {
             author = System.getProperty("user.name");
         }
         TableModel info = new TableModel(introspectedTable, author);
-        //判断是否是关联表
-        if (!info.isRelationTable()) {
+//        //判断是否是关联表
+//        if (!info.isRelationTable()) {
             if (needCustomPath) {
                 targetRelativeOutDirPath = targetRelativeOutDirPath + File.separator + info.getModelNamePath();
             }
@@ -135,9 +135,9 @@ public class FreemarkerPlugin extends BasePlugin {
             } else {
                 Log.i("不存在！模板文件:" + templateFile.getPath());
             }
-        } else {
-            Log.i("忽略关联表:" + info.getTableName());
-        }
+//        } else {
+//            Log.i("忽略关联表:" + info.getTableName());
+//        }
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 
