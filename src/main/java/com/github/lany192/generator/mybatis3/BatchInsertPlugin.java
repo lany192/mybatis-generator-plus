@@ -18,9 +18,9 @@ import java.util.StringJoiner;
 
 /**
  * 批量插入插件
- *         <plugin type="com.github.lany192.generator.mybatis3.BatchInsertPlugin">
- *             <property name="ignoreColumns" value="id,create_time"/>
- *         </plugin>
+ * <plugin type="com.github.lany192.generator.mybatis3.BatchInsertPlugin">
+ * <property name="ignoreColumns" value="id,create_time"/>
+ * </plugin>
  */
 public class BatchInsertPlugin extends BasePlugin {
     public static final String METHOD_BATCH_INSERT = "batchInsert";  // 方法名
@@ -93,11 +93,9 @@ public class BatchInsertPlugin extends BasePlugin {
         foreachElement.addAttribute(new Attribute("collection", "list"));
         foreachElement.addAttribute(new Attribute("item", "item"));
         foreachElement.addAttribute(new Attribute("separator", ","));
-//        foreachElement.addAttribute(new Attribute("index", "index"));
-        foreachElement.addAttribute(new Attribute("open", "("));
-        foreachElement.addAttribute(new Attribute("close", ")"));
-
-        foreachElement.addElement(new TextElement("("));
+        foreachElement.addAttribute(new Attribute("index", "index"));
+//        foreachElement.addAttribute(new Attribute("open", "("));
+//        foreachElement.addAttribute(new Attribute("close", ")"));
 
         StringJoiner joiner2 = new StringJoiner(",");
         for (IntrospectedColumn column : columns) {
@@ -108,8 +106,7 @@ public class BatchInsertPlugin extends BasePlugin {
                 joiner2.add("#{item." + column.getJavaProperty() + ",jdbcType=" + column.getJdbcTypeName() + "}");
             }
         }
-        foreachElement.addElement(new TextElement(joiner2.toString()));
-        foreachElement.addElement(new TextElement(")"));
+        foreachElement.addElement(new TextElement("(" + joiner2.toString() + ")"));
 
         batchInsertEle.addElement(foreachElement);
         document.getRootElement().addElement(batchInsertEle);
