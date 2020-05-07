@@ -1,6 +1,7 @@
 package com.github.lany192.generator.mybatis3;
 
 import com.github.lany192.generator.BasePlugin;
+import com.github.lany192.generator.utils.Log;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -11,13 +12,23 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.internal.util.StringUtility;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * 批量插入插件
+ *         <plugin type="com.github.lany192.generator.mybatis3.BatchInsertPlugin">
+ *             <property name="ignoreColumns" value="id,create_time"/>
+ *         </plugin>
  */
 public class BatchInsertPlugin extends BasePlugin {
     public static final String METHOD_BATCH_INSERT = "batchInsert";  // 方法名
+    public static final String KEY_IGNORE_COLUMNS = "ignoreColumns";  // 要忽略的字段，多个字段用逗号隔开
+
+    /**
+     * 要忽略的字段
+     */
+    private List<String> ignoreColumns;
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -26,6 +37,8 @@ public class BatchInsertPlugin extends BasePlugin {
             warnings.add(this.getClass().getTypeName() + "插件要求运行targetRuntime必须为MyBatis3！");
             return false;
         }
+        String columns = getProperty(KEY_IGNORE_COLUMNS, "");
+        this.ignoreColumns = Arrays.asList(columns.split(";"));
         return true;
     }
 
@@ -85,11 +98,16 @@ public class BatchInsertPlugin extends BasePlugin {
         foreachElement.addElement(new TextElement("("));
         for (int i = 0; i < columns.size(); i++) {
             IntrospectedColumn column = columns.get(i);
-            String item = "#{item." + column.getJavaProperty() + ",jdbcType=" + column.getJdbcTypeName() + "}";
-            if (i != columns.size() - 1) {
-                item += ",";
+            //排除字段
+            if (ignoreColumns.contains(column.getActualColumnName())) {
+                Log.i("忽略字段:" + column.getActualColumnName());
+            } else {
+                String item = "#{item." + column.getJavaProperty() + ",jdbcType=" + column.getJdbcTypeName() + "}";
+                if (i != columns.size() - 1) {
+                    item += ",";
+                }
+                foreachElement.addElement(new TextElement(item));
             }
-            foreachElement.addElement(new TextElement(item));
         }
         foreachElement.addElement(new TextElement(")"));
 
