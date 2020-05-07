@@ -38,7 +38,7 @@ public class BatchInsertPlugin extends BasePlugin {
             return false;
         }
         String columns = getProperty(KEY_IGNORE_COLUMNS, "");
-        this.ignoreColumns = Arrays.asList(columns.split(";"));
+        this.ignoreColumns = Arrays.asList(columns.split(","));
         return true;
     }
 
@@ -79,9 +79,14 @@ public class BatchInsertPlugin extends BasePlugin {
         StringBuilder names = new StringBuilder();
         for (int i = 0; i < columns.size(); i++) {
             IntrospectedColumn column = columns.get(i);
-            names.append(column.getActualColumnName());
-            if (i != columns.size() - 1) {
-                names.append(",");
+            //排除字段
+            if (ignoreColumns.contains(column.getActualColumnName())) {
+                Log.i("忽略字段:" + column.getActualColumnName());
+            } else {
+                names.append(column.getActualColumnName());
+                if (i != columns.size() - 1) {
+                    names.append(",");
+                }
             }
         }
         batchInsertEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " (" + names + ") values"));
