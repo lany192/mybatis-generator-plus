@@ -14,6 +14,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * 批量插入插件
@@ -76,20 +77,16 @@ public class BatchInsertPlugin extends BasePlugin {
         batchInsertEle.addAttribute(new Attribute("parameterType", "java.util.List"));
 
         List<IntrospectedColumn> columns = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
-        StringBuilder names = new StringBuilder();
-        for (int i = 0; i < columns.size(); i++) {
-            IntrospectedColumn column = columns.get(i);
+        StringJoiner joiner = new StringJoiner(",");
+        for (IntrospectedColumn column : columns) {
             //排除字段
             if (ignoreColumns.contains(column.getActualColumnName())) {
                 Log.i("忽略字段:" + column.getActualColumnName());
             } else {
-                names.append(column.getActualColumnName());
-                if (i != columns.size() - 1) {
-                    names.append(",");
-                }
+                joiner.add(column.getActualColumnName());
             }
         }
-        batchInsertEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " (" + names + ") values"));
+        batchInsertEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " (" + joiner.toString() + ") values"));
 
         // 添加foreach节点
         XmlElement foreachElement = new XmlElement("foreach");
@@ -101,19 +98,17 @@ public class BatchInsertPlugin extends BasePlugin {
         foreachElement.addAttribute(new Attribute("close", ")"));
 
         foreachElement.addElement(new TextElement("("));
-        for (int i = 0; i < columns.size(); i++) {
-            IntrospectedColumn column = columns.get(i);
+
+        StringJoiner joiner2 = new StringJoiner(",");
+        for (IntrospectedColumn column : columns) {
             //排除字段
             if (ignoreColumns.contains(column.getActualColumnName())) {
                 Log.i("忽略字段:" + column.getActualColumnName());
             } else {
-                String item = "#{item." + column.getJavaProperty() + ",jdbcType=" + column.getJdbcTypeName() + "}";
-                if (i != columns.size() - 1) {
-                    item += ",";
-                }
-                foreachElement.addElement(new TextElement(item));
+                joiner2.add("#{item." + column.getJavaProperty() + ",jdbcType=" + column.getJdbcTypeName() + "}");
             }
         }
+        foreachElement.addElement(new TextElement(joiner2.toString()));
         foreachElement.addElement(new TextElement(")"));
 
         batchInsertEle.addElement(foreachElement);
