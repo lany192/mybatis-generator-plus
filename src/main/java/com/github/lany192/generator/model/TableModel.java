@@ -30,6 +30,8 @@ public class TableModel {
      */
     private String modelNamePath;
 
+    private List<ColumnModel> columns;
+
     public TableModel(IntrospectedTable info, String author) {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
@@ -40,7 +42,7 @@ public class TableModel {
         } else {
             primaryKeyType = "Long";
         }
-        List<ColumnModel> columns = new ArrayList<>();
+        columns = new ArrayList<>();
         for (IntrospectedColumn item : info.getAllColumns()) {
             columns.add(new ColumnModel(item));
         }

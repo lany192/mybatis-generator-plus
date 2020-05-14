@@ -1,6 +1,7 @@
 package com.github.lany192.generator.dsql;
 
 import com.github.lany192.generator.BasePlugin;
+import com.github.lany192.generator.model.ColumnModel;
 import com.github.lany192.generator.model.TableModel;
 import com.github.lany192.generator.utils.JsonUtils;
 import com.github.lany192.generator.utils.Log;
@@ -45,7 +46,32 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(selectByPage(info));
         interfaze.addMethod(selectByPageAndSize(info));
         interfaze.addMethod(insertMultiple(info));
+        interfaze.addMethod(selectByEntity(info));
         return super.clientGenerated(interfaze, introspectedTable);
+    }
+
+    private Method selectByEntity(TableModel info) {
+        Method method = new Method("selectByEntity");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 根据条件查看记录");
+        method.addJavaDocLine(" */");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        String returnType = "List<" + info.getFullType() + ">";
+        method.setReturnType(new FullyQualifiedJavaType(returnType));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "record"));
+        method.addBodyLine("return select(c -> {");
+
+        List<ColumnModel> columns = info.getColumns();
+        for (ColumnModel column : columns) {
+            method.addBodyLine("if (record.get" + column.getName() + "() != null && \"\".equals(record.get" + column.getName() + "())) {");
+            method.addBodyLine("c.where().and(" + info.getName() + "Support.account, SqlBuilder.isEqualTo(record.getAccount()));");
+            method.addBodyLine("}");
+        }
+        method.addBodyLine("return c;");
+        method.addBodyLine("});");
+        return method;
     }
 
     private Method selectAllMethod(TableModel info) {
@@ -85,7 +111,7 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getPrimaryKeyType() +">"), "ids"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getPrimaryKeyType() + ">"), "ids"));
         method.addBodyLine("return delete(c -> c.where(id, SqlBuilder.isIn(ids)));");
         return method;
     }
