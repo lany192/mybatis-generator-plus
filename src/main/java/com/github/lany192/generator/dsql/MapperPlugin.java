@@ -65,8 +65,14 @@ public class MapperPlugin extends BasePlugin {
 
         List<ColumnModel> columns = info.getColumns();
         for (ColumnModel column : columns) {
-            method.addBodyLine("if (record.get" + column.getName() + "() != null && \"\".equals(record.get" + column.getName() + "())) {");
-            method.addBodyLine("c.where().and(" + info.getName() + "Support.account, SqlBuilder.isEqualTo(record.getAccount()));");
+            if (Long.class.getTypeName().equals(column.getFullTypeName()) || Integer.class.getTypeName().equals(column.getFullTypeName())) {
+                method.addBodyLine("if (record.get" + column.getFirstUpperName() + "() != null && 0 != record.get" + column.getFirstUpperName() + "()) {");
+            } else if (String.class.getTypeName().equals(column.getFullTypeName())) {
+                method.addBodyLine("if (record.get" + column.getFirstUpperName() + "() != null && \"\".equals(record.get" + column.getFirstUpperName() + "())) {");
+            } else {
+                method.addBodyLine("if (record.get" + column.getFirstUpperName() + "() != null) {");
+            }
+            method.addBodyLine("c.where().and(" + info.getName() + "Support." + column.getName() + ", SqlBuilder.isEqualTo(record.get" + column.getFirstUpperName() + "()));");
             method.addBodyLine("}");
         }
         method.addBodyLine("return c;");

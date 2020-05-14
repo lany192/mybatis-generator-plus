@@ -168,4 +168,11 @@ public class ColumnModel implements Serializable {
         }
         return defaultValue;
     }
+
+    /**
+     * 首字母大写名称
+     */
+    public String getFirstUpperName() {
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
 }
