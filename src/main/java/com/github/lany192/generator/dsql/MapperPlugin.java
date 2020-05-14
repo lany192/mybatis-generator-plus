@@ -72,7 +72,7 @@ public class MapperPlugin extends BasePlugin {
             } else {
                 method.addBodyLine("if (record.get" + column.getFirstUpperName() + "() != null) {");
             }
-            method.addBodyLine("c.where().and(" + info.getName() + "Support." + column.getName() + ", SqlBuilder.isEqualTo(record.get" + column.getFirstUpperName() + "()));");
+            method.addBodyLine("c.where().and(" + column.getName() + ", isEqualTo(record.get" + column.getFirstUpperName() + "()));");
             method.addBodyLine("}");
         }
         method.addBodyLine("return c;");
