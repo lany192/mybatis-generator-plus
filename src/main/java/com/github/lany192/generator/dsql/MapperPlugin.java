@@ -108,7 +108,7 @@ public class MapperPlugin extends BasePlugin {
                 "return select(c -> c.where(",
                 "));");
         for (ColumnModel column : columns) {
-            joiner.add(column.getName() + ", isEqualTo(record.get" + column.getFirstUpperName() + "()).when(Objects::nonNull)");
+            joiner.add(column.getName() + ", isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
         }
         method.addBodyLine(joiner.toString());
         return method;
