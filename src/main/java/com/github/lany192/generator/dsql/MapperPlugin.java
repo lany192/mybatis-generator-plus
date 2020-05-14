@@ -13,6 +13,8 @@ import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * 拓展Mapper类的功能
@@ -39,6 +41,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
 
         interfaze.addMethod(selectAllMethod(info));
         interfaze.addMethod(selectByIds(info));
@@ -89,22 +92,15 @@ public class MapperPlugin extends BasePlugin {
         String returnType = "List<" + info.getFullType() + ">";
         method.setReturnType(new FullyQualifiedJavaType(returnType));
         method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "record"));
-        method.addBodyLine("return select(c -> {");
-
         List<ColumnModel> columns = info.getColumns();
+        StringJoiner joiner = new StringJoiner(
+                ")\n                .and(",
+                "return select(c -> c.where(",
+                "));");
         for (ColumnModel column : columns) {
-            if (Long.class.getTypeName().equals(column.getFullTypeName()) || Integer.class.getTypeName().equals(column.getFullTypeName())) {
-                method.addBodyLine("if (record.get" + column.getFirstUpperName() + "() != null && 0 != record.get" + column.getFirstUpperName() + "()) {");
-            } else if (String.class.getTypeName().equals(column.getFullTypeName())) {
-                method.addBodyLine("if (record.get" + column.getFirstUpperName() + "() != null && \"\".equals(record.get" + column.getFirstUpperName() + "())) {");
-            } else {
-                method.addBodyLine("if (record.get" + column.getFirstUpperName() + "() != null) {");
-            }
-            method.addBodyLine("c.where().and(" + column.getName() + ", isEqualTo(record.get" + column.getFirstUpperName() + "()));");
-            method.addBodyLine("}");
+            joiner.add(column.getName() + ", isEqualTo(record.get" + column.getFirstUpperName() + "()).when(Objects::nonNull)");
         }
-        method.addBodyLine("return c;");
-        method.addBodyLine("});");
+        method.addBodyLine(joiner.toString());
         return method;
     }
 
