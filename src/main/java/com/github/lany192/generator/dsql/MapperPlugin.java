@@ -64,25 +64,25 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
 
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("String"), "keyword"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("String"), "searchKeyword"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addBodyLine("return selectByPage(pageNum, pageSize, c -> {");
         StringJoiner joiner = new StringJoiner(
-                ", or",
+                ").or",
                 "c.where",
-                ")));");
+                ");");
         List<ColumnModel> columns = info.getColumns();
         boolean enable = false;
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
-                joiner.add("(" + column.getName() + ", isLike(\"%\" + keyword + \"%\")");
+                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\")");
                 enable = true;
             }
         }
         if (enable) {
-            method.addBodyLine("if (keyword != null && !\"\".equals(keyword)) {");
+            method.addBodyLine("if (searchKeyword != null && !\"\".equals(searchKeyword)) {");
             method.addBodyLine(joiner.toString());
             method.addBodyLine("}");
         }
