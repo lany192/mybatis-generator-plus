@@ -65,7 +65,7 @@ public class MapperPlugin extends BasePlugin {
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addBodyLine("return selectByPage(pageNum, pageSize, c -> {");
-        method.addBodyLine("if (keyword != null && \"\".equals(keyword)) {");
+        method.addBodyLine("if (keyword != null && !\"\".equals(keyword)) {");
         List<ColumnModel> columns = info.getColumns();
         for (ColumnModel column : columns) {
             if (String.class.getTypeName().equals(column.getFullTypeName())) {
