@@ -69,8 +69,8 @@ public class MapperPlugin extends BasePlugin {
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addBodyLine("return selectByPage(pageNum, pageSize, c -> {");
         StringJoiner joiner = new StringJoiner(
-                ").or",
-                "c.where",
+                ")\n                        .or",
+                "c\n                        .where",
                 ");");
         List<ColumnModel> columns = info.getColumns();
         boolean enable = false;
