@@ -47,7 +47,35 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(selectByPageAndSize(info));
         interfaze.addMethod(insertMultiple(info));
         interfaze.addMethod(selectByEntity(info));
+        interfaze.addMethod(search(info));
         return super.clientGenerated(interfaze, introspectedTable);
+    }
+
+    private Method search(TableModel info) {
+        Method method = new Method("search");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 搜索(目前仅支持文本）");
+        method.addJavaDocLine(" */");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+
+        method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("String"), "keyword"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
+        method.addBodyLine("return selectByPage(pageNum, pageSize, c -> {");
+        method.addBodyLine("if (keyword != null && \"\".equals(keyword) {");
+        List<ColumnModel> columns = info.getColumns();
+        for (ColumnModel column : columns) {
+            if (String.class.getTypeName().equals(column.getFullTypeName())) {
+                method.addBodyLine("c.where().or(" + column.getName() + ", isLike(\"%\" + keyword + \"%\"));");
+            }
+        }
+        method.addBodyLine("}");
+        method.addBodyLine("return c;");
+        method.addBodyLine("});");
+        return method;
     }
 
     private Method selectByEntity(TableModel info) {
