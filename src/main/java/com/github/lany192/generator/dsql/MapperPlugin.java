@@ -7,6 +7,7 @@ import com.github.lany192.generator.utils.JsonUtils;
 import com.github.lany192.generator.utils.Log;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -42,6 +43,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(StringUtils.class.getTypeName()));
 
         interfaze.addMethod(selectAllMethod(info));
         interfaze.addMethod(selectByIds(info));
@@ -69,24 +71,17 @@ public class MapperPlugin extends BasePlugin {
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addBodyLine("return selectByPage(pageNum, pageSize, c -> {");
         StringJoiner joiner = new StringJoiner(
-                ")\n                        .or",
-                "c\n                        .where",
+                ")\n                    .or",
+                "c\n                    .where",
                 ");");
         List<ColumnModel> columns = info.getColumns();
-        boolean enable = false;
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
-                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\")");
-                enable = true;
+                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").when(obj -> !StringUtils.isEmpty(searchKeyword))");
             }
         }
-        if (enable) {
-            method.addBodyLine("if (searchKeyword != null && !\"\".equals(searchKeyword)) {");
-            method.addBodyLine(joiner.toString());
-            method.addBodyLine("}");
-        }
-        method.addBodyLine("return c;");
+        method.addBodyLine("return "+joiner.toString());
         method.addBodyLine("});");
         return method;
     }
