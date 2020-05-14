@@ -68,20 +68,24 @@ public class MapperPlugin extends BasePlugin {
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addBodyLine("return selectByPage(pageNum, pageSize, c -> {");
-        method.addBodyLine("if (keyword != null && !\"\".equals(keyword)) {");
         StringJoiner joiner = new StringJoiner(
                 ", or",
                 "c.where",
                 ")));");
         List<ColumnModel> columns = info.getColumns();
+        boolean enable = false;
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
                 joiner.add("(" + column.getName() + ", isLike(\"%\" + keyword + \"%\")");
+                enable = true;
             }
         }
-        method.addBodyLine(joiner.toString());
-        method.addBodyLine("}");
+        if (enable) {
+            method.addBodyLine("if (keyword != null && !\"\".equals(keyword)) {");
+            method.addBodyLine(joiner.toString());
+            method.addBodyLine("}");
+        }
         method.addBodyLine("return c;");
         method.addBodyLine("});");
         return method;
