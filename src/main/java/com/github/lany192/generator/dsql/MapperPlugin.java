@@ -75,13 +75,19 @@ public class MapperPlugin extends BasePlugin {
                 "c\n                    .where",
                 ");");
         List<ColumnModel> columns = info.getColumns();
+        boolean enable = false;
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
                 joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").when(obj -> !StringUtils.isEmpty(searchKeyword))");
+                enable = true;
             }
         }
-        method.addBodyLine("return "+joiner.toString());
+        if (enable) {
+            method.addBodyLine("return " + joiner.toString());
+        } else {
+            method.addBodyLine("return c;");
+        }
         method.addBodyLine("});");
         return method;
     }
