@@ -76,7 +76,7 @@ public class MapperPlugin extends BasePlugin {
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
-                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").when(obj -> !OtherUtils.isEmpty(searchKeyword))");
+                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").when(obj -> !StringUtils.isEmpty(searchKeyword))");
                 enable = true;
             }
         }
