@@ -42,7 +42,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
-        interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
+//        interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(StringUtils.class.getTypeName()));
 
         interfaze.addMethod(selectAllMethod(info));
