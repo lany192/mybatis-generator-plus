@@ -4,7 +4,7 @@ import com.github.lany192.generator.BasePlugin;
 import com.github.lany192.generator.model.TableModel;
 import com.github.lany192.generator.utils.FreemarkerUtils;
 import com.github.lany192.generator.utils.Log;
-import org.apache.commons.lang3.StringUtils;
+import com.github.lany192.generator.utils.OtherUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 
@@ -84,7 +84,7 @@ public class FreemarkerPlugin extends BasePlugin {
         //是否需要自定义文件路径
         boolean needCustomPath = getProperty(KEY_NEED_CUSTOM_PATH, false);
 
-        if (StringUtils.isEmpty(author)) {
+        if (OtherUtils.isEmpty(author)) {
             author = System.getProperty("user.name");
         }
         TableModel info = new TableModel(introspectedTable, author);
@@ -118,7 +118,7 @@ public class FreemarkerPlugin extends BasePlugin {
                 Log.i("目标文件输出目录:" + outDirFile.getPath());
                 String targetFileName = filePrefix + info.getName() + fileSuffix;
                 //如果有配置固定名字，使用固定名称。必须配置自定义文件路径，不然生成的文件路径和名称冲突
-                if (!StringUtils.isEmpty(fixationName) && needCustomPath) {
+                if (!OtherUtils.isEmpty(fixationName) && needCustomPath) {
                     targetFileName = fixationName;
                 }
 

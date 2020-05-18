@@ -1,9 +1,8 @@
 package com.github.lany192.generator.dsql;
 
 import com.github.lany192.generator.BasePlugin;
-import org.apache.commons.lang3.StringUtils;
+import com.github.lany192.generator.utils.OtherUtils;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.config.JavaModelGeneratorConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public class SupportPlugin extends BasePlugin {
         super.initialized(introspectedTable);
         String supportType = introspectedTable.getMyBatisDynamicSqlSupportType();
         //修改包名
-        if (!StringUtils.isEmpty(this.targetPackage)) {
+        if (!OtherUtils.isEmpty(this.targetPackage)) {
             supportType = supportType.replace(getContext().getJavaClientGeneratorConfiguration().getTargetPackage(), this.targetPackage);
         }
         //修改类名

@@ -1,7 +1,7 @@
 package com.github.lany192.generator;
 
 
-import org.apache.commons.lang3.StringUtils;
+import com.github.lany192.generator.utils.OtherUtils;
 import org.mybatis.generator.api.CommentGenerator;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -39,7 +39,7 @@ public final class RemarkGenerator implements CommentGenerator {
             this.dateFormat = new SimpleDateFormat(dateFormatString);
         }
         this.author = properties.getProperty("author");
-        if (StringUtils.isEmpty(author)) {
+        if (OtherUtils.isEmpty(author)) {
             author = System.getProperty("user.name");
         }
     }

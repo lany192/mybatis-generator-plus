@@ -9,6 +9,10 @@ import java.util.Map;
 
 public class OtherUtils {
 
+    public static boolean isEmpty(CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
+
     /***
      * 驼峰命名转成路径
      *

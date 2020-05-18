@@ -2,7 +2,7 @@ package com.github.lany192.generator;
 
 import com.github.lany192.generator.utils.JsonUtils;
 import com.github.lany192.generator.utils.Log;
-import org.apache.commons.lang3.StringUtils;
+import com.github.lany192.generator.utils.OtherUtils;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.internal.util.StringUtility;
 
@@ -47,7 +47,7 @@ public abstract class BasePlugin extends PluginAdapter {
 
     public boolean getProperty(String key, boolean defaultValue) {
         String value = (String) params.get(key);
-        if (StringUtils.isEmpty(value)) {
+        if (OtherUtils.isEmpty(value)) {
             return defaultValue;
         }
         return value.equals("true");

@@ -7,14 +7,12 @@ import com.github.lany192.generator.utils.JsonUtils;
 import com.github.lany192.generator.utils.Log;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
@@ -42,8 +40,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
-//        interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
-        interfaze.addImportedType(new FullyQualifiedJavaType(StringUtils.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.springframework.util.StringUtils"));
 
         interfaze.addMethod(selectAllMethod(info));
         interfaze.addMethod(selectByIds(info));
@@ -79,7 +76,7 @@ public class MapperPlugin extends BasePlugin {
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
-                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").when(obj -> !StringUtils.isEmpty(searchKeyword))");
+                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").when(obj -> !OtherUtils.isEmpty(searchKeyword))");
                 enable = true;
             }
         }
