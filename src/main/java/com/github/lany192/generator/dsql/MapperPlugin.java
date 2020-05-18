@@ -1,17 +1,21 @@
 package com.github.lany192.generator.dsql;
 
 import com.github.lany192.generator.BasePlugin;
+import com.github.lany192.generator.model.ColumnModel;
 import com.github.lany192.generator.model.TableModel;
 import com.github.lany192.generator.utils.JsonUtils;
 import com.github.lany192.generator.utils.Log;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * 拓展Mapper类的功能
@@ -38,20 +42,81 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(StringUtils.class.getTypeName()));
 
-        interfaze.addMethod(findAllMethod(info));
+        interfaze.addMethod(selectAllMethod(info));
         interfaze.addMethod(selectByIds(info));
         interfaze.addMethod(deleteByIds(info));
         interfaze.addMethod(selectByPage(info));
         interfaze.addMethod(selectByPageAndSize(info));
-        interfaze.addMethod(findByPage(info));
-        interfaze.addMethod(findByPageAndSize(info));
         interfaze.addMethod(insertMultiple(info));
+        interfaze.addMethod(selectByEntity(info));
+        interfaze.addMethod(search(info));
         return super.clientGenerated(interfaze, introspectedTable);
     }
 
-    private Method findAllMethod(TableModel info) {
-        Method method = new Method("findAll");
+    private Method search(TableModel info) {
+        Method method = new Method("search");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 搜索(目前仅支持文本）");
+        method.addJavaDocLine(" */");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+
+        method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("String"), "searchKeyword"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
+        method.addBodyLine("return selectByPage(pageNum, pageSize, c -> {");
+        StringJoiner joiner = new StringJoiner(
+                ")\n                    .or",
+                "c\n                    .where",
+                ");");
+        List<ColumnModel> columns = info.getColumns();
+        boolean enable = false;
+        for (ColumnModel column : columns) {
+            //目前仅支持文本
+            if (column.getFullTypeName().equals(String.class.getTypeName())) {
+                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").when(obj -> !StringUtils.isEmpty(searchKeyword))");
+                enable = true;
+            }
+        }
+        if (enable) {
+            method.addBodyLine("return " + joiner.toString());
+        } else {
+            method.addBodyLine("return c;");
+        }
+        method.addBodyLine("});");
+        return method;
+    }
+
+    private Method selectByEntity(TableModel info) {
+        Method method = new Method("selectByEntity");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 根据条件查看记录");
+        method.addJavaDocLine(" */");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        String returnType = "List<" + info.getFullType() + ">";
+        method.setReturnType(new FullyQualifiedJavaType(returnType));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "record"));
+        List<ColumnModel> columns = info.getColumns();
+        StringJoiner joiner = new StringJoiner(
+                ")\n                .and(",
+                "return select(c -> c.where(",
+                "));");
+        for (ColumnModel column : columns) {
+            joiner.add(column.getName() + ", isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
+        }
+        method.addBodyLine(joiner.toString());
+        return method;
+    }
+
+    private Method selectAllMethod(TableModel info) {
+        Method method = new Method("selectAll");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 查看所有记录");
         method.addJavaDocLine(" */");
@@ -87,7 +152,7 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getPrimaryKeyType() +">"), "ids"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getPrimaryKeyType() + ">"), "ids"));
         method.addBodyLine("return delete(c -> c.where(id, SqlBuilder.isIn(ids)));");
         return method;
     }
@@ -127,40 +192,6 @@ public class MapperPlugin extends BasePlugin {
         return method;
     }
 
-
-    private Method findByPage(TableModel info) {
-        Method method = new Method("findByPage");
-        method.addJavaDocLine("/**");
-        method.addJavaDocLine(" * 分页查询记录,指定页码");
-        method.addJavaDocLine(" * @return 记录List集");
-        method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
-        method.setDefault(true);
-        method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
-        method.addBodyLine("return findByPage(pageNum, 30, SelectDSLCompleter.allRows());");
-        return method;
-    }
-
-    private Method findByPageAndSize(TableModel info) {
-        Method method = new Method("findByPage");
-        method.addJavaDocLine("/**");
-        method.addJavaDocLine(" * 分页查询记录,指定页码");
-        method.addJavaDocLine(" * @return 记录List集");
-        method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
-        method.setDefault(true);
-        method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(new FullyQualifiedJavaType("List<" + info.getName() + ">"));
-        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
-        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
-        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
-        method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
-        method.addBodyLine("return select(completer);");
-        return method;
-    }
-
     private Method insertMultiple(TableModel info) {
         Method method = new Method("insertMultiple");
         method.addJavaDocLine("/**");
@@ -182,5 +213,4 @@ public class MapperPlugin extends BasePlugin {
         method.addBodyLine("return 0;");
         return method;
     }
-
 }

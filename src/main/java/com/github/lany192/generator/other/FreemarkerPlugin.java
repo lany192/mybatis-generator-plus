@@ -49,6 +49,17 @@ public class FreemarkerPlugin extends BasePlugin {
             warnings.add(TAG + ":请配置目标文件的文件格式" + TARGET_FILE_FORMAT + "属性");
             return false;
         }
+        //是否删除旧的目标文件
+        boolean clearOldFile = getProperty(DELETE_OLD_FILE, false);
+        if (clearOldFile) {
+            //模板文件完整路径
+            String templateFilePath = getProperty(TEMPLATE_FILE_PATH, "");
+            File file = new File(templateFilePath);
+            //删除整个目录
+            if (file.isDirectory()) {
+                file.deleteOnExit();
+            }
+        }
         return true;
     }
 
@@ -77,8 +88,8 @@ public class FreemarkerPlugin extends BasePlugin {
             author = System.getProperty("user.name");
         }
         TableModel info = new TableModel(introspectedTable, author);
-        //判断是否是关联表
-        if (!info.isRelationTable()) {
+//        //判断是否是关联表
+//        if (!info.isRelationTable()) {
             if (needCustomPath) {
                 targetRelativeOutDirPath = targetRelativeOutDirPath + File.separator + info.getModelNamePath();
             }
@@ -124,9 +135,9 @@ public class FreemarkerPlugin extends BasePlugin {
             } else {
                 Log.i("不存在！模板文件:" + templateFile.getPath());
             }
-        } else {
-            Log.i("忽略关联表:" + info.getTableName());
-        }
+//        } else {
+//            Log.i("忽略关联表:" + info.getTableName());
+//        }
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
 

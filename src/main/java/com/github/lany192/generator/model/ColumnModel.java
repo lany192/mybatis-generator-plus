@@ -17,7 +17,7 @@ public class ColumnModel implements Serializable {
     /**
      * 表中字段名称
      */
-    private String column;
+    private String tname;
     /**
      * 字段名称
      */
@@ -64,6 +64,19 @@ public class ColumnModel implements Serializable {
      * 自定义类的值
      */
     private String customValue;
+    /**
+     * 是否是数组
+     */
+    private boolean isArray;
+
+    /**
+     * 是否是富文本
+     */
+    private boolean richColumn;
+    /**
+     * 是否是图片链接
+     */
+    private boolean imageColumn;
 
     private boolean identity;
     private boolean isColumnNameDelimited;
@@ -81,17 +94,50 @@ public class ColumnModel implements Serializable {
         isGeneratedAlways = info.isGeneratedAlways();
         tableAlias = info.getTableAlias();
         defaultValue = info.getDefaultValue();
-        column = info.getActualColumnName();
+        tname = info.getActualColumnName();
+        imageColumn = isImage(tname);
         name = info.getJavaProperty();
         remark = info.getRemarks();
         length = info.getLength();
+        richColumn = isRich(info);
         nullable = info.isNullable();
         typeName = info.getFullyQualifiedJavaType().getShortName();
         fullTypeName = info.getFullyQualifiedJavaType().getFullyQualifiedName();
         isCustomType = OtherUtils.isJdbcType(info.getJdbcType());
         if (isCustomType) {
             customValue = getCustomValue(fullTypeName);
+            if (customValue != null && customValue.contains("},{")) {
+                customValue = customValue.replace("},{", "}, {");
+            }
+            if (customValue != null && customValue.contains("\":")) {
+                customValue = customValue.replace("\":", "\": ");
+            }
+            if (customValue != null && customValue.contains("\",\"")) {
+                customValue = customValue.replace("\",\"", "\", \"");
+            }
         }
+    }
+
+    private boolean isRich(IntrospectedColumn info) {
+        if (info.getLength() >= 512) {
+            if (info.getActualColumnName().equals("images")) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isImage(String column) {
+        if (column.contains("avatar")
+                || column.contains("picture")
+                || column.equals("pic")
+                || column.equals("icon")
+                || column.contains("image")
+                || column.contains("cover")) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -101,6 +147,7 @@ public class ColumnModel implements Serializable {
         try {
             Class<?> clazz = Class.forName(className);
             isEnum = clazz.isEnum();
+            isArray = clazz.isArray();
             if (isEnum) {
                 //得到enum的所有实例
                 Object[] objects = clazz.getEnumConstants();
@@ -112,7 +159,7 @@ public class ColumnModel implements Serializable {
                     list.add(map);
                 }
                 return JsonUtils.object2json(list);
-            } else if (clazz.isArray()) {
+            } else if (isArray) {
                 Log.i("数组的元素类型是:" + clazz.getComponentType().getName());
                 return "[]";
             }
@@ -120,5 +167,12 @@ public class ColumnModel implements Serializable {
             e.printStackTrace();
         }
         return defaultValue;
+    }
+
+    /**
+     * 首字母大写名称
+     */
+    public String getFirstUpperName() {
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 }

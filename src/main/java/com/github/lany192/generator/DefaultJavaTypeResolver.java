@@ -17,11 +17,11 @@ import java.util.Properties;
  * <p>
  * 用法:
  *
- * <javaTypeResolver type="com.github.lany192.mybatis.generator.CustomJavaTypeResolver">
+ * <javaTypeResolver type="com.github.lany192.mybatis.generator.DefaultJavaTypeResolver">
  *      <property name="sex" value="xxx.xxx.xxx.enums.SexEnum"/>
  * </javaTypeResolver>
  */
-public class CustomJavaTypeResolver extends JavaTypeResolverDefaultImpl {
+public class DefaultJavaTypeResolver extends JavaTypeResolverDefaultImpl {
     private final String TAG = getClass().getSimpleName();
     private Map<String, String> mFieldsMap = new HashMap<>();
 
@@ -36,8 +36,6 @@ public class CustomJavaTypeResolver extends JavaTypeResolverDefaultImpl {
         }
         mFieldsMap.remove(PropertyRegistry.TYPE_RESOLVER_FORCE_BIG_DECIMALS);
         mFieldsMap.remove(PropertyRegistry.TYPE_RESOLVER_USE_JSR310_TYPES);
-
-        //Log.i(TAG, "自定义Java类型的属性映射关系:" + JsonUtils.object2json(mFieldsMap));
     }
 
     @Override
