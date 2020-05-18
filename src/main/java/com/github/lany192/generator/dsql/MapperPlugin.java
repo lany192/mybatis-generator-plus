@@ -95,22 +95,23 @@ public class MapperPlugin extends BasePlugin {
     private Method selectByPage(TableModel info) {
         Method method = new Method("selectByPage");
         method.addJavaDocLine("/**");
-        method.addJavaDocLine(" * 分页查询记录,指定页码");
+        method.addJavaDocLine(" * 分页查询记录");
         method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
-        method.addBodyLine("return selectByPage(pageNum, 30, SelectDSLCompleter.allRows());");
+        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
+        method.addBodyLine("return selectByPage(pageNum, pageSize, SelectDSLCompleter.allRows());");
         return method;
     }
 
     private Method selectByPageAndSize(TableModel info) {
         Method method = new Method("selectByPage");
         method.addJavaDocLine("/**");
-        method.addJavaDocLine(" * 分页查询记录,指定页码");
+        method.addJavaDocLine(" * 分页查询记录");
         method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
