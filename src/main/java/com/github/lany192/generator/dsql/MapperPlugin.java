@@ -7,7 +7,12 @@ import com.github.lany192.generator.utils.JsonUtils;
 import com.github.lany192.generator.utils.Log;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.mybatis.dynamic.sql.Constant;
 import org.mybatis.dynamic.sql.SqlBuilder;
+import org.mybatis.dynamic.sql.render.RenderingStrategies;
+import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
+import org.mybatis.dynamic.sql.select.SelectModel;
+import org.mybatis.dynamic.sql.util.Buildable;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
@@ -40,6 +45,11 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(Constant.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(SelectModel.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(Buildable.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(RenderingStrategies.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(QueryExpressionDSL.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType("org.springframework.util.StringUtils"));
 
         interfaze.addMethod(selectAllMethod(info));
@@ -50,7 +60,25 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(insertMultiple(info));
         interfaze.addMethod(selectByEntity(info));
         interfaze.addMethod(search(info));
+        interfaze.addMethod(exist(info));
         return super.clientGenerated(interfaze, introspectedTable);
+    }
+
+    private Method exist(TableModel info) {
+        Method method = new Method("exist");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 是否存在满足条件的记录");
+        method.addJavaDocLine(" */");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("boolean"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
+        method.addBodyLine("QueryExpressionDSL<SelectModel> dsl = SqlBuilder.select(BasicColumn.columnList(Constant.of(\"count(*)\"))).from(" + info.getFirstLowerTableName() + ");");
+        method.addBodyLine("dsl.limit(1);");
+        method.addBodyLine("long count = count(((SelectModel) ((Buildable) completer.apply(dsl)).build()).render(RenderingStrategies.MYBATIS3));");
+        method.addBodyLine("return count > 0;");
+        return method;
     }
 
     private Method search(TableModel info) {

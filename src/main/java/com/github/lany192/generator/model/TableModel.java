@@ -125,4 +125,11 @@ public class TableModel {
         }
         return false;
     }
+
+    /**
+     * 首字母大写名称
+     */
+    public String getFirstLowerTableName() {
+        return name.substring(0, 1).toLowerCase() + name.substring(1);
+    }
 }
