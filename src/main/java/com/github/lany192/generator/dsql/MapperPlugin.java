@@ -68,6 +68,8 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("exist");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 是否存在满足条件的记录");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 是否存在");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
@@ -85,6 +87,8 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("search");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 搜索(目前仅支持文本）");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 记录集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
@@ -121,6 +125,8 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("selectByEntity");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 根据条件查看记录");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 记录集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
@@ -144,6 +150,8 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("selectAll");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 查看所有记录");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 记录集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
@@ -158,6 +166,8 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("selectByIds");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 根据多个id，查询记录");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 记录集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
@@ -186,6 +196,7 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("selectByPage");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 分页查询记录");
+        method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
@@ -202,6 +213,7 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("selectByPage");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 分页查询记录");
+        method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
