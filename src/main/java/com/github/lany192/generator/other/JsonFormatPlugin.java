@@ -8,7 +8,7 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 import java.util.List;
 
-public class JsonPlugin extends PluginAdapter {
+public class JsonFormatPlugin extends PluginAdapter {
 
     @Override
     public boolean validate(List<String> warnings) {
