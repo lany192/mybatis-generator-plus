@@ -1,6 +1,5 @@
 package com.github.lany192.generator.other;
 
-import com.sun.org.apache.bcel.internal.classfile.Annotations;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -43,8 +42,6 @@ public class JsonFormatPlugin extends PluginAdapter {
     @Override
     public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                        IntrospectedTable introspectedTable, ModelClassType modelClassType) {
-
-
         if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.time.LocalDateTime")) {
             topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonFormat");
             field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\")");
@@ -56,6 +53,10 @@ public class JsonFormatPlugin extends PluginAdapter {
         if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.time.LocalDate")) {
             topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonFormat");
             field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd\")");
+        }
+        if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.util.Date")) {
+            topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonFormat");
+            field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\")");
         }
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
