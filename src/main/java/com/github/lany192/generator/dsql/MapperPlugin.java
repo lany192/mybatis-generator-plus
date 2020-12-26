@@ -234,7 +234,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 批量插入");
         method.addJavaDocLine(" * ");
-        method.addJavaDocLine(" * @return 插入数量");
+        method.addJavaDocLine(" * @return 生成记录的id集");
         method.addJavaDocLine(" */");
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
