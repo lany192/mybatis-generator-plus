@@ -239,15 +239,16 @@ public class MapperPlugin extends BasePlugin {
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(new FullyQualifiedJavaType("int"));
+        method.setReturnType(new FullyQualifiedJavaType("List<Long>"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "records"));
+        method.addBodyLine("List<Long> ids = new ArrayList<>();");
         method.addBodyLine("if (records != null && records.size() > 0) {");
         method.addBodyLine("for (" + info.getName() + " record : records) {");
         method.addBodyLine("insertSelective(record);");
+        method.addBodyLine("ids.add(record.getId());");
         method.addBodyLine("}");
-        method.addBodyLine("return records.size();");
         method.addBodyLine("}");
-        method.addBodyLine("return 0;");
+        method.addBodyLine("return ids;");
         return method;
     }
 }
