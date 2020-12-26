@@ -17,6 +17,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -51,6 +52,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(RenderingStrategies.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(QueryExpressionDSL.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType("org.springframework.util.StringUtils"));
+        interfaze.addImportedType(new FullyQualifiedJavaType(ArrayList.class.getTypeName()));
 
         interfaze.addMethod(selectAllMethod(info));
         interfaze.addMethod(selectByIds(info));
