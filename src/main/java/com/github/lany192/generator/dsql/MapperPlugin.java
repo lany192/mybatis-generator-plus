@@ -66,6 +66,22 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(existById(info));
         return super.clientGenerated(interfaze, introspectedTable);
     }
+    
+    private Method existById(TableModel info) {
+        Method method = new Method("exist");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 是否存在目标id");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 是否存在");
+        method.addJavaDocLine(" */");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("boolean"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("Long"), "id"));
+        method.addBodyLine("return selectByPrimaryKey(id).isPresent();");
+        return method;
+    }
 
     private Method exist(TableModel info) {
         Method method = new Method("exist");
