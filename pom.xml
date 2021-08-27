@@ -49,7 +49,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
-
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.2.1</version>
+        </dependency>
         <!-- https://github.com/square/javapoet -->
         <dependency>
             <groupId>com.squareup</groupId>
