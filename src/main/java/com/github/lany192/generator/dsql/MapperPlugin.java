@@ -51,7 +51,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(Buildable.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(RenderingStrategies.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(QueryExpressionDSL.class.getTypeName()));
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.springframework.util.StringUtils"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.commons.lang3.StringUtils"));
         interfaze.addImportedType(new FullyQualifiedJavaType(ArrayList.class.getTypeName()));
 
         interfaze.addMethod(selectAllMethod(info));
@@ -66,7 +66,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(existById(info));
         return super.clientGenerated(interfaze, introspectedTable);
     }
-    
+
     private Method existById(TableModel info) {
         Method method = new Method("exist");
         method.addJavaDocLine("/**");
@@ -127,7 +127,7 @@ public class MapperPlugin extends BasePlugin {
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
-                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").when(obj -> !StringUtils.isEmpty(searchKeyword))");
+                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").filter(obj -> !StringUtils.isEmpty(searchKeyword))");
                 enable = true;
             }
         }
