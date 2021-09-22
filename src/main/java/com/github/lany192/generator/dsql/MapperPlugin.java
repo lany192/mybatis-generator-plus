@@ -72,7 +72,7 @@ public class MapperPlugin extends BasePlugin {
     }
 
     private Method existByEntity(TableModel info) {
-        Method method = new Method("selectByEntity");
+        Method method = new Method("existByEntity");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 根据条件查看是否有记录");
         method.addJavaDocLine(" *");
@@ -81,8 +81,7 @@ public class MapperPlugin extends BasePlugin {
         method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
-        String returnType = "List<" + info.getFullType() + ">";
-        method.setReturnType(new FullyQualifiedJavaType(returnType));
+        method.setReturnType(new FullyQualifiedJavaType("boolean"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "record"));
         List<ColumnModel> columns = info.getColumns();
         StringJoiner joiner = new StringJoiner(
