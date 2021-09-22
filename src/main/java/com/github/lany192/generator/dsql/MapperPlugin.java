@@ -17,9 +17,12 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
+import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualToWhenPresent;
 
 /**
  * 拓展Mapper类的功能
@@ -64,7 +67,34 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(search(info));
         interfaze.addMethod(exist(info));
         interfaze.addMethod(existById(info));
+        interfaze.addMethod(existByEntity(info));
         return super.clientGenerated(interfaze, introspectedTable);
+    }
+
+    private Method existByEntity(TableModel info) {
+        Method method = new Method("selectByEntity");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 根据条件查看是否有记录");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 是否存在");
+        method.addJavaDocLine(" */");
+        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        String returnType = "List<" + info.getFullType() + ">";
+        method.setReturnType(new FullyQualifiedJavaType(returnType));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "record"));
+        List<ColumnModel> columns = info.getColumns();
+        StringJoiner joiner = new StringJoiner(
+                ")\n                .and(",
+                "long count = count(c -> c.where(",
+                "));");
+        for (ColumnModel column : columns) {
+            joiner.add(column.getName() + ", isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
+        }
+        method.addBodyLine(joiner.toString());
+        method.addBodyLine("return count > 0;");
+        return method;
     }
 
     private Method existById(TableModel info) {
