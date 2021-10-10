@@ -268,8 +268,7 @@ public class MapperPlugin extends BasePlugin {
         method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
         method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
-        method.addBodyLine("List<" + info.getName() + "> records = select(completer);");
-        method.addBodyLine("return new PageInfo<>(records);");
+        method.addBodyLine("return new PageInfo<>(select(completer));");
         return method;
     }
 
