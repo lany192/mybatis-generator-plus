@@ -17,12 +17,9 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
-import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
-
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualToWhenPresent;
 
 /**
  * 拓展Mapper类的功能
@@ -78,7 +75,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 是否存在");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("boolean"));
@@ -102,7 +99,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 是否存在");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("boolean"));
@@ -118,7 +115,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 是否存在");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("boolean"));
@@ -137,7 +134,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 记录集");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
 
@@ -160,7 +157,7 @@ public class MapperPlugin extends BasePlugin {
             }
         }
         if (enable) {
-            method.addBodyLine("return " + joiner.toString());
+            method.addBodyLine("return " + joiner);
         } else {
             method.addBodyLine("return c;");
         }
@@ -175,7 +172,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 记录集");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         String returnType = "List<" + info.getFullType() + ">";
@@ -200,7 +197,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 记录集");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         String returnType = "List<" + info.getFullType() + ">";
@@ -216,7 +213,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 记录集");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
@@ -230,7 +227,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 根据多个id，删除记录");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
@@ -246,7 +243,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
@@ -263,7 +260,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 记录PageInfo集");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
@@ -283,7 +280,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" * ");
         method.addJavaDocLine(" * @return 生成记录的id集");
         method.addJavaDocLine(" */");
-//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<Long>"));
