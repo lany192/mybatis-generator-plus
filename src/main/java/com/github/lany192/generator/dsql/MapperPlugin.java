@@ -78,7 +78,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 是否存在");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("boolean"));
@@ -103,7 +103,7 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 是否存在");
         method.addJavaDocLine(" */");
-        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
+//        method.addAnnotation("@Generated(value = \"org.mybatis.generator.api.MyBatisGenerator\", comments = \"Source Table: " + info.getTableName() + "\")");
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("boolean"));
