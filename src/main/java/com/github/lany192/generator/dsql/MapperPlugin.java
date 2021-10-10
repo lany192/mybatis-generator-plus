@@ -86,13 +86,12 @@ public class MapperPlugin extends BasePlugin {
         List<ColumnModel> columns = info.getColumns();
         StringJoiner joiner = new StringJoiner(
                 ")\n                .and(",
-                "long count = count(c -> c.where(",
+                "return exist(c -> c.where(",
                 "));");
         for (ColumnModel column : columns) {
             joiner.add(column.getName() + ", isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
         }
         method.addBodyLine(joiner.toString());
-        method.addBodyLine("return count > 0;");
         return method;
     }
 
