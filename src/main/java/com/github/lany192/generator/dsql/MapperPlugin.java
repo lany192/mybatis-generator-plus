@@ -126,8 +126,8 @@ public class MapperPlugin extends BasePlugin {
         method.addParameter(new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
         method.addBodyLine("QueryExpressionDSL<SelectModel> dsl = SqlBuilder.select(BasicColumn.columnList(Constant.of(\"count(*)\"))).from(" + info.getFirstLowerTableName() + ");");
         method.addBodyLine("dsl.limit(1);");
-        method.addBodyLine("long count = count(((SelectModel) ((Buildable) completer.apply(dsl)).build()).render(RenderingStrategies.MYBATIS3));");
-        method.addBodyLine("return count > 0;");
+        method.addBodyLine("SelectStatementProvider selectStatement = completer.apply(dsl).build().render(RenderingStrategies.MYBATIS3);");
+        method.addBodyLine("return count(selectStatement) > 0;");
         return method;
     }
 
