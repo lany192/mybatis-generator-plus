@@ -93,7 +93,7 @@ public class MapperPlugin extends BasePlugin {
     }
 
     private Method existById(TableModel info) {
-        Method method = new Method("exist");
+        Method method = new Method("existById");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 是否存在目标id");
         method.addJavaDocLine(" *");
