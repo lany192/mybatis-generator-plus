@@ -302,54 +302,54 @@ public final class RemarkGenerator implements CommentGenerator {
 
     @Override
     public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> imports) {
-        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
-        String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString();
-        method.addAnnotation(this.getGeneratedAnnotation(comment));
+//        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
+//        String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString();
+//        method.addAnnotation(this.getGeneratedAnnotation(comment));
     }
 
     @Override
     public void addGeneralMethodAnnotation(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> imports) {
-        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
-        String comment = "Source field: " + introspectedTable.getFullyQualifiedTable().toString() + "." + introspectedColumn.getActualColumnName();
-        method.addAnnotation(this.getGeneratedAnnotation(comment));
+//        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
+//        String comment = "Source field: " + introspectedTable.getFullyQualifiedTable().toString() + "." + introspectedColumn.getActualColumnName();
+//        method.addAnnotation(this.getGeneratedAnnotation(comment));
     }
 
     @Override
     public void addFieldAnnotation(Field field, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> imports) {
-        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
-        String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString();
-        field.addAnnotation(this.getGeneratedAnnotation(comment));
+//        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
+//        String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString();
+//        field.addAnnotation(this.getGeneratedAnnotation(comment));
     }
 
     @Override
     public void addFieldAnnotation(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn, Set<FullyQualifiedJavaType> imports) {
-        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
-        String comment = "Source field: " + introspectedTable.getFullyQualifiedTable().toString() + "." + introspectedColumn.getActualColumnName();
-        field.addAnnotation(this.getGeneratedAnnotation(comment));
-        if (!this.suppressAllComments && this.addRemarkComments) {
-            String remarks = introspectedColumn.getRemarks();
-            if (this.addRemarkComments && StringUtility.stringHasValue(remarks)) {
-                field.addJavaDocLine("/**");
-                field.addJavaDocLine(" * Database Column Remarks:");
-                String[] remarkLines = remarks.split(System.getProperty("line.separator"));
-                String[] var8 = remarkLines;
-                int var9 = remarkLines.length;
-
-                for (int var10 = 0; var10 < var9; ++var10) {
-                    String remarkLine = var8[var10];
-                    field.addJavaDocLine(" *   " + remarkLine);
-                }
-
-                field.addJavaDocLine(" */");
-            }
-        }
+//        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
+//        String comment = "Source field: " + introspectedTable.getFullyQualifiedTable().toString() + "." + introspectedColumn.getActualColumnName();
+//        field.addAnnotation(this.getGeneratedAnnotation(comment));
+//        if (!this.suppressAllComments && this.addRemarkComments) {
+//            String remarks = introspectedColumn.getRemarks();
+//            if (this.addRemarkComments && StringUtility.stringHasValue(remarks)) {
+//                field.addJavaDocLine("/**");
+//                field.addJavaDocLine(" * Database Column Remarks:");
+//                String[] remarkLines = remarks.split(System.getProperty("line.separator"));
+//                String[] var8 = remarkLines;
+//                int var9 = remarkLines.length;
+//
+//                for (int var10 = 0; var10 < var9; ++var10) {
+//                    String remarkLine = var8[var10];
+//                    field.addJavaDocLine(" *   " + remarkLine);
+//                }
+//
+//                field.addJavaDocLine(" */");
+//            }
+//        }
     }
 
     @Override
     public void addClassAnnotation(InnerClass innerClass, IntrospectedTable introspectedTable, Set<FullyQualifiedJavaType> imports) {
-        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
-        String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString();
-        innerClass.addAnnotation(this.getGeneratedAnnotation(comment));
+//        imports.add(new FullyQualifiedJavaType("javax.annotation.Generated"));
+//        String comment = "Source Table: " + introspectedTable.getFullyQualifiedTable().toString();
+//        innerClass.addAnnotation(this.getGeneratedAnnotation(comment));
     }
 
     private String getGeneratedAnnotation(String comment) {
