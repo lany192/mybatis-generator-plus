@@ -1,6 +1,5 @@
 package com.github.lany192.generator.other;
 
-import com.github.lany192.generator.utils.OtherUtils;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
@@ -29,12 +28,8 @@ public class SwaggerPlugin extends PluginAdapter {
         if (!topLevelClass.getAnnotations().contains(classAnnotation)) {
             topLevelClass.addAnnotation(classAnnotation);
         }
-        //如果有默认值，打印默认值
-        if (OtherUtils.isEmpty(introspectedColumn.getDefaultValue())) {
-            field.addAnnotation("@ApiModelProperty(value=\"" + introspectedColumn.getRemarks() + "\")");
-        } else {
-            field.addAnnotation("@ApiModelProperty(value=\"" + introspectedColumn.getRemarks() + "\", example = \"" + introspectedColumn.getDefaultValue() + "\")");
-        }
+        String comment = introspectedTable.getFullyQualifiedTable().toString() + "." + introspectedColumn.getActualColumnName();
+        field.addAnnotation("@ApiModelProperty(value=\"" + introspectedColumn.getRemarks() + "\", notes = \"" + comment + "\", dataType = \"" + introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName() + "\")");
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 }
