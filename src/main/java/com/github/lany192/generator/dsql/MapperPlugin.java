@@ -142,11 +142,8 @@ public class MapperPlugin extends BasePlugin {
         method.addParameter(new Parameter(new FullyQualifiedJavaType("String"), "searchKeyword"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
-        method.addBodyLine("return selectByPage(pageNum, pageSize, c -> {");
-        StringJoiner joiner = new StringJoiner(
-                ")\n                    .or",
-                "c\n                    .where",
-                ");");
+        method.addBodyLine("return selectByPage(pageNum, pageSize, c -> c");
+        StringJoiner joiner = new StringJoiner(")\n                .or", "        .where", ")");
         List<ColumnModel> columns = info.getColumns();
         boolean enable = false;
         for (ColumnModel column : columns) {
@@ -157,11 +154,11 @@ public class MapperPlugin extends BasePlugin {
             }
         }
         if (enable) {
-            method.addBodyLine("return " + joiner);
+            method.addBodyLine(" " + joiner);
         } else {
-            method.addBodyLine("return c;");
+            method.addBodyLine(" c;");
         }
-        method.addBodyLine("});");
+        method.addBodyLine(");");
         return method;
     }
 
