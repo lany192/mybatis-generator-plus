@@ -155,8 +155,6 @@ public class MapperPlugin extends BasePlugin {
         }
         if (enable) {
             method.addBodyLine(" " + joiner);
-        } else {
-            method.addBodyLine(" c;");
         }
         method.addBodyLine(");");
         return method;
