@@ -139,7 +139,7 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
 
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("String"), "searchKeyword"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("String"), "keyword"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
         method.addBodyLine("return selectByPage(pageNum, pageSize, c -> c");
@@ -149,7 +149,7 @@ public class MapperPlugin extends BasePlugin {
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
-                joiner.add("(" + column.getName() + ", isLike(\"%\" + searchKeyword + \"%\").filter(obj -> !StringUtils.isEmpty(searchKeyword))");
+                joiner.add("(" + column.getName() + ", isLike(\"%\" + keyword + \"%\").filter(obj -> !StringUtils.isEmpty(keyword))");
                 enable = true;
             }
         }
