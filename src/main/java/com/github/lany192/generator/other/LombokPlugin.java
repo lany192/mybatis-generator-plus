@@ -155,6 +155,7 @@ public class LombokPlugin extends PluginAdapter {
         //@Data is default annotation
         annotations.add(Annotations.SETTER);
         annotations.add(Annotations.GETTER);
+        annotations.add(Annotations.BUILDER);
 
         for (String annotationName : properties.stringPropertyNames()) {
             if (annotationName.contains(".")) {
