@@ -25,9 +25,8 @@ public class ModelFieldDocPlugin extends PluginAdapter {
         field.addJavaDocLine("/**\n" +
                 "     * " + introspectedColumn.getRemarks() + "\n" +
                 "     * 表字段：" + comment + "\n" +
-                "     * 类型：" + introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName() + "\n" +
-                "     */"
-        );
+                "     * 类型：{@link" + introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName() + "}\n" +
+                "     */");
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 }
