@@ -22,8 +22,7 @@ public class ModelFieldDocPlugin extends PluginAdapter {
     public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                        IntrospectedTable introspectedTable, ModelClassType modelClassType) {
         String comment = introspectedTable.getFullyQualifiedTable().toString() + "." + introspectedColumn.getActualColumnName();
-        field.addJavaDocLine(
-                "    /**\n" +
+        field.addJavaDocLine("/**\n" +
                 "     * " + introspectedColumn.getRemarks() + "\n" +
                 "     * 表字段：" + comment + "\n" +
                 "     * 字段类型：" + introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName() + "\n" +
