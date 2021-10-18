@@ -9,7 +9,7 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 import java.util.List;
 
 /**
- * 实体增加api文档注解
+ * 字段注释
  */
 public class ModelFieldDocPlugin extends PluginAdapter {
 
@@ -25,7 +25,7 @@ public class ModelFieldDocPlugin extends PluginAdapter {
         field.addJavaDocLine("/**\n" +
                 "     * " + introspectedColumn.getRemarks() + "\n" +
                 "     * 表字段：" + comment + "\n" +
-                "     * 字段类型：" + introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName() + "\n" +
+                "     * 类型：" + introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName() + "\n" +
                 "     */"
         );
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
