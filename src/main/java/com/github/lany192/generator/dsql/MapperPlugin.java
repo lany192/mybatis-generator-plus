@@ -53,7 +53,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.commons.lang3.StringUtils"));
         interfaze.addImportedType(new FullyQualifiedJavaType(ArrayList.class.getTypeName()));
 
-        interfaze.addMethod(count(info));
+        interfaze.addMethod(selectCount(info));
         interfaze.addMethod(selectAllMethod(info));
         interfaze.addMethod(selectByIds(info));
         interfaze.addMethod(deleteByIds(info));
@@ -68,8 +68,8 @@ public class MapperPlugin extends BasePlugin {
         return super.clientGenerated(interfaze, introspectedTable);
     }
 
-    private Method count(TableModel info) {
-        Method method = new Method("count");
+    private Method selectCount(TableModel info) {
+        Method method = new Method("selectCount");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 查询符合条件的数量");
         method.addJavaDocLine(" *");
