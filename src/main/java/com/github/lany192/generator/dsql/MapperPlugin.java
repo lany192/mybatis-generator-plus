@@ -12,7 +12,6 @@ import org.mybatis.dynamic.sql.SqlBuilder;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
 import org.mybatis.dynamic.sql.select.SelectModel;
-import org.mybatis.dynamic.sql.util.Buildable;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
@@ -213,6 +212,9 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + info.getFullType() + ">"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getPrimaryKeyType() + ">"), "ids"));
+        method.addBodyLine("if (ids.size() == 0) {");
+        method.addBodyLine("return new ArrayList<>();");
+        method.addBodyLine("}");
         method.addBodyLine("return select(c -> c.where(id, isIn(ids)));");
         return method;
     }
