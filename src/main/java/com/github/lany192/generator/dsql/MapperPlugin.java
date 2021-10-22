@@ -53,6 +53,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.commons.lang3.StringUtils"));
         interfaze.addImportedType(new FullyQualifiedJavaType(ArrayList.class.getTypeName()));
 
+        interfaze.addMethod(count(info));
         interfaze.addMethod(selectAllMethod(info));
         interfaze.addMethod(selectByIds(info));
         interfaze.addMethod(deleteByIds(info));
@@ -65,6 +66,22 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(existById(info));
         interfaze.addMethod(existByEntity(info));
         return super.clientGenerated(interfaze, introspectedTable);
+    }
+
+    private Method count(TableModel info) {
+        Method method = new Method("count");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 查询符合条件的数量");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 数量");
+        method.addJavaDocLine(" */");
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("long"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
+        method.addBodyLine("QueryExpressionDSL<SelectModel> dsl = SqlBuilder.select(BasicColumn.columnList(Constant.of(\"count(*)\"))).from(" + info.getFirstLowerTableName() + ");");
+        method.addBodyLine("return count(completer.apply(dsl).build().render(RenderingStrategies.MYBATIS3));");
+        return method;
     }
 
     private Method existByEntity(TableModel info) {
