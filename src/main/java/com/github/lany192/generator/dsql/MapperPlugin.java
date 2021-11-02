@@ -66,7 +66,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(selectByPageAndSize(info));
         interfaze.addMethod(insertSelective(info));
         interfaze.addMethod(selectByEntity(info));
-        interfaze.addMethod(search(info));
+//        interfaze.addMethod(search(info));
         interfaze.addMethod(exist(info));
         interfaze.addMethod(existById(info));
         interfaze.addMethod(existByEntity(info));
