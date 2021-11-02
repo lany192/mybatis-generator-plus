@@ -305,6 +305,16 @@ public class MapperPlugin extends BasePlugin {
         return method;
     }
 
+    /**
+     *    default List<Long> insertSelective(List<XXXXX> records) {
+     *         return records.parallelStream()
+     *                 .filter(Objects::nonNull)
+     *                 .map(record -> {
+     *                     insertSelective(record);
+     *                     return record.getId();
+     *                 }).collect(Collectors.toList());
+     *     }
+     */
     private Method insertSelective(TableModel info) {
         Method method = new Method("insertSelective");
         method.addJavaDocLine("/**");
@@ -317,20 +327,12 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<Long>"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "records"));
-//        method.addBodyLine("List<Long> ids = new ArrayList<>();");
-//        method.addBodyLine("if (records != null && records.size() > 0) {");
-//        method.addBodyLine("for (" + info.getName() + " record : records) {");
-//        method.addBodyLine("insertSelective(record);");
-//        method.addBodyLine("ids.add(record.getId());");
-//        method.addBodyLine("}");
-//        method.addBodyLine("}");
-//        method.addBodyLine("return ids;");
-        method.addBodyLine("return records.parallelStream()\n" +
-                "                .filter(Objects::nonNull)\n" +
-                "                .map(record -> {\n" +
-                "                    insertSelective(record);\n" +
-                "                    return record.getId();\n" +
-                "                }).collect(Collectors.toList());");
+        method.addBodyLine("return records.parallelStream()\n");
+        method.addBodyLine(".filter(Objects::nonNull)\n");
+        method.addBodyLine(".map(record -> {\n");
+        method.addBodyLine("insertSelective(record);\n");
+        method.addBodyLine("return record.getId();\n");
+        method.addBodyLine("}).collect(Collectors.toList());");
         return method;
     }
 }
