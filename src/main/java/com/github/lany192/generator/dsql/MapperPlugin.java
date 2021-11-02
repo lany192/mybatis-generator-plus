@@ -52,7 +52,7 @@ public class MapperPlugin extends BasePlugin {
 //        interfaze.addImportedType(new FullyQualifiedJavaType(Buildable.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(RenderingStrategies.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(QueryExpressionDSL.class.getTypeName()));
-        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.commons.lang3.StringUtils"));
+//        interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.commons.lang3.StringUtils"));
         interfaze.addImportedType(new FullyQualifiedJavaType(ArrayList.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Collectors.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
