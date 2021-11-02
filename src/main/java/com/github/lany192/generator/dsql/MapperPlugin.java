@@ -64,7 +64,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(deleteByIds(info));
         interfaze.addMethod(selectByPage(info));
         interfaze.addMethod(selectByPageAndSize(info));
-        interfaze.addMethod(insertMultiple(info));
+        interfaze.addMethod(insertSelective(info));
         interfaze.addMethod(selectByEntity(info));
         interfaze.addMethod(search(info));
         interfaze.addMethod(exist(info));
@@ -305,8 +305,8 @@ public class MapperPlugin extends BasePlugin {
         return method;
     }
 
-    private Method insertMultiple(TableModel info) {
-        Method method = new Method("insertMultiple");
+    private Method insertSelective(TableModel info) {
+        Method method = new Method("insertSelective");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 批量插入");
         method.addJavaDocLine(" *");
