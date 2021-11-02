@@ -309,6 +309,7 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("insertSelective");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 批量插入");
+        method.addJavaDocLine(" * 注:并行执行插入");
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 生成记录的id集");
         method.addJavaDocLine(" */");
