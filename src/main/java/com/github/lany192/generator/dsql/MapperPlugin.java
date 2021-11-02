@@ -305,7 +305,7 @@ public class MapperPlugin extends BasePlugin {
         Method method = new Method("insertMultiple");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 批量插入");
-        method.addJavaDocLine(" * ");
+        method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 生成记录的id集");
         method.addJavaDocLine(" */");
 
@@ -313,14 +313,20 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<Long>"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "records"));
-        method.addBodyLine("List<Long> ids = new ArrayList<>();");
-        method.addBodyLine("if (records != null && records.size() > 0) {");
-        method.addBodyLine("for (" + info.getName() + " record : records) {");
-        method.addBodyLine("insertSelective(record);");
-        method.addBodyLine("ids.add(record.getId());");
-        method.addBodyLine("}");
-        method.addBodyLine("}");
-        method.addBodyLine("return ids;");
+//        method.addBodyLine("List<Long> ids = new ArrayList<>();");
+//        method.addBodyLine("if (records != null && records.size() > 0) {");
+//        method.addBodyLine("for (" + info.getName() + " record : records) {");
+//        method.addBodyLine("insertSelective(record);");
+//        method.addBodyLine("ids.add(record.getId());");
+//        method.addBodyLine("}");
+//        method.addBodyLine("}");
+//        method.addBodyLine("return ids;");
+        method.addBodyLine("return records.parallelStream()\n" +
+                "                .filter(Objects::nonNull)\n" +
+                "                .map(record -> {\n" +
+                "                    insertSelective(record);\n" +
+                "                    return record.getId();\n" +
+                "                }).collect(Collectors.toList());");
         return method;
     }
 }
