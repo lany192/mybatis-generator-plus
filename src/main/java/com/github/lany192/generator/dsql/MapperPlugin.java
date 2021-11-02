@@ -18,7 +18,9 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * 拓展Mapper类的功能
@@ -52,6 +54,8 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(QueryExpressionDSL.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType("org.apache.commons.lang3.StringUtils"));
         interfaze.addImportedType(new FullyQualifiedJavaType(ArrayList.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(Collectors.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
 
         interfaze.addMethod(countSelect(info));
         interfaze.addMethod(countTotal(info));
