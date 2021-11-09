@@ -121,7 +121,7 @@ public class OtherUtils {
         map.put(12, new JavaTypeResolverDefaultImpl.JdbcTypeInformation("VARCHAR", new FullyQualifiedJavaType(String.class.getName())));
         map.put(2013, new JavaTypeResolverDefaultImpl.JdbcTypeInformation("TIME_WITH_TIMEZONE", new FullyQualifiedJavaType("java.time.OffsetTime")));
         map.put(2014, new JavaTypeResolverDefaultImpl.JdbcTypeInformation("TIMESTAMP_WITH_TIMEZONE", new FullyQualifiedJavaType("java.time.OffsetDateTime")));
-        Log.i(JsonUtils.object2json(map));
+//        Log.i(JsonUtils.object2json(map));
         return map.containsKey(jdbcType);
     }
 }

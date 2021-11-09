@@ -40,7 +40,7 @@ public class MapperPlugin extends BasePlugin {
     @Override
     public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         TableModel info = new TableModel(introspectedTable, System.getProperty("user.name"));
-        Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
+//        Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
 
         interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
 
