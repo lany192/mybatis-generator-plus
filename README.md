@@ -1,11 +1,15 @@
-# mybatis-generator-plus
-mybatis拓展库，简化开发
+[![](https://jitpack.io/v/lany192/mybatis-generator-plus.svg)](https://jitpack.io/#lany192/mybatis-generator-plus)
 
-#使用方法
-1.检出项目在本地运行编译
+    allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
 
-    https://github.com/lany192/mybatis-generator-plus.git
-
-2.安装到本地仓库
-
-    mvn package install  -Dmaven.test.skip=true
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
