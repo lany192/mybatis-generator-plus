@@ -121,7 +121,7 @@ public class MapperPlugin extends BasePlugin {
                 "return exist(c -> c.where(",
                 "));");
         for (ColumnModel column : columns) {
-            joiner.add(column.getName() + ", isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
+            joiner.add(column.getName() + ", SqlBuilder.isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
         }
         method.addBodyLine(joiner.toString());
         return method;
@@ -214,7 +214,7 @@ public class MapperPlugin extends BasePlugin {
                 "return select(c -> c.where(",
                 "));");
         for (ColumnModel column : columns) {
-            joiner.add(column.getName() + ", isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
+            joiner.add(column.getName() + ", SqlBuilder.isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
         }
         method.addBodyLine(joiner.toString());
         return method;
@@ -251,7 +251,7 @@ public class MapperPlugin extends BasePlugin {
         method.addBodyLine("if (ids.size() == 0) {");
         method.addBodyLine("return new ArrayList<>();");
         method.addBodyLine("}");
-        method.addBodyLine("return select(c -> c.where(id, isIn(ids)));");
+        method.addBodyLine("return select(c -> c.where(id, SqlBuilder.isIn(ids)));");
         return method;
     }
 
@@ -265,7 +265,7 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getPrimaryKeyType() + ">"), "ids"));
-        method.addBodyLine("return delete(c -> c.where(id, isIn(ids)));");
+        method.addBodyLine("return delete(c -> c.where(id, SqlBuilder.isIn(ids)));");
         return method;
     }
 
