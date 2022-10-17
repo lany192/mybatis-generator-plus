@@ -29,8 +29,8 @@ public class MapperPlugin extends BasePlugin {
 
     @Override
     public boolean validate(List<String> warnings) {
-        if (StringUtility.stringHasValue(getContext().getTargetRuntime())
-                && !"MyBatis3DynamicSQL".equalsIgnoreCase(getContext().getTargetRuntime())) {
+        if (StringUtility.stringHasValue(context.getTargetRuntime())
+                && !"MyBatis3DynamicSQL".equalsIgnoreCase(context.getTargetRuntime())) {
             warnings.add(this.getClass().getTypeName() + "插件要求运行targetRuntime必须为MyBatis3DynamicSQL！");
             return false;
         }

@@ -19,8 +19,8 @@ public class ExamplePlugin extends BasePlugin {
 
     @Override
     public boolean validate(List<String> warnings) {
-        if (StringUtility.stringHasValue(getContext().getTargetRuntime())
-                && !"MyBatis3".equalsIgnoreCase(getContext().getTargetRuntime())) {
+        if (StringUtility.stringHasValue(context.getTargetRuntime())
+                && !"MyBatis3".equalsIgnoreCase(context.getTargetRuntime())) {
             warnings.add(this.getClass().getTypeName() + "插件要求运行targetRuntime必须为MyBatis3！");
             return false;
         }
@@ -35,7 +35,7 @@ public class ExamplePlugin extends BasePlugin {
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
-        JavaModelGeneratorConfiguration config = getContext().getJavaModelGeneratorConfiguration();
+        JavaModelGeneratorConfiguration config = context.getJavaModelGeneratorConfiguration();
         String newExampleType = introspectedTable.getExampleType().replace(config.getTargetPackage(), this.targetPackage);
         // 修改包名
         introspectedTable.setExampleType(newExampleType);
