@@ -114,14 +114,14 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("boolean"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "record"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "row"));
         List<ColumnModel> columns = info.getColumns();
         StringJoiner joiner = new StringJoiner(
                 ")\n                .and(",
                 "return exist(c -> c.where(",
                 "));");
         for (ColumnModel column : columns) {
-            joiner.add(column.getName() + ", SqlBuilder.isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
+            joiner.add(column.getName() + ", SqlBuilder.isEqualToWhenPresent(row::get" + column.getFirstUpperName() + ")");
         }
         method.addBodyLine(joiner.toString());
         return method;
@@ -207,14 +207,14 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         String returnType = "List<" + info.getFullType() + ">";
         method.setReturnType(new FullyQualifiedJavaType(returnType));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "record"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType(info.getFullType()), "row"));
         List<ColumnModel> columns = info.getColumns();
         StringJoiner joiner = new StringJoiner(
                 ")\n                .and(",
                 "return select(c -> c.where(",
                 "));");
         for (ColumnModel column : columns) {
-            joiner.add(column.getName() + ", SqlBuilder.isEqualToWhenPresent(record::get" + column.getFirstUpperName() + ")");
+            joiner.add(column.getName() + ", SqlBuilder.isEqualToWhenPresent(row::get" + column.getFirstUpperName() + ")");
         }
         method.addBodyLine(joiner.toString());
         return method;
@@ -317,12 +317,12 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<Long>"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "records"));
-        method.addBodyLine("return records.parallelStream()\n" +
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "rows"));
+        method.addBodyLine("return rows.parallelStream()\n" +
                 "                .filter(Objects::nonNull)\n" +
-                "                .map(record -> {\n" +
-                "                    insertSelective(record);\n" +
-                "                    return record.getId();\n" +
+                "                .map(row -> {\n" +
+                "                    insertSelective(row);\n" +
+                "                    return row.getId();\n" +
                 "                }).collect(Collectors.toList());");
         return method;
     }
