@@ -42,10 +42,9 @@ public class MapperPlugin extends BasePlugin {
         TableModel info = new TableModel(introspectedTable, System.getProperty("user.name"));
 //        Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
 
-        interfaze.addSuperInterface(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.util.mybatis3.CommonInsertMapper<" + info.getFullType() + ">"));
-
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.util.mybatis3.CommonInsertMapper"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.util.mybatis3.CommonSelectMapper"));
         interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
-
         interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(SqlBuilder.class.getTypeName()));
@@ -58,6 +57,9 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(ArrayList.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Collectors.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
+
+        interfaze.addSuperInterface(new FullyQualifiedJavaType("CommonInsertMapper<" + info.getFullType() + ">"));
+        interfaze.addSuperInterface(new FullyQualifiedJavaType("CommonSelectMapper"));
 
         interfaze.addMethod(countSelect(info));
         interfaze.addMethod(countTotal(info));
