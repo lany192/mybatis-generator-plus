@@ -42,6 +42,8 @@ public class MapperPlugin extends BasePlugin {
         TableModel info = new TableModel(introspectedTable, System.getProperty("user.name"));
 //        Log.i(info.getName() + "信息:" + JsonUtils.object2json(info));
 
+        interfaze.addSuperInterface(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.util.mybatis3.CommonInsertMapper<" + info.getFullType() + ">"));
+
         interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
 
         interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));

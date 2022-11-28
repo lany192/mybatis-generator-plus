@@ -5,7 +5,7 @@
 
     <groupId>com.github.lany192</groupId>
     <artifactId>mybatis-generator-plugin</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
     <name>mybatis-generator-plugin</name>
     <description>Mybatis generator plus</description>
 
