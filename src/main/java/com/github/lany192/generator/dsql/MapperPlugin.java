@@ -67,6 +67,8 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(selectByIds(info));
         interfaze.addMethod(deleteByIds(info));
         interfaze.addMethod(selectByPage(info));
+        interfaze.addMethod(selectByPage2(info));
+        interfaze.addMethod(selectByPage3(info));
         interfaze.addMethod(selectByPageAndSize(info));
         interfaze.addMethod(insertSelective(info));
         interfaze.addMethod(selectByEntity(info));
@@ -328,6 +330,52 @@ public class MapperPlugin extends BasePlugin {
                 "                    insertSelective(row);\n" +
                 "                    return row.getId();\n" +
                 "                }).collect(Collectors.toList());");
+        return method;
+    }
+
+    private Method selectByPage2(TableModel info) {
+        Method method = new Method("selectByPage");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 分页查询记录");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @param pageNum   页码");
+        method.addJavaDocLine(" * @param pageSize  每页数据");
+        method.addJavaDocLine(" * @param provider  查询语句");
+        method.addJavaDocLine(" * @return 记录PageInfo集");
+        method.addJavaDocLine(" */");
+
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
+        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
+        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.render.SelectStatementProvider"), "provider"));
+        method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
+        method.addBodyLine("return new PageInfo<>(selectMany(provider));");
+        return method;
+    }
+
+    private Method selectByPage3(TableModel info) {
+        Method method = new Method("selectByPage");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 分页查询记录");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @param pageNum   页码");
+        method.addJavaDocLine(" * @param pageSize  每页数据");
+        method.addJavaDocLine(" * @param provider  查询语句");
+        method.addJavaDocLine(" * @param rowMapper 类型装换");
+        method.addJavaDocLine(" * @return 记录PageInfo集");
+        method.addJavaDocLine(" */");
+
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
+        method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
+        method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
+        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.render.SelectStatementProvider"), "provider"));
+        method.addParameter(3, new Parameter(new FullyQualifiedJavaType("java.util.function.SelectStatementProvider.Function<Map<String, Object>, " + info.getName() + ">"), "rowMapper"));
+        method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
+        method.addBodyLine("return new PageInfo<>(selectMany(provider, rowMapper));");
         return method;
     }
 }
