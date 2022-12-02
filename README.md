@@ -10,3 +10,5 @@
 	dependencies {
 	        implementation 'com.github.lany192:mybatis-generator-plus:1.0.0'
 	}
+
+https://github.com/lany192/mybatis-generator-plus
