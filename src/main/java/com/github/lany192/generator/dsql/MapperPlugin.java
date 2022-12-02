@@ -3,8 +3,6 @@ package com.github.lany192.generator.dsql;
 import com.github.lany192.generator.BasePlugin;
 import com.github.lany192.generator.model.ColumnModel;
 import com.github.lany192.generator.model.TableModel;
-import com.github.lany192.generator.utils.JsonUtils;
-import com.github.lany192.generator.utils.Log;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mybatis.dynamic.sql.Constant;
@@ -16,10 +14,8 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.internal.util.StringUtility;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +40,11 @@ public class MapperPlugin extends BasePlugin {
 
         interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.util.mybatis3.CommonInsertMapper"));
         interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.util.mybatis3.CommonSelectMapper"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.render.SelectStatementProvider"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.render.SelectStatementProvider"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo"));
+
         interfaze.addImportedType(new FullyQualifiedJavaType(info.getFullType()));
         interfaze.addImportedType(new FullyQualifiedJavaType(PageHelper.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(PageInfo.class.getTypeName()));
@@ -57,6 +58,8 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(ArrayList.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Collectors.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(Function.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(Map.class.getTypeName()));
 
         interfaze.addSuperInterface(new FullyQualifiedJavaType("CommonInsertMapper<" + info.getFullType() + ">"));
         interfaze.addSuperInterface(new FullyQualifiedJavaType("CommonSelectMapper"));
@@ -103,7 +106,7 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("long"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("SelectDSLCompleter"), "completer"));
         method.addBodyLine("QueryExpressionDSL<SelectModel> dsl = SqlBuilder.select(BasicColumn.columnList(Constant.of(\"count(*)\"))).from(" + info.getFirstLowerTableName() + ");");
         method.addBodyLine("return count(completer.apply(dsl).build().render(RenderingStrategies.MYBATIS3));");
         return method;
@@ -160,7 +163,7 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("boolean"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("SelectDSLCompleter"), "completer"));
         method.addBodyLine("QueryExpressionDSL<SelectModel> dsl = SqlBuilder.select(BasicColumn.columnList(Constant.of(\"count(*)\"))).from(" + info.getFirstLowerTableName() + ");");
         method.addBodyLine("dsl.limit(1);");
         method.addBodyLine("SelectStatementProvider selectStatement = completer.apply(dsl).build().render(RenderingStrategies.MYBATIS3);");
@@ -179,7 +182,7 @@ public class MapperPlugin extends BasePlugin {
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
 
-        method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
+        method.setReturnType(new FullyQualifiedJavaType("PageInfo<" + info.getName() + ">"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("String"), "word"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
@@ -190,7 +193,7 @@ public class MapperPlugin extends BasePlugin {
         for (ColumnModel column : columns) {
             //目前仅支持文本
             if (column.getFullTypeName().equals(String.class.getTypeName())) {
-                joiner.add("(" + column.getName() + ", isLike(\"%\" + word + \"%\").filter(obj -> !StringUtils.isEmpty(word))");
+                joiner.add("(" + column.getName() + ", SqlBuilder.isLike(word).filter(Objects::nonNull).map(s -> \"%\" + s + \"%\"))");
                 enable = true;
             }
         }
@@ -305,7 +308,7 @@ public class MapperPlugin extends BasePlugin {
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
         method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
-        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.SelectDSLCompleter"), "completer"));
+        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("SelectDSLCompleter"), "completer"));
         method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
         method.addBodyLine("return new PageInfo<>(select(completer));");
         return method;
@@ -349,7 +352,7 @@ public class MapperPlugin extends BasePlugin {
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
         method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
-        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.render.SelectStatementProvider"), "provider"));
+        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("SelectStatementProvider"), "provider"));
         method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
         method.addBodyLine("return new PageInfo<>(selectMany(provider));");
         return method;
@@ -372,8 +375,8 @@ public class MapperPlugin extends BasePlugin {
         method.setReturnType(new FullyQualifiedJavaType("com.github.pagehelper.PageInfo<" + info.getName() + ">"));
         method.addParameter(0, new Parameter(new FullyQualifiedJavaType("int"), "pageNum"));
         method.addParameter(1, new Parameter(new FullyQualifiedJavaType("int"), "pageSize"));
-        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("org.mybatis.dynamic.sql.select.render.SelectStatementProvider"), "provider"));
-        method.addParameter(3, new Parameter(new FullyQualifiedJavaType("java.util.function.SelectStatementProvider.Function<Map<String, Object>, " + info.getName() + ">"), "rowMapper"));
+        method.addParameter(2, new Parameter(new FullyQualifiedJavaType("SelectStatementProvider"), "provider"));
+        method.addParameter(3, new Parameter(new FullyQualifiedJavaType("Function<Map<String, Object>, " + info.getName() + ">"), "rowMapper"));
         method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
         method.addBodyLine("return new PageInfo<>(selectMany(provider, rowMapper));");
         return method;
