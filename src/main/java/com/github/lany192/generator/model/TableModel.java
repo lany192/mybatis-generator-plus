@@ -32,6 +32,8 @@ public class TableModel {
 
     private List<ColumnModel> columns;
 
+    private String remark;
+
     public TableModel(IntrospectedTable info, String author) {
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(info.getBaseRecordType());
         name = type.getShortName();
@@ -48,6 +50,8 @@ public class TableModel {
         }
         boolean hasBlob = info.getBLOBColumns() != null && info.getBLOBColumns().size() > 1;
         modelNamePath = OtherUtils.hump2path(name);
+        remark = info.getRemarks();
+
         //运行时是否是动态sql
         map.put("is_dynamic_sql", info.getTargetRuntime().equals(IntrospectedTable.TargetRuntime.MYBATIS3_DSQL));
         //表名
@@ -86,6 +90,10 @@ public class TableModel {
         map.put("contain_image_column", containImage(columns));
         //是否包含富文本字段
         map.put("contain_rich_column", containRichText(columns));
+    }
+
+    public String getRemark() {
+        return remark;
     }
 
     public Map<String, Object> getMap() {

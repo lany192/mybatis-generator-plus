@@ -64,6 +64,10 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addSuperInterface(new FullyQualifiedJavaType("CommonInsertMapper<" + info.getFullType() + ">"));
         interfaze.addSuperInterface(new FullyQualifiedJavaType("CommonSelectMapper"));
 
+        interfaze.addFileCommentLine("/**");
+        interfaze.addFileCommentLine(" * " + info.getRemark());
+        interfaze.addFileCommentLine("**/");
+
         interfaze.addMethod(countSelect(info));
         interfaze.addMethod(countTotal(info));
         interfaze.addMethod(selectAllMethod(info));
