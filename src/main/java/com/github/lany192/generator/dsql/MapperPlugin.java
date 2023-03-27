@@ -408,12 +408,15 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(modelType, "row"));
+
+        method.addBodyLine("return MyBatis3Utils.insert(this::insert, row, " + sss + ", c ->c.");
+
         List<ColumnModel> columns = info.getColumns();
-        StringJoiner joiner = new StringJoiner("return MyBatis3Utils.insert(this::insert, row, " + sss + ", c ->c.");
         for (ColumnModel column : columns) {
-            joiner.add(".map(" + column.getName() + ").toPropertyWhenPresent(\"" + column.getName() + "\", row::get" + column.getFirstUpperName() + ")");
+            method.addBodyLine(("\n.map(" + column.getName() + ").toPropertyWhenPresent(\"" + column.getName() + "\", row::get" + column.getFirstUpperName() + ")"));
         }
-        method.addBodyLine(joiner.toString());
+
+        method.addBodyLine(";");
         return method;
     }
 }
