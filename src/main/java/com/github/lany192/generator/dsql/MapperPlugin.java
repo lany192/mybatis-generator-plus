@@ -83,6 +83,9 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addMethod(exist(info));
         interfaze.addMethod(existById(info));
         interfaze.addMethod(existByEntity(info));
+
+        interfaze.addMethod(insertSelectiveWithId(info));
+
         return super.clientGenerated(interfaze, introspectedTable);
     }
 
@@ -383,6 +386,34 @@ public class MapperPlugin extends BasePlugin {
         method.addParameter(3, new Parameter(new FullyQualifiedJavaType("Function<Map<String, Object>, " + info.getName() + ">"), "rowMapper"));
         method.addBodyLine("PageHelper.startPage(pageNum, pageSize);");
         method.addBodyLine("return new PageInfo<>(selectMany(provider, rowMapper));");
+        return method;
+    }
+
+
+    private Method insertSelectiveWithId(TableModel info) {
+
+        FullyQualifiedJavaType modelType = new FullyQualifiedJavaType(info.getFullType());
+
+        String name = modelType.getShortName();
+        String sss = name.substring(0, 1).toLowerCase() + name.substring(1);
+
+        Method method = new Method("insertSelectiveWithId");
+        method.addJavaDocLine("/**");
+        method.addJavaDocLine(" * 带ID的插入方法");
+        method.addJavaDocLine(" *");
+        method.addJavaDocLine(" * @return 影响行数");
+        method.addJavaDocLine(" */");
+
+        method.setDefault(true);
+        method.setVisibility(JavaVisibility.PUBLIC);
+        method.setReturnType(new FullyQualifiedJavaType("int"));
+        method.addParameter(new Parameter(modelType, "row"));
+        List<ColumnModel> columns = info.getColumns();
+        StringJoiner joiner = new StringJoiner("return MyBatis3Utils.insert(this::insert, row, " + sss + ", c ->c.");
+        for (ColumnModel column : columns) {
+            joiner.add(".map(" + column.getName() + ").toPropertyWhenPresent(\"" + column.getName() + "\", row::get" + column.getFirstUpperName() + ")");
+        }
+        method.addBodyLine(joiner.toString());
         return method;
     }
 }
