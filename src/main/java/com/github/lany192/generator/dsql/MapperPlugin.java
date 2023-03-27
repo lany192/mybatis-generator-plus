@@ -409,7 +409,7 @@ public class MapperPlugin extends BasePlugin {
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(modelType, "row"));
 
-        method.addBodyLine("return MyBatis3Utils.insert(this::insert, row, " + sss + ", c ->c.");
+        method.addBodyLine("return MyBatis3Utils.insert(this::insert, row, " + sss + ", c ->c");
 
         List<ColumnModel> columns = info.getColumns();
         for (ColumnModel column : columns) {
