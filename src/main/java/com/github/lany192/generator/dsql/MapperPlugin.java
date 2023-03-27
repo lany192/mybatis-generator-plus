@@ -391,11 +391,10 @@ public class MapperPlugin extends BasePlugin {
 
 
     private Method insertSelectiveWithId(TableModel info) {
-
         FullyQualifiedJavaType modelType = new FullyQualifiedJavaType(info.getFullType());
 
         String name = modelType.getShortName();
-        String sss = name.substring(0, 1).toLowerCase() + name.substring(1);
+        String tableName = name.substring(0, 1).toLowerCase() + name.substring(1);
 
         Method method = new Method("insertSelectiveWithId");
         method.addJavaDocLine("/**");
@@ -403,15 +402,14 @@ public class MapperPlugin extends BasePlugin {
         method.addJavaDocLine(" *");
         method.addJavaDocLine(" * @return 影响行数");
         method.addJavaDocLine(" */");
-
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(modelType, "row"));
-        method.addBodyLine("return MyBatis3Utils.insert(this::insert, row, " + sss + ", c ->c");
+        method.addBodyLine("return MyBatis3Utils.insert(this::insert, row, " + tableName + ", c ->c");
         List<ColumnModel> columns = info.getColumns();
         for (ColumnModel column : columns) {
-            method.addBodyLine((".map(" + column.getName() + ").toPropertyWhenPresent(\"" + column.getName() + "\", row::get" + column.getFirstUpperName() + ")"));
+            method.addBodyLine(".map(" + column.getName() + ").toPropertyWhenPresent(\"" + column.getName() + "\", row::get" + column.getFirstUpperName() + ")");
         }
         method.addBodyLine(");");
         return method;
