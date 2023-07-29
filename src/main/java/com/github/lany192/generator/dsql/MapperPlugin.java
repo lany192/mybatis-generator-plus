@@ -318,6 +318,8 @@ public class MapperPlugin extends BasePlugin {
     }
 
     private Method insertSelective(TableModel info) {
+        List<ColumnModel> columns = info.getColumns();
+
         Method method = new Method("insertSelective");
         method.addJavaDocLine("/**");
         method.addJavaDocLine(" * 批量插入");
@@ -328,14 +330,16 @@ public class MapperPlugin extends BasePlugin {
 
         method.setDefault(true);
         method.setVisibility(JavaVisibility.PUBLIC);
-        method.setReturnType(new FullyQualifiedJavaType("List<Long>"));
+        method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "rows"));
-        method.addBodyLine("return rows.parallelStream()\n" +
-                "                .filter(Objects::nonNull)\n" +
-                "                .map(row -> {\n" +
-                "                    insertSelective(row);\n" +
-                "                    return row.getId();\n" +
-                "                }).collect(Collectors.toList());");
+        method.addBodyLine("MultiRowInsertStatementProvider<Member> multiRowInsert = SqlBuilder.insertMultiple(rows)");
+        method.addBodyLine(".into(member)");
+        for (ColumnModel column : columns) {
+            method.addBodyLine(".map(" + column.getFirstUpperName() + ").toProperty(\"" + column.getFirstUpperName() + "\")");
+        }
+        method.addBodyLine(".build()");
+        method.addBodyLine(".render(RenderingStrategies.MYBATIS3);");
+        method.addBodyLine("return insertMultiple(multiRowInsert);");
         return method;
     }
 
