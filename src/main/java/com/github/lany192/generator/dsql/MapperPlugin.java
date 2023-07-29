@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.mybatis.dynamic.sql.Constant;
 import org.mybatis.dynamic.sql.SqlBuilder;
+import org.mybatis.dynamic.sql.insert.render.MultiRowInsertStatementProvider;
 import org.mybatis.dynamic.sql.render.RenderingStrategies;
 import org.mybatis.dynamic.sql.select.QueryExpressionDSL;
 import org.mybatis.dynamic.sql.select.SelectModel;
@@ -60,6 +61,7 @@ public class MapperPlugin extends BasePlugin {
         interfaze.addImportedType(new FullyQualifiedJavaType(Objects.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Function.class.getTypeName()));
         interfaze.addImportedType(new FullyQualifiedJavaType(Map.class.getTypeName()));
+        interfaze.addImportedType(new FullyQualifiedJavaType(MultiRowInsertStatementProvider.class.getTypeName()));
 
         interfaze.addSuperInterface(new FullyQualifiedJavaType("CommonInsertMapper<" + info.getFullType() + ">"));
         interfaze.addSuperInterface(new FullyQualifiedJavaType("CommonSelectMapper"));
@@ -332,13 +334,13 @@ public class MapperPlugin extends BasePlugin {
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("int"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType("List<" + info.getName() + ">"), "rows"));
-        method.addBodyLine("MultiRowInsertStatementProvider<Member> multiRowInsert = SqlBuilder.insertMultiple(rows)");
-        method.addBodyLine(".into(member)");
+        method.addBodyLine("MultiRowInsertStatementProvider<" + info.getName() + "> multiRowInsert = SqlBuilder.insertMultiple(rows)");
+        method.addBodyLine("    .into(" + info.getFirstLowerTableName() + ")");
         for (ColumnModel column : columns) {
-            method.addBodyLine(".map(" + column.getFirstUpperName() + ").toProperty(\"" + column.getFirstUpperName() + "\")");
+            method.addBodyLine("    .map(" + column.getName() + ").toProperty(\"" + column.getName() + "\")");
         }
-        method.addBodyLine(".build()");
-        method.addBodyLine(".render(RenderingStrategies.MYBATIS3);");
+        method.addBodyLine("    .build()");
+        method.addBodyLine("    .render(RenderingStrategies.MYBATIS3);");
         method.addBodyLine("return insertMultiple(multiRowInsert);");
         return method;
     }
