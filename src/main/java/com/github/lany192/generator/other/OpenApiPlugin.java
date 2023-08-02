@@ -22,13 +22,12 @@ public class OpenApiPlugin extends PluginAdapter {
     public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                        IntrospectedTable introspectedTable, ModelClassType modelClassType) {
         topLevelClass.addImportedType("io.swagger.v3.oas.annotations.media.Schema");
-//        topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
 
         String classAnnotation = "@Schema(description = \"" + introspectedTable.getRemarks() + "\")";
         if (!topLevelClass.getAnnotations().contains(classAnnotation)) {
             topLevelClass.addAnnotation(classAnnotation);
         }
-        field.addAnnotation("@Schema(description=\"" + introspectedColumn.getRemarks() + "\"");
+        field.addAnnotation("@Schema(description=\"" + introspectedColumn.getRemarks() + "\")");
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 }
