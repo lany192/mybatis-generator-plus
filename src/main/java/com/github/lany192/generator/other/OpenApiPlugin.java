@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 实体增加api文档注解
  */
-public class SwaggerPlugin extends PluginAdapter {
+public class OpenApiPlugin extends PluginAdapter {
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -21,15 +21,14 @@ public class SwaggerPlugin extends PluginAdapter {
     @Override
     public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                        IntrospectedTable introspectedTable, ModelClassType modelClassType) {
-        topLevelClass.addImportedType("io.swagger.annotations.ApiModel");
-        topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
+        topLevelClass.addImportedType("io.swagger.v3.oas.annotations.media.Schema");
+//        topLevelClass.addImportedType("io.swagger.annotations.ApiModelProperty");
 
-        String classAnnotation = "@ApiModel(value=\"" + topLevelClass.getType().getShortName() + "\", description = \"" + introspectedTable.getRemarks() + "\")";
+        String classAnnotation = "@Schema(description = \"" + introspectedTable.getRemarks() + "\")";
         if (!topLevelClass.getAnnotations().contains(classAnnotation)) {
             topLevelClass.addAnnotation(classAnnotation);
         }
-        String comment = introspectedTable.getFullyQualifiedTable().toString() + "." + introspectedColumn.getActualColumnName();
-        field.addAnnotation("@ApiModelProperty(value=\"" + introspectedColumn.getRemarks() + "\", notes = \"" + comment + "\", dataType = \"" + introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName() + "\")");
+        field.addAnnotation("@Schema(description=\"" + introspectedColumn.getRemarks() + "\"");
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 }
