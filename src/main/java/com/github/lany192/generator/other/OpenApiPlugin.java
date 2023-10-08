@@ -23,7 +23,7 @@ public class OpenApiPlugin extends PluginAdapter {
                                        IntrospectedTable introspectedTable, ModelClassType modelClassType) {
         topLevelClass.addImportedType("io.swagger.v3.oas.annotations.media.Schema");
 
-        String classAnnotation = "@Schema(description = \"" + introspectedTable.getRemarks() + "\")";
+        String classAnnotation = "@Schema(description = \"" + introspectedTable.getRemarks() + "实体\")";
         if (!topLevelClass.getAnnotations().contains(classAnnotation)) {
             topLevelClass.addAnnotation(classAnnotation);
         }
