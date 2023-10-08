@@ -27,7 +27,7 @@ public class OpenApiPlugin extends PluginAdapter {
         if (!topLevelClass.getAnnotations().contains(classAnnotation)) {
             topLevelClass.addAnnotation(classAnnotation);
         }
-        field.addAnnotation("@Schema(description=\"" + introspectedColumn.getRemarks() + "\")");
+        field.addAnnotation("@Schema(description = \"" + introspectedColumn.getRemarks() + "\")");
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 }
