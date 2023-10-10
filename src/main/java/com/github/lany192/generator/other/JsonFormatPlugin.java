@@ -44,19 +44,19 @@ public class JsonFormatPlugin extends PluginAdapter {
                                        IntrospectedTable introspectedTable, ModelClassType modelClassType) {
         if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.time.LocalDateTime")) {
             topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonFormat");
-            field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\")");
+            field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\", timezone = \"GMT+8\")");
         }
         if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.time.LocalTime")) {
             topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonFormat");
-            field.addAnnotation("@JsonFormat(pattern = \"HH:mm:ss\")");
+            field.addAnnotation("@JsonFormat(pattern = \"HH:mm:ss\", timezone = \"GMT+8\")");
         }
         if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.time.LocalDate")) {
             topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonFormat");
-            field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd\")");
+            field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd\", timezone = \"GMT+8\")");
         }
         if (introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName().equals("java.util.Date")) {
             topLevelClass.addImportedType("com.fasterxml.jackson.annotation.JsonFormat");
-            field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\")");
+            field.addAnnotation("@JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\", timezone = \"GMT+8\")");
         }
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
