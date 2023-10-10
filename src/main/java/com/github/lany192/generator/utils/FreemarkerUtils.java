@@ -28,7 +28,7 @@ public class FreemarkerUtils {
         }
         Log.i("定义的属性:" + JsonUtils.object2json(params));
         try {
-            Configuration cfg = new Configuration(Configuration.VERSION_2_3_28);
+            Configuration cfg = new Configuration(Configuration.VERSION_2_3_32);
             cfg.setDirectoryForTemplateLoading(templateFile.getParentFile());
             cfg.setDefaultEncoding("UTF-8");
             cfg.setTemplateExceptionHandler(TemplateExceptionHandler.IGNORE_HANDLER);
