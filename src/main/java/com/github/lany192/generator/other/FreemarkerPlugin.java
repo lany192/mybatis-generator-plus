@@ -109,7 +109,7 @@ public class FreemarkerPlugin extends BasePlugin {
             data.putAll(info.getMap());
 
             //项目的根目录，相对多模块而言
-            String rootPath = new File(System.getProperty("user.dir")).getParent();
+            String rootPath = System.getProperty("user.dir");
             //模板文件
             File templateFile = new File(rootPath + templateFilePath);
             if (templateFile.exists()) {
