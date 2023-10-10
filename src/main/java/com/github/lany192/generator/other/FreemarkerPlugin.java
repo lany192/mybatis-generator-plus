@@ -28,8 +28,7 @@ public class FreemarkerPlugin extends BasePlugin {
             return false;
         }
         String templatePath = rootPath + getPath(Constants.TEMPLATE_FILE_PATH, "");
-        File templateFile = new File(templatePath);
-        if (!templateFile.exists()) {
+        if (!new File(templatePath).exists()) {
             warnings.add(TAG + ":模板文件不存在:" + templatePath);
             return false;
         }
