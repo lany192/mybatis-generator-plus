@@ -6,6 +6,7 @@ import com.github.lany192.generator.utils.OtherUtils;
 import org.mybatis.generator.api.PluginAdapter;
 import org.mybatis.generator.internal.util.StringUtility;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -35,6 +36,16 @@ public abstract class BasePlugin extends PluginAdapter {
 
     public boolean check(String key) {
         return params.containsKey(key);
+    }
+
+    public String getPath(String key, String defaultValue) {
+        String path = (String) params.get(key);
+        if (path == null) {
+            return defaultValue;
+        }
+        path = path.replace("\\", File.separator);
+        path = path.replace("/", File.separator);
+        return path;
     }
 
     public String getProperty(String key, String defaultValue) {
