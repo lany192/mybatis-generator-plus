@@ -34,7 +34,7 @@ public abstract class BasePlugin extends PluginAdapter {
         return params;
     }
 
-    public boolean check(String key) {
+    public boolean containsKey(String key) {
         return params.containsKey(key);
     }
 

@@ -23,7 +23,7 @@ public class FreemarkerPlugin extends BasePlugin {
 
     @Override
     public boolean validate(List<String> warnings) {
-        if (!check(Constants.TEMPLATE_FILE_PATH)) {
+        if (!containsKey(Constants.TEMPLATE_FILE_PATH)) {
             warnings.add(TAG + ":请配置模板文件相对路径" + Constants.TEMPLATE_FILE_PATH + "属性");
             return false;
         }
@@ -35,11 +35,11 @@ public class FreemarkerPlugin extends BasePlugin {
         warnings.add(TAG + ":模板文件正常:" + templatePath);
 
 
-        if (!check(Constants.TARGET_OUT_PATH)) {
+        if (!containsKey(Constants.TARGET_OUT_PATH)) {
             warnings.add(TAG + ":请配置目标文件输出目录" + Constants.TARGET_OUT_PATH + "属性");
             return false;
         }
-        if (!check(Constants.TARGET_FILE_FORMAT)) {
+        if (!containsKey(Constants.TARGET_FILE_FORMAT)) {
             warnings.add(TAG + ":请配置目标文件的文件格式" + Constants.TARGET_FILE_FORMAT + "属性");
             return false;
         }
