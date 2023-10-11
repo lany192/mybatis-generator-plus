@@ -7,6 +7,7 @@ import com.github.lany192.generator.utils.FreemarkerUtils;
 import com.github.lany192.generator.utils.JsonUtils;
 import com.github.lany192.generator.utils.Log;
 import com.github.lany192.generator.utils.OtherUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
 
@@ -14,6 +15,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class FreemarkerPlugin extends BasePlugin {
     /**
@@ -65,7 +67,15 @@ public class FreemarkerPlugin extends BasePlugin {
         boolean overwrite = getProperty(Constants.OVERWRITE, false);
         //作者
         String author = getProperty(Constants.AUTHOR, System.getProperty("user.name"));
+        //需要忽略的表名
+        String ignoreTableName = getProperty(Constants.IGNORE_TABLE_NAME, "");
 
+        String tableName = introspectedTable.getFullyQualifiedTable().toString();
+
+        if (!StringUtils.isEmpty(ignoreTableName) && Pattern.compile(ignoreTableName).matcher(tableName).matches()) {
+            Log.i("忽略该表：" + tableName);
+            return super.contextGenerateAdditionalJavaFiles(introspectedTable);
+        }
 
         TableModel info = new TableModel(introspectedTable, author);
 
@@ -76,7 +86,6 @@ public class FreemarkerPlugin extends BasePlugin {
         data.remove(Constants.TARGET_OUT_PATH);
         data.remove(Constants.TEMPLATE_FILE_PATH);
         data.putAll(info.getMap());
-
 
         //模板文件
         File templateFile = new File(rootPath + templatePath);
