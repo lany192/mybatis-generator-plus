@@ -21,12 +21,9 @@ public class ValidatedPlugin extends PluginAdapter {
     @Override
     public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn,
                                        IntrospectedTable introspectedTable, ModelClassType modelClassType) {
-        String comment = introspectedTable.getFullyQualifiedTable().toString() + "." + introspectedColumn.getActualColumnName();
-        field.addJavaDocLine("/**\n" +
-                "     * " + introspectedColumn.getRemarks() + "\n" +
-                "     * 表字段：" + comment + "\n" +
-                "     * 类型：{@link " + introspectedColumn.getFullyQualifiedJavaType().getFullyQualifiedName() + "}\n" +
-                "     */");
+        if (!introspectedColumn.isNullable()) {
+            field.addAnnotation("@NoBlank()");
+        }
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 }
