@@ -19,4 +19,6 @@ public class Constants {
     public static final String AUTHOR = "author";
     //需要忽略的表名，正则匹配
     public static final String IGNORE_TABLE_NAME = "ignore_table_name";
+    //需要忽略的字段名，用逗号分开
+    public static final String IGNORE_COLUMNS = "ignore_columns";
 }
