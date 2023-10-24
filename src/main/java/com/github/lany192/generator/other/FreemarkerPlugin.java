@@ -84,6 +84,13 @@ public class FreemarkerPlugin extends BasePlugin {
             return super.contextGenerateAdditionalJavaFiles(introspectedTable);
         }
 
+        //模板文件
+        File templateFile = new File(rootPath + templatePath);
+        if (!templateFile.exists()) {
+            Log.i("不存在！模板文件:" + templateFile.getPath() + ",忽略");
+            return super.contextGenerateAdditionalJavaFiles(introspectedTable);
+        }
+
         TableModel info = new TableModel(introspectedTable, author);
 
         Map<String, Object> data = new HashMap<>(getParams());
@@ -94,28 +101,22 @@ public class FreemarkerPlugin extends BasePlugin {
         data.remove(Constants.TEMPLATE_FILE_PATH);
         data.putAll(info.getMap());
 
-        //模板文件
-        File templateFile = new File(rootPath + templatePath);
-        if (templateFile.exists()) {
-            Log.i("模板文件:" + templateFile.getPath());
-            String targetFileName = filePrefix + info.getName() + fileSuffix;
-            //如果有配置固定名字，使用固定名称。必须配置自定义文件路径，不然生成的文件路径和名称冲突
-            if (!OtherUtils.isEmpty(fixationName)) {
-                targetFileName = fixationName;
-            }
+        Log.i("模板文件:" + templateFile.getPath());
+        String targetFileName = filePrefix + info.getName() + fileSuffix;
+        //如果有配置固定名字，使用固定名称。必须配置自定义文件路径，不然生成的文件路径和名称冲突
+        if (!OtherUtils.isEmpty(fixationName)) {
+            targetFileName = fixationName;
+        }
 
-            File outFile = new File(rootPath + File.separator + targetPath + File.separator + targetFileName + "." + fileFormat);
-            Log.i("目标文件:" + outFile.getPath());
-            data.put("target_file_name", targetFileName);
+        File outFile = new File(rootPath + File.separator + targetPath + File.separator + targetFileName + "." + fileFormat);
+        Log.i("目标文件:" + outFile.getPath());
+        data.put("target_file_name", targetFileName);
 
-            if (outFile.exists() && !overwrite) {
-                Log.i("已存在,忽略:" + outFile.getPath());
-            } else {
-                //生成文件
-                FreemarkerUtils.buildFile(templateFile, outFile, data);
-            }
+        if (outFile.exists() && !overwrite) {
+            Log.i("已存在,忽略:" + outFile.getPath());
         } else {
-            Log.i("不存在！模板文件:" + templateFile.getPath());
+            //生成文件
+            FreemarkerUtils.buildFile(templateFile, outFile, data);
         }
         return super.contextGenerateAdditionalJavaFiles(introspectedTable);
     }
