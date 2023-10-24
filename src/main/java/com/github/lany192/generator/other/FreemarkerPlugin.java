@@ -69,11 +69,18 @@ public class FreemarkerPlugin extends BasePlugin {
         String author = getProperty(Constants.AUTHOR, System.getProperty("user.name"));
         //需要忽略的表名
         String ignoreTableName = getProperty(Constants.IGNORE_TABLE_NAME, "");
+        //指定需要的表名
+        String targetTableName = getProperty(Constants.TARGET_TABLE_NAME, "");
 
         String tableName = introspectedTable.getFullyQualifiedTable().toString();
 
         if (!StringUtils.isEmpty(ignoreTableName) && Pattern.compile(ignoreTableName).matcher(tableName).matches()) {
-            Log.i("忽略该表：" + tableName);
+            Log.i("因为指定了忽略表名，该表符合条件：" + tableName + ",忽略");
+            return super.contextGenerateAdditionalJavaFiles(introspectedTable);
+        }
+
+        if (!StringUtils.isEmpty(targetTableName) && !Pattern.compile(targetTableName).matcher(tableName).matches()) {
+            Log.i("因为指定了目标表名，该表不符合条件：" + tableName + ",忽略");
             return super.contextGenerateAdditionalJavaFiles(introspectedTable);
         }
 
